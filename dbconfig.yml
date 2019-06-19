@@ -1,0 +1,5 @@
+development:
+    dialect: mysql
+    datasource: root@tcp(127.0.0.1)/pdns?parseTime=true
+    dir: migrations/mysql
+    table: migrations
