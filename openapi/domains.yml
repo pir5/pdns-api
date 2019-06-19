@@ -1,0 +1,108 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: pdns-api Domains
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8080/api/
+paths:
+  /domains:
+    get:
+      summary: get domains information
+      operationId: getDomains
+      tags:
+        - domain
+      parameters:
+        - name: domainID
+          in: query
+          description: query target domain id
+          required: false
+          schema:
+            type: integer
+        - name: name
+          in: query
+          description: query target domain name
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: return domain information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Domain"
+    post:
+      summary: create domains
+      operationId: createDomains
+      tags:
+        - domain
+      requestBody:
+        description: create domains
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Domain'
+      responses:
+        '201':
+          description: domains successfully created
+        '400':
+          description: domains failed create
+    put:
+      summary: update domains
+      operationId: updateDomains
+      tags:
+        - domain
+      requestBody:
+        description: update domains
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Domain'
+      responses:
+        '200':
+          description: domains successfully updated
+        '400':
+          description: domains failed update
+
+    delete:
+      summary: delete domains
+      operationId: deleteDomains
+      tags:
+        - domain
+      parameters:
+        - name: domainID
+          in: query
+          description: query target domain id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: domains successfully deleted
+        '400':
+          description: domains failed delete
+
+components:
+  schemas:
+    Domain:
+      required:
+        - id
+        - name
+        - type
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        master:
+          type: string
+        last_check:
+          type: integer
+        type:
+          type: string
+        notified_serial:
+          type: integer
+        account:
+          type: string

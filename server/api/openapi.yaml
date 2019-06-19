@@ -1,0 +1,120 @@
+openapi: 3.0.0
+info:
+  license:
+    name: MIT
+  title: pdns-api Domains
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api/
+paths:
+  /domains:
+    delete:
+      operationId: deleteDomains
+      parameters:
+      - description: query target domain id
+        explode: true
+        in: query
+        name: domainID
+        required: true
+        schema:
+          type: integer
+        style: form
+      responses:
+        204:
+          description: domains successfully deleted
+        400:
+          description: domains failed delete
+      summary: delete domains
+      tags:
+      - domain
+    get:
+      operationId: getDomains
+      parameters:
+      - description: query target domain id
+        explode: true
+        in: query
+        name: domainID
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: query target domain name
+        explode: true
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Domain'
+          description: return domain information
+      summary: get domains information
+      tags:
+      - domain
+    post:
+      operationId: createDomains
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Domain'
+        description: create domains
+      responses:
+        201:
+          description: domains successfully created
+        400:
+          description: domains failed create
+      summary: create domains
+      tags:
+      - domain
+    put:
+      operationId: updateDomains
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Domain'
+        description: update domains
+      responses:
+        200:
+          description: domains successfully updated
+        400:
+          description: domains failed update
+      summary: update domains
+      tags:
+      - domain
+components:
+  schemas:
+    Domain:
+      example:
+        name: name
+        notified_serial: 1
+        id: 0
+        last_check: 6
+        type: type
+        account: account
+        master: master
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        master:
+          type: string
+        last_check:
+          type: integer
+        type:
+          type: string
+        notified_serial:
+          type: integer
+        account:
+          type: string
+      required:
+      - id
+      - name
+      - type
