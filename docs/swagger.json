@@ -163,6 +163,9 @@
                 "account": {
                     "type": "string"
                 },
+                "db": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },

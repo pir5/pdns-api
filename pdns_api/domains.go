@@ -20,36 +20,28 @@ import (
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /domains [get]
-func getDomains(c echo.Context) error {
-	db, err := getDBConnection()
+func (h *domainHandler) getDomains(c echo.Context) error {
+	whereParams := map[string]interface{}{}
+	for k, v := range c.QueryParams() {
+		if conf.IsHTTPAuth() && strings.ToLower(k) == "name" {
+			domains := c.Get(AllowDomainsKey).([]string)
+			for _, vv := range domains {
+				v = append(v, vv)
+			}
+		}
+		whereParams[k] = v
+	}
+
+	ds, err := h.domainModel.FindBy(whereParams)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	d := model.Domains{}
-	query := db.Debug().
-		Preload("Records")
-
-	for k, v := range c.QueryParams() {
-		if k == "name" || k == "id" {
-			query = query.Where(k+" = ?", v)
-		}
-	}
-
-	r := query.Find(&d)
-	if r.Error != nil {
-		return r.Error
-	}
-
-	if len(d) == 0 {
+	if ds == nil {
 		return c.JSON(http.StatusNotFound, "domains does not exists")
 	}
 
-	if conf.IsHTTPAuth() {
-		domains := c.Get(AllowDomainsKey).([]string)
-		d.FilterOwnerDomains(domains)
-	}
-	return c.JSON(http.StatusNoContent, d)
+	return c.JSON(http.StatusOK, ds)
 }
 
 // updateDomain is update domain.
@@ -64,29 +56,23 @@ func getDomains(c echo.Context) error {
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /domains/{name} [update]
-func updateDomain(c echo.Context) error {
-	db, err := prepare(c, c.Param("name"))
+func (h *domainHandler) updateDomain(c echo.Context) error {
+	err := isAllowDomain(c, c.Param("name"))
 	if err != nil {
 		return err
-	}
-
-	d := model.Domain{}
-	r := db.Where("name = ?", c.Param("name")).Take(&d)
-	if r.Error != nil {
-		if r.RecordNotFound() {
-			return c.JSON(http.StatusNotFound, "domains does not exists")
-		} else {
-			return c.JSON(http.StatusInternalServerError, r.Error)
-		}
 	}
 
 	nd := &model.Domain{}
 	if err := c.Bind(nd); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	r = db.Model(&d).Updates(&nd)
-	if r.Error != nil {
-		return c.JSON(http.StatusInternalServerError, r.Error)
+	updated, err := h.domainModel.UpdateByName(c.Param("name"), nd)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	if updated {
+		return c.JSON(http.StatusNotFound, "domains does not exists")
 	}
 	return c.JSON(http.StatusOK, nil)
 }
@@ -102,25 +88,19 @@ func updateDomain(c echo.Context) error {
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /domains/{name} [delete]
-func deleteDomain(c echo.Context) error {
-	db, err := prepare(c, c.Param("name"))
+func (h *domainHandler) deleteDomain(c echo.Context) error {
+	err := isAllowDomain(c, c.Param("name"))
 	if err != nil {
 		return err
 	}
 
-	d := model.Domain{}
-	r := db.Where("name = ?", c.Param("name")).Take(&d)
-	if r.Error != nil {
-		if r.RecordNotFound() {
-			return c.JSON(http.StatusNotFound, "domains does not exists")
-		} else {
-			return c.JSON(http.StatusInternalServerError, r.Error)
-		}
+	deleted, err := h.domainModel.DeleteByName(c.Param("name"))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	r = db.Delete(d)
-	if r.Error != nil {
-		return c.JSON(http.StatusInternalServerError, r.Error)
+	if deleted {
+		return c.JSON(http.StatusNotFound, "domains does not exists")
 	}
 
 	return c.JSON(http.StatusOK, nil)
@@ -137,34 +117,28 @@ func deleteDomain(c echo.Context) error {
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /domains [post]
-func createDomain(c echo.Context) error {
-	db, err := prepare(c, "")
-	if err != nil {
-		return err
-	}
-
+func (h *domainHandler) createDomain(c echo.Context) error {
 	d := &model.Domain{}
 	if err := c.Bind(d); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	if err := db.Create(&d).Error; err != nil {
-		return c.JSON(http.StatusInternalServerError, err)
+	err := isAllowDomain(c, d.Name)
+	if err != nil {
+		return err
 	}
 
+	if err := h.domainModel.Create(d); err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
 	return c.JSON(http.StatusCreated, nil)
 }
 
-func prepare(c echo.Context, name string) (*gorm.DB, error) {
-	db, err := getDBConnection()
-	if err != nil {
-		return nil, c.JSON(http.StatusInternalServerError, err)
-	}
-
+func isAllowDomain(c echo.Context, name string) error {
 	if name != "" && !allowDomain(c, name) {
-		return nil, c.JSON(http.StatusForbidden, nil)
+		return c.JSON(http.StatusForbidden, nil)
 	}
-	return db, nil
+	return nil
 }
 
 func allowDomain(c echo.Context, name string) bool {
@@ -180,9 +154,19 @@ func allowDomain(c echo.Context, name string) bool {
 	return false
 }
 
-func DomainEndpoints(g *echo.Group) {
-	g.GET("/domains", getDomains)
-	g.PUT("/domains/:name", updateDomain)
-	g.DELETE("/domains/:name", deleteDomain)
-	g.POST("/domains", createDomain)
+type domainHandler struct {
+	domainModel model.DomainModel
+}
+
+func NewDomainHandler(d model.DomainModel) *domainHandler {
+	return &domainHandler{
+		domainModel: d,
+	}
+}
+func DomainEndpoints(g *echo.Group, db *gorm.DB) {
+	h := NewDomainHandler(model.NewDomainModel(db))
+	g.GET("/domains", h.getDomains)
+	g.PUT("/domains/:name", h.updateDomain)
+	g.DELETE("/domains/:name", h.deleteDomain)
+	g.POST("/domains", h.createDomain)
 }

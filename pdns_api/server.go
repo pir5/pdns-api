@@ -10,6 +10,8 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	echoSwagger "github.com/swaggo/echo-swagger"
 
 	"github.com/facebookgo/pidfile"
@@ -120,7 +122,18 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 	}()
 
 	v1 := e.Group("/v1")
-	DomainEndpoints(v1)
+
+	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
+		conf.DB.UserName,
+		conf.DB.Password,
+		conf.DB.Host,
+		conf.DB.Port,
+		conf.DB.DBName,
+	))
+	if err != nil {
+		return err
+	}
+	DomainEndpoints(v1, db)
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello! STNS!!1")
 	})
