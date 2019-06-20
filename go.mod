@@ -10,10 +10,15 @@ require (
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.4.0 // indirect
 	github.com/go-openapi/spec v0.19.2 // indirect
+	github.com/go-sql-driver/mysql v1.4.1 // indirect
+	github.com/jinzhu/gorm v1.9.1
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/k0kubun/pp v2.3.0+incompatible
 	github.com/kless/osutil v0.0.0-20161130133508-7d3ee1afa71c
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo/v4 v4.1.6
 	github.com/labstack/gommon v0.2.9
+	github.com/revel/config v0.21.0
 	github.com/swaggo/echo-swagger v0.0.0-20190329130007-1219b460a043
 	github.com/swaggo/gin-swagger v1.1.0 // indirect
 	github.com/swaggo/swag v1.5.1

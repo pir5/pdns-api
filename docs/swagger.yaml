@@ -14,9 +14,60 @@ definitions:
         type: string
       notified_serial:
         type: integer
+      records:
+        $ref: '#/definitions/model.Records'
+        type: object
       type:
         type: string
     type: object
+  model.Record:
+    properties:
+      auth:
+        type: boolean
+      content:
+        type: string
+      disabled:
+        type: boolean
+      domain_id:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      older_name:
+        type: string
+      prio:
+        type: integer
+      ttl:
+        type: integer
+      type:
+        type: string
+    type: object
+  model.Records:
+    items:
+      properties:
+        auth:
+          type: boolean
+        content:
+          type: string
+        disabled:
+          type: boolean
+        domain_id:
+          type: integer
+        id:
+          type: integer
+        name:
+          type: string
+        older_name:
+          type: string
+        prio:
+          type: integer
+        ttl:
+          type: integer
+        type:
+          type: string
+      type: object
+    type: array
   pdns_api.HTTPError:
     type: object
 host: 127.0.0.1:8080
@@ -52,10 +103,83 @@ paths:
             items:
               $ref: '#/definitions/model.Domain'
             type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
             type: object
       summary: get domains
+    post:
+      consumes:
+      - application/json
+      description: create domain
+      parameters:
+      - description: Domain Object
+        in: body
+        name: domain
+        required: true
+        schema:
+          $ref: '#/definitions/model.Domain'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201": {}
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+      summary: create domain
+  /domains/{name}:
+    delete:
+      consumes:
+      - application/json
+      description: delete domain
+      parameters:
+      - description: Domain Name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204": {}
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+      summary: delete domain
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
