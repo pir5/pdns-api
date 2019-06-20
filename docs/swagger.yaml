@@ -1,0 +1,61 @@
+basePath: /v1
+definitions:
+  model.Domain:
+    properties:
+      account:
+        type: string
+      id:
+        type: integer
+      last_check:
+        type: integer
+      master:
+        type: string
+      name:
+        type: string
+      notified_serial:
+        type: integer
+      type:
+        type: string
+    type: object
+  pdns_api.HTTPError:
+    type: object
+host: 127.0.0.1:8080
+info:
+  contact: {}
+  description: This is PDNS RESTful API Server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: PDNS-API
+  version: "1.0"
+paths:
+  /domains:
+    get:
+      consumes:
+      - application/json
+      description: get domains
+      parameters:
+      - description: Domain ID
+        in: query
+        name: id
+        type: integer
+      - description: Name
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Domain'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+      summary: get domains
+swagger: "2.0"

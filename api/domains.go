@@ -3,13 +3,24 @@ package api
 import (
 	"net/http"
 
-	"github.com/labstack/echo"
-	_ "github.com/tredoe/osutil/user/crypt/md5_crypt"
-	_ "github.com/tredoe/osutil/user/crypt/sha256_crypt"
+	"github.com/labstack/echo/v4"
+	"github.com/pir5/pdns-api/model"
 )
 
+// getDomains is getting domains.
+// @Summary get domains
+// @Description get domains
+// @Accept  json
+// @Produce  json
+// @Param id query int false "Domain ID"
+// @Param name query string false "Name"
+// @Success 200 {array} model.Domain
+// @Failure 500 {object} pdns_api.HTTPError
+// @Router /domains [get]
 func getDomains(c echo.Context) error {
-	return c.JSON(http.StatusOK, nil)
+	return c.JSON(http.StatusOK, model.Domains{model.Domain{
+		ID: 1,
+	}})
 }
 func updateDomain(c echo.Context) error {
 	return c.JSON(http.StatusOK, nil)
