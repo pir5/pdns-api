@@ -14,3 +14,6 @@ dbmigrate: depends dbcreate
 	sql-migrate up pdns
 depends:
 	GO111MODULE=off go get -v github.com/rubenv/sql-migrate/...
+
+run:
+	go run main.go --config ./misc/develop.toml server
