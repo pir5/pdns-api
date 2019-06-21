@@ -23,8 +23,8 @@ import (
 func (h *domainHandler) getDomains(c echo.Context) error {
 	whereParams := map[string]interface{}{}
 	for k, v := range c.QueryParams() {
-		if conf.IsHTTPAuth() && strings.ToLower(k) == "name" {
-			domains := c.Get(AllowDomainsKey).([]string)
+		if globalConfig.IsHTTPAuth() && strings.ToLower(k) == "name" {
+			domains := getAllowDomains(c)
 			for _, vv := range domains {
 				v = append(v, vv)
 			}
@@ -37,7 +37,7 @@ func (h *domainHandler) getDomains(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	if ds == nil {
+	if ds == nil || len(ds) == 0 {
 		return c.JSON(http.StatusNotFound, "domains does not exists")
 	}
 
@@ -135,23 +135,24 @@ func (h *domainHandler) createDomain(c echo.Context) error {
 }
 
 func isAllowDomain(c echo.Context, name string) error {
-	if name != "" && !allowDomain(c, name) {
-		return c.JSON(http.StatusForbidden, nil)
+	if !globalConfig.IsHTTPAuth() {
+		return nil
 	}
-	return nil
-}
 
-func allowDomain(c echo.Context, name string) bool {
-	if !conf.IsHTTPAuth() {
-		return true
-	}
-	domains := c.Get(AllowDomainsKey).([]string)
-	for _, vv := range domains {
+	for _, vv := range getAllowDomains(c) {
 		if strings.ToLower(name) == strings.ToLower(vv) {
-			return true
+			return nil
 		}
 	}
-	return false
+	return c.JSON(http.StatusForbidden, nil)
+}
+
+func getAllowDomains(c echo.Context) []string {
+	ds := c.Get(AllowDomainsKey)
+	if ds != nil {
+		return ds.([]string)
+	}
+	return []string{}
 }
 
 type domainHandler struct {

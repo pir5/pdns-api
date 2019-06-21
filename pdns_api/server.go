@@ -44,7 +44,7 @@ func init() {
 
 }
 
-var conf Config
+var globalConfig Config
 
 // runServer executes sub command and return exit code.
 func runServer(cmdFlags *GlobalFlags, args []string) error {
@@ -53,7 +53,8 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 		fmt.Println(err)
 		os.Exit(2)
 	}
-	conf = c
+
+	globalConfig = c
 
 	logger := log.New("pdns-api")
 	pidfile.SetPidfilePath(*cmdFlags.PidPath)
@@ -93,14 +94,14 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 
 	e.Use(middleware.KeyAuthWithConfig(middleware.KeyAuthConfig{
 		Validator: func(key string, c echo.Context) (bool, error) {
-			if conf.IsTokenAuth() {
-				for _, v := range conf.TokenAuth.Tokens {
+			if globalConfig.IsTokenAuth() {
+				for _, v := range globalConfig.TokenAuth.Tokens {
 					if key == v {
 						return true, nil
 					}
 				}
-			} else if conf.IsHTTPAuth() {
-				domains, err := conf.TokenAuth.HttpAuth.Authenticate(key)
+			} else if globalConfig.IsHTTPAuth() {
+				domains, err := globalConfig.TokenAuth.HttpAuth.Authenticate(key)
 				if err != nil {
 					return false, err
 				}
@@ -111,12 +112,12 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 
 		},
 		Skipper: func(c echo.Context) bool {
-			return !conf.IsTokenAuth() && !conf.IsHTTPAuth()
+			return !globalConfig.IsTokenAuth() && !globalConfig.IsHTTPAuth()
 		},
 	}))
 
 	go func() {
-		if err := e.Start(conf.Listen); err != nil {
+		if err := e.Start(globalConfig.Listen); err != nil {
 			e.Logger.Fatalf("shutting down the server: %s", err)
 		}
 	}()
@@ -124,11 +125,11 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 	v1 := e.Group("/v1")
 
 	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
-		conf.DB.UserName,
-		conf.DB.Password,
-		conf.DB.Host,
-		conf.DB.Port,
-		conf.DB.DBName,
+		globalConfig.DB.UserName,
+		globalConfig.DB.Password,
+		globalConfig.DB.Host,
+		globalConfig.DB.Port,
+		globalConfig.DB.DBName,
 	))
 	if err != nil {
 		return err
