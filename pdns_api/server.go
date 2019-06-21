@@ -135,7 +135,7 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 	}
 	DomainEndpoints(v1, db)
 	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello! STNS!!1")
+		return c.String(http.StatusOK, "Hello! PDNS!!1")
 	})
 
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
