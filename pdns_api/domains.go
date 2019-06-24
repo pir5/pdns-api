@@ -1,6 +1,7 @@
 package pdns_api
 
 import (
+	"errors"
 	"net/http"
 	"strings"
 
@@ -23,13 +24,27 @@ import (
 func (h *domainHandler) getDomains(c echo.Context) error {
 	whereParams := map[string]interface{}{}
 	for k, v := range c.QueryParams() {
-		if globalConfig.IsHTTPAuth() && strings.ToLower(k) == "name" {
-			domains := getAllowDomains(c)
-			for _, vv := range domains {
-				v = append(v, vv)
-			}
+		if k != "id" && k != "name" {
+			return c.JSON(http.StatusForbidden, nil)
 		}
 		whereParams[k] = v
+	}
+
+	if globalConfig.IsHTTPAuth() {
+		domains, err := getAllowDomains(c)
+		if err != nil {
+			return c.JSON(http.StatusForbidden, err)
+		}
+		names := []string{}
+		n := whereParams["name"]
+		if n != nil {
+			names = n.([]string)
+		}
+
+		for _, vv := range domains {
+			names = append(names, vv)
+		}
+		whereParams["name"] = names
 	}
 
 	ds, err := h.domainModel.FindBy(whereParams)
@@ -71,7 +86,7 @@ func (h *domainHandler) updateDomain(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	if updated {
+	if !updated {
 		return c.JSON(http.StatusNotFound, "domains does not exists")
 	}
 	return c.JSON(http.StatusOK, nil)
@@ -99,11 +114,11 @@ func (h *domainHandler) deleteDomain(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	if deleted {
+	if !deleted {
 		return c.JSON(http.StatusNotFound, "domains does not exists")
 	}
 
-	return c.JSON(http.StatusOK, nil)
+	return c.JSON(http.StatusNoContent, nil)
 }
 
 // createDomain is create domain.
@@ -139,7 +154,12 @@ func isAllowDomain(c echo.Context, name string) error {
 		return nil
 	}
 
-	for _, vv := range getAllowDomains(c) {
+	domains, err := getAllowDomains(c)
+	if err != nil {
+		return c.JSON(http.StatusForbidden, nil)
+	}
+
+	for _, vv := range domains {
 		if strings.ToLower(name) == strings.ToLower(vv) {
 			return nil
 		}
@@ -147,12 +167,12 @@ func isAllowDomain(c echo.Context, name string) error {
 	return c.JSON(http.StatusForbidden, nil)
 }
 
-func getAllowDomains(c echo.Context) []string {
+func getAllowDomains(c echo.Context) ([]string, error) {
 	ds := c.Get(AllowDomainsKey)
 	if ds != nil {
-		return ds.([]string)
+		return ds.([]string), nil
 	}
-	return []string{}
+	return nil, errors.New("allow domains not exists")
 }
 
 type domainHandler struct {
