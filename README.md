@@ -11,6 +11,7 @@ TBD
 $ brew install mysql
 $ brew services start mysql
 $ make dbmigrate
+$ make test
 ```
 
 ## Author
