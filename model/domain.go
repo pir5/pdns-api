@@ -32,7 +32,7 @@ type Domain struct {
 type Domains []Domain
 
 func (d *Domain) FindBy(params map[string]interface{}) (Domains, error) {
-	query := d.db.Debug().Preload("Records")
+	query := d.db.Preload("Records")
 	for k, v := range params {
 		query = query.Where(k+" in(?)", v)
 	}
