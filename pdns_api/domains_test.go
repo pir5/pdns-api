@@ -13,6 +13,13 @@ import (
 type domainModelStub struct {
 }
 
+func init() {
+	globalConfig = Config{
+		TokenAuth: tokenAuth{
+			AuthType: AuthTypeHTTP,
+		},
+	}
+}
 func (d *domainModelStub) FindBy(params map[string]interface{}) (model.Domains, error) {
 	ds := model.Domains{}
 
@@ -21,21 +28,17 @@ func (d *domainModelStub) FindBy(params map[string]interface{}) (model.Domains, 
 		ds = model.Domains{
 			model.Domain{
 				ID:   1,
-				Name: "test.com",
+				Name: "ok.com",
 			},
 		}
 	case "error_please":
 		return nil, fmt.Errorf("give error to you")
-	case "allowed":
-		if params["name"].([]string)[1] == "allow.com" {
-			ds = model.Domains{
-				model.Domain{
-					ID:   1,
-					Name: "allow.com",
-				},
-			}
-		} else {
-			return nil, fmt.Errorf("give error to you")
+	case "deny":
+		ds = model.Domains{
+			model.Domain{
+				ID:   1,
+				Name: "deny.com",
+			},
 		}
 	}
 
@@ -100,13 +103,13 @@ func Test_domainHandler_getDomains(t *testing.T) {
 			queryName: "error_please",
 		},
 		{
-			name: "allowed domain",
+			name: "deny",
 			fields: fields{
 				domainModel: &domainModelStub{},
 			},
 			wantErr:   false,
-			wantCode:  http.StatusOK,
-			queryName: "allowed",
+			wantCode:  http.StatusNotFound,
+			queryName: "deny",
 		},
 	}
 	for _, tt := range tests {
@@ -115,17 +118,11 @@ func Test_domainHandler_getDomains(t *testing.T) {
 				domainModel: tt.fields.domainModel,
 			}
 
-			globalConfig = Config{
-				TokenAuth: tokenAuth{
-					AuthType: AuthTypeHTTP,
-				},
-			}
-
 			q := make(url.Values)
 			q.Set("name", tt.queryName)
 			ctx, rec := dummyContext(t, "GET", "/domains?"+q.Encode(), nil)
 
-			ctx.Set(AllowDomainsKey, []string{"allow.com"})
+			ctx.Set(AllowDomainsKey, []string{"ok.com"})
 			if err := h.getDomains(ctx); (err != nil) != tt.wantErr {
 				t.Errorf("domainHandler.getDomains() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -175,13 +172,13 @@ func Test_domainHandler_updateDomain(t *testing.T) {
 			queryName: "notfound.com",
 		},
 		{
-			name: "not allowed",
+			name: "deny",
 			fields: fields{
 				domainModel: &domainModelStub{},
 			},
 			wantErr:   false,
 			wantCode:  http.StatusForbidden,
-			queryName: "notallowed.com",
+			queryName: "deny",
 		},
 	}
 	for _, tt := range tests {
@@ -236,13 +233,13 @@ func Test_domainHandler_deleteDomain(t *testing.T) {
 			queryName: "notfound.com",
 		},
 		{
-			name: "not allowed",
+			name: "deny",
 			fields: fields{
 				domainModel: &domainModelStub{},
 			},
 			wantErr:   false,
 			wantCode:  http.StatusForbidden,
-			queryName: "notallowed.com",
+			queryName: "deny",
 		},
 	}
 
@@ -298,13 +295,13 @@ func Test_domainHandler_createDomain(t *testing.T) {
 			queryName: "ok.com",
 		},
 		{
-			name: "not allowed",
+			name: "deny",
 			fields: fields{
 				domainModel: &domainModelStub{},
 			},
 			wantErr:   false,
 			wantCode:  http.StatusForbidden,
-			queryName: "notallowed.com",
+			queryName: "deny.com",
 		},
 	}
 	for _, tt := range tests {

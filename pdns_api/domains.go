@@ -30,26 +30,25 @@ func (h *domainHandler) getDomains(c echo.Context) error {
 		whereParams[k] = v
 	}
 
+	ds, err := h.domainModel.FindBy(whereParams)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
 	if globalConfig.IsHTTPAuth() {
+		ret := model.Domains{}
 		domains, err := getAllowDomains(c)
 		if err != nil {
 			return c.JSON(http.StatusForbidden, err)
 		}
-		names := []string{}
-		n := whereParams["name"]
-		if n != nil {
-			names = n.([]string)
-		}
-
 		for _, vv := range domains {
-			names = append(names, vv)
+			for _, v := range ds {
+				if strings.ToLower(v.Name) == strings.ToLower(vv) {
+					ret = append(ret, v)
+				}
+			}
 		}
-		whereParams["name"] = names
-	}
-
-	ds, err := h.domainModel.FindBy(whereParams)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err)
+		ds = ret
 	}
 
 	if ds == nil || len(ds) == 0 {
