@@ -2,7 +2,6 @@ package pdns_api
 
 import (
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/jinzhu/gorm"
@@ -34,14 +33,15 @@ func (h *recordHandler) getRecords(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
+
 	if globalConfig.IsHTTPAuth() {
 		ret := model.Records{}
-		records, err := getAllowDomains(c)
+		domains, err := getAllowDomains(c)
 		if err != nil {
 			return c.JSON(http.StatusForbidden, err)
 		}
 
-		for _, vv := range records {
+		for _, vv := range domains {
 			for _, v := range ds {
 				if strings.ToLower(v.Domain.Name) == strings.ToLower(vv) {
 					ret = append(ret, v)
@@ -71,8 +71,8 @@ func (h *recordHandler) getRecords(c echo.Context) error {
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /records/{id} [update]
 func (h *recordHandler) updateRecord(c echo.Context) error {
-	if err := h.isAllowRecord(c); err != nil {
-		return nil
+	if err := h.isAllowRecordID(c); err != nil {
+		return err
 	}
 
 	nd := &model.Record{}
@@ -103,7 +103,7 @@ func (h *recordHandler) updateRecord(c echo.Context) error {
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /records/{name} [delete]
 func (h *recordHandler) deleteRecord(c echo.Context) error {
-	err := h.isAllowRecord(c)
+	err := h.isAllowRecordID(c)
 	if err != nil {
 		return err
 	}
@@ -117,7 +117,7 @@ func (h *recordHandler) deleteRecord(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, "records does not exists")
 	}
 
-	return c.JSON(http.StatusNoContent, nil)
+	return c.NoContent(http.StatusNoContent)
 }
 
 // createRecord is create record.
@@ -137,7 +137,7 @@ func (h *recordHandler) createRecord(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	err := h.isAllowRecordByDomainID(c, d.DomainID)
+	err := h.isAllowDomainID(c, d.DomainID)
 	if err != nil {
 		return err
 	}
@@ -148,17 +148,13 @@ func (h *recordHandler) createRecord(c echo.Context) error {
 	return c.JSON(http.StatusCreated, nil)
 }
 
-func (h *recordHandler) isAllowRecord(c echo.Context) error {
+func (h *recordHandler) isAllowRecordID(c echo.Context) error {
 	if !globalConfig.IsHTTPAuth() {
 		return nil
 	}
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, err)
-	}
 
 	ds, err := h.recordModel.FindBy(map[string]interface{}{
-		"id": id,
+		"id": []string{c.Param("id")},
 	})
 
 	if err != nil {
@@ -169,14 +165,10 @@ func (h *recordHandler) isAllowRecord(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, "records does not exists")
 	}
 
-	err = isAllowDomain(c, ds[0].Name)
-	if err != nil {
-		return err
-	}
-	return nil
+	return h.isAllowDomainID(c, ds[0].DomainID)
 }
 
-func (h *recordHandler) isAllowRecordByDomainID(c echo.Context, domainID int) error {
+func (h *recordHandler) isAllowDomainID(c echo.Context, domainID int) error {
 	if !globalConfig.IsHTTPAuth() {
 		return nil
 	}
@@ -185,11 +177,15 @@ func (h *recordHandler) isAllowRecordByDomainID(c echo.Context, domainID int) er
 		"id": domainID,
 	})
 
-	err = isAllowDomain(c, ds[0].Name)
 	if err != nil {
-		return err
+		return c.JSON(http.StatusForbidden, nil)
 	}
-	return c.JSON(http.StatusForbidden, nil)
+
+	if ds == nil || len(ds) == 0 {
+		return c.JSON(http.StatusNotFound, "domains does not exists")
+	}
+
+	return isAllowDomain(c, ds[0].Name)
 }
 
 type recordHandler struct {

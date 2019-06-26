@@ -117,7 +117,7 @@ func (h *domainHandler) deleteDomain(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, "domains does not exists")
 	}
 
-	return c.JSON(http.StatusNoContent, nil)
+	return c.NoContent(http.StatusNoContent)
 }
 
 // createDomain is create domain.

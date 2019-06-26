@@ -23,22 +23,43 @@ func init() {
 func (d *domainModelStub) FindBy(params map[string]interface{}) (model.Domains, error) {
 	ds := model.Domains{}
 
-	switch params["name"].([]string)[0] {
-	case "ok":
-		ds = model.Domains{
-			model.Domain{
-				ID:   1,
-				Name: "ok.com",
-			},
+	if params["name"] != nil {
+		switch params["name"].([]string)[0] {
+		case "ok":
+			ds = model.Domains{
+				model.Domain{
+					ID:   1,
+					Name: "ok.com",
+				},
+			}
+		case "error_please":
+			return nil, fmt.Errorf("give error to you")
+		case "deny":
+			ds = model.Domains{
+				model.Domain{
+					ID:   1,
+					Name: "deny.com",
+				},
+			}
 		}
-	case "error_please":
-		return nil, fmt.Errorf("give error to you")
-	case "deny":
-		ds = model.Domains{
-			model.Domain{
-				ID:   1,
-				Name: "deny.com",
-			},
+	} else if params["id"] != nil {
+		switch params["id"].(int) {
+		case 1:
+			ds = model.Domains{
+				model.Domain{
+					ID:   1,
+					Name: "ok.com",
+				},
+			}
+		case 2:
+			return nil, fmt.Errorf("give error to you")
+		case 3:
+			ds = model.Domains{
+				model.Domain{
+					ID:   1,
+					Name: "deny.com",
+				},
+			}
 		}
 	}
 
