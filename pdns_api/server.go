@@ -134,7 +134,7 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 	if err != nil {
 		return err
 	}
-	DomainEndpoints(v1, db)
+	DomainEndpoints(v1, db.Set("gorm:association_autoupdate", false).Set("gorm:association_autocreate", false))
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello! PDNS!!1")
 	})
