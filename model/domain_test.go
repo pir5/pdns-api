@@ -381,6 +381,15 @@ func TestDomain_DeleteByName(t *testing.T) {
 					WithArgs("test.com").
 					WillReturnRows(tt.domainRows)
 				mock.ExpectBegin()
+
+				mock.ExpectExec("DELETE FROM `records` WHERE \\(domain_id = \\?\\)").
+					WithArgs(1).WillReturnResult(
+					sqlmock.NewResult(
+						1,
+						1,
+					),
+				)
+
 				mock.ExpectExec("DELETE FROM `domains` WHERE `domains`.`id` = \\?").
 					WithArgs(1).WillReturnResult(
 					sqlmock.NewResult(

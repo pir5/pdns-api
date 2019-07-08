@@ -75,7 +75,28 @@ func (d *Domain) DeleteByName(name string) (bool, error) {
 		}
 	}
 
-	r = d.db.Delete(d)
+	tx := d.db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	r = tx.Where("domain_id = ?", d.ID).Delete(&Record{})
+	if r.Error != nil {
+		if !r.RecordNotFound() {
+			tx.Rollback()
+			return false, r.Error
+		}
+	}
+
+	r = tx.Delete(d)
+	if r.Error != nil {
+		tx.Rollback()
+		return false, r.Error
+	}
+
+	r = tx.Commit()
 	if r.Error != nil {
 		return false, r.Error
 	}
