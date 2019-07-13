@@ -37,7 +37,7 @@ func Test_httpAuth_Authenticate(t *testing.T) {
 			handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				bufbody := new(bytes.Buffer)
 				bufbody.ReadFrom(r.Body)
-				if "token=ok" == bufbody.String() {
+				if "{\"token\":\"ok\"}" == bufbody.String() {
 					fmt.Fprintln(w, `{"domains": ["test.com"]}`)
 				}
 			})

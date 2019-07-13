@@ -1,11 +1,10 @@
 package pdns_api
 
 import (
+	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"net/url"
-	"strings"
 )
 
 type httpAuth struct {
@@ -18,14 +17,22 @@ type httpAuthResponse struct {
 }
 
 func (h httpAuth) Authenticate(token string) ([]string, error) {
-	values := url.Values{}
-	values.Set("token", token)
-
-	req, err := http.NewRequest("POST", h.endpoint, strings.NewReader(values.Encode()))
+	input, err := json.Marshal(
+		struct {
+			Token string `json:"token"`
+		}{
+			Token: token,
+		},
+	)
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	req, err := http.NewRequest("POST", h.endpoint, bytes.NewBuffer(input))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/json")
 	for k, v := range h.requestHeader {
 		req.Header.Add(k, v)
 	}
