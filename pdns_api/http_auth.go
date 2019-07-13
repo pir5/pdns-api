@@ -14,7 +14,7 @@ type httpAuth struct {
 }
 
 type httpAuthResponse struct {
-	domains []string
+	Domains []string
 }
 
 func (h httpAuth) Authenticate(token string) ([]string, error) {
@@ -48,5 +48,5 @@ func (h httpAuth) Authenticate(token string) ([]string, error) {
 		return nil, err
 	}
 
-	return d.domains, err
+	return d.Domains, err
 }
