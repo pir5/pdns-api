@@ -111,6 +111,59 @@
             }
         },
         "/domains/{name}": {
+            "put": {
+                "description": "update domain",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "update domain",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Domain Name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Domain Object",
+                        "name": "domain",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Domain"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {},
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "description": "delete domain",
                 "consumes": [
@@ -125,6 +178,313 @@
                         "type": "string",
                         "description": "Domain Name",
                         "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {},
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/records": {
+            "get": {
+                "description": "get records",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "get records",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Record ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Domain ID",
+                        "name": "domain_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Record"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create record",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "create record",
+                "parameters": [
+                    {
+                        "description": "Record Object",
+                        "name": "record",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {},
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/records/disable/{id}": {
+            "put": {
+                "description": "disable record",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "disable record",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Record ID ",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Record Object",
+                        "name": "record",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {},
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/records/enable/{id}": {
+            "put": {
+                "description": "enable record",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "enable record",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Record ID ",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Record Object",
+                        "name": "record",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {},
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/records/{id}": {
+            "put": {
+                "description": "update record",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "update record",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Record ID ",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Record Object",
+                        "name": "record",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {},
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/records/{name}": {
+            "delete": {
+                "description": "delete record",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "delete record",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Record ID ",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     }
@@ -199,6 +559,9 @@
                 "content": {
                     "type": "string"
                 },
+                "db": {
+                    "type": "string"
+                },
                 "disabled": {
                     "type": "boolean"
                 },
@@ -234,6 +597,9 @@
                         "type": "boolean"
                     },
                     "content": {
+                        "type": "string"
+                    },
+                    "db": {
                         "type": "string"
                     },
                     "disabled": {

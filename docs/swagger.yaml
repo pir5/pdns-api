@@ -28,6 +28,8 @@ definitions:
         type: boolean
       content:
         type: string
+      db:
+        type: string
       disabled:
         type: boolean
       domain_id:
@@ -51,6 +53,8 @@ definitions:
         auth:
           type: boolean
         content:
+          type: string
+        db:
           type: string
         disabled:
           type: boolean
@@ -179,6 +183,254 @@ paths:
             $ref: '#/definitions/pdns_api.HTTPError'
             type: object
       summary: delete domain
+    put:
+      consumes:
+      - application/json
+      description: update domain
+      parameters:
+      - description: Domain Name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: Domain Object
+        in: body
+        name: domain
+        required: true
+        schema:
+          $ref: '#/definitions/model.Domain'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200": {}
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+      summary: update domain
+  /records:
+    get:
+      consumes:
+      - application/json
+      description: get records
+      parameters:
+      - description: Record ID
+        in: query
+        name: id
+        type: integer
+      - description: Domain ID
+        in: query
+        name: domain_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Record'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+      summary: get records
+    post:
+      consumes:
+      - application/json
+      description: create record
+      parameters:
+      - description: Record Object
+        in: body
+        name: record
+        required: true
+        schema:
+          $ref: '#/definitions/model.Record'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201": {}
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+      summary: create record
+  /records/{id}:
+    put:
+      consumes:
+      - application/json
+      description: update record
+      parameters:
+      - description: 'Record ID '
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Record Object
+        in: body
+        name: record
+        required: true
+        schema:
+          $ref: '#/definitions/model.Record'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200": {}
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+      summary: update record
+  /records/{name}:
+    delete:
+      consumes:
+      - application/json
+      description: delete record
+      parameters:
+      - description: 'Record ID '
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204": {}
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+      summary: delete record
+  /records/disable/{id}:
+    put:
+      consumes:
+      - application/json
+      description: disable record
+      parameters:
+      - description: 'Record ID '
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Record Object
+        in: body
+        name: record
+        required: true
+        schema:
+          $ref: '#/definitions/model.Record'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200": {}
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+      summary: disable record
+  /records/enable/{id}:
+    put:
+      consumes:
+      - application/json
+      description: enable record
+      parameters:
+      - description: 'Record ID '
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Record Object
+        in: body
+        name: record
+        required: true
+        schema:
+          $ref: '#/definitions/model.Record'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200": {}
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+      summary: enable record
 securityDefinitions:
   Bearer:
     in: header

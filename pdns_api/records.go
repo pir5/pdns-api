@@ -69,7 +69,7 @@ func (h *recordHandler) getRecords(c echo.Context) error {
 // @Failure 403 {object} pdns_api.HTTPError
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
-// @Router /records/{id} [update]
+// @Router /records/{id} [put]
 func (h *recordHandler) updateRecord(c echo.Context) error {
 	if err := h.isAllowRecordID(c); err != nil {
 		return err
@@ -89,6 +89,59 @@ func (h *recordHandler) updateRecord(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, "records does not exists")
 	}
 	return c.JSON(http.StatusOK, nil)
+}
+
+// enableRecord is enable record.
+// @Summary enable record
+// @Description enable record
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Record ID "
+// @Param record body model.Record true "Record Object"
+// @Success 200
+// @Failure 403 {object} pdns_api.HTTPError
+// @Failure 404 {object} pdns_api.HTTPError
+// @Failure 500 {object} pdns_api.HTTPError
+// @Router /records/enable/{id} [put]
+func (h *recordHandler) enableRecord(c echo.Context) error {
+	return changeState(h, c, false)
+}
+
+// disableRecord is disable record.
+// @Summary disable record
+// @Description disable record
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Record ID "
+// @Param record body model.Record true "Record Object"
+// @Success 200
+// @Failure 403 {object} pdns_api.HTTPError
+// @Failure 404 {object} pdns_api.HTTPError
+// @Failure 500 {object} pdns_api.HTTPError
+// @Router /records/disable/{id} [put]
+func (h *recordHandler) disableRecord(c echo.Context) error {
+	return changeState(h, c, true)
+}
+
+func changeState(h *recordHandler, c echo.Context, disabled bool) error {
+	if err := h.isAllowRecordID(c); err != nil {
+		return err
+	}
+
+	nd := &model.Record{
+		Disabled: disabled,
+	}
+
+	updated, err := h.recordModel.UpdateByID(c.Param("id"), nd)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	if !updated {
+		return c.JSON(http.StatusNotFound, "records does not exists")
+	}
+	return c.JSON(http.StatusOK, nil)
+
 }
 
 // deleteRecord is delete record.
@@ -206,6 +259,8 @@ func RecordEndpoints(g *echo.Group, db *gorm.DB) {
 	)
 	g.GET("/records", h.getRecords)
 	g.PUT("/records/:id", h.updateRecord)
+	g.PUT("/records/enable/:id", h.enableRecord)
+	g.PUT("/records/disable/:id", h.disableRecord)
 	g.DELETE("/records/:id", h.deleteRecord)
 	g.POST("/records", h.createRecord)
 }

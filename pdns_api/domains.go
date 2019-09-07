@@ -69,7 +69,7 @@ func (h *domainHandler) getDomains(c echo.Context) error {
 // @Failure 403 {object} pdns_api.HTTPError
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
-// @Router /domains/{name} [update]
+// @Router /domains/{name} [put]
 func (h *domainHandler) updateDomain(c echo.Context) error {
 	err := isAllowDomain(c, c.Param("name"))
 	if err != nil {

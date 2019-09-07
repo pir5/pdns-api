@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"testing"
 
+	"github.com/labstack/echo/v4"
 	"github.com/pir5/pdns-api/model"
 )
 
@@ -350,6 +351,140 @@ func Test_recordHandler_createRecord(t *testing.T) {
 				t.Errorf("recordHandler.createRecords() got different http status code = %d, wantCode %d", rec.Code, tt.wantCode)
 			}
 
+		})
+	}
+}
+
+func Test_recordHandler_enableRecord(t *testing.T) {
+	type fields struct {
+		recordModel model.RecordModel
+		domainModel model.DomainModel
+	}
+	type args struct {
+		c echo.Context
+	}
+	tests := []struct {
+		name     string
+		fields   fields
+		args     args
+		wantCode int
+		wantErr  bool
+		queryID  string
+	}{
+		{
+			name: "ok",
+			fields: fields{
+				domainModel: &domainModelStub{},
+				recordModel: &recordModelStub{},
+			},
+			wantErr:  false,
+			wantCode: http.StatusOK,
+			queryID:  "1",
+		},
+		{
+			name: "not found",
+			fields: fields{
+				domainModel: &domainModelStub{},
+				recordModel: &recordModelStub{},
+			},
+			wantErr:  false,
+			wantCode: http.StatusNotFound,
+			queryID:  "0",
+		},
+		{
+			name: "deny",
+			fields: fields{
+				domainModel: &domainModelStub{},
+				recordModel: &recordModelStub{},
+			},
+			wantErr:  false,
+			wantCode: http.StatusForbidden,
+			queryID:  "3",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			h := &recordHandler{
+				recordModel: tt.fields.recordModel,
+				domainModel: tt.fields.domainModel,
+			}
+			ctx, rec := dummyContext(t, "PUT", "/records/enable/:", nil)
+			ctx.SetParamNames("id")
+			ctx.SetParamValues(tt.queryID)
+			ctx.Set(AllowDomainsKey, []string{"ok.com"})
+			if err := h.enableRecord(ctx); (err != nil) != tt.wantErr {
+				t.Errorf("recordHandler.enableRecord() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			if rec.Code != tt.wantCode {
+				t.Errorf("recordHandler.enableRecords() got different http status code = %d, wantCode %d", rec.Code, tt.wantCode)
+			}
+		})
+	}
+}
+
+func Test_recordHandler_disableRecord(t *testing.T) {
+	type fields struct {
+		recordModel model.RecordModel
+		domainModel model.DomainModel
+	}
+	type args struct {
+		c echo.Context
+	}
+	tests := []struct {
+		name     string
+		fields   fields
+		args     args
+		wantCode int
+		wantErr  bool
+		queryID  string
+	}{
+		{
+			name: "ok",
+			fields: fields{
+				domainModel: &domainModelStub{},
+				recordModel: &recordModelStub{},
+			},
+			wantErr:  false,
+			wantCode: http.StatusOK,
+			queryID:  "1",
+		},
+		{
+			name: "not found",
+			fields: fields{
+				domainModel: &domainModelStub{},
+				recordModel: &recordModelStub{},
+			},
+			wantErr:  false,
+			wantCode: http.StatusNotFound,
+			queryID:  "0",
+		},
+		{
+			name: "deny",
+			fields: fields{
+				domainModel: &domainModelStub{},
+				recordModel: &recordModelStub{},
+			},
+			wantErr:  false,
+			wantCode: http.StatusForbidden,
+			queryID:  "3",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			h := &recordHandler{
+				recordModel: tt.fields.recordModel,
+				domainModel: tt.fields.domainModel,
+			}
+			ctx, rec := dummyContext(t, "PUT", "/records/disable/:", nil)
+			ctx.SetParamNames("id")
+			ctx.SetParamValues(tt.queryID)
+			ctx.Set(AllowDomainsKey, []string{"ok.com"})
+			if err := h.disableRecord(ctx); (err != nil) != tt.wantErr {
+				t.Errorf("recordHandler.disableRecord() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			if rec.Code != tt.wantCode {
+				t.Errorf("recordHandler.disableRecords() got different http status code = %d, wantCode %d", rec.Code, tt.wantCode)
+			}
 		})
 	}
 }
