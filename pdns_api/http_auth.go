@@ -16,12 +16,14 @@ type httpAuthResponse struct {
 	Domains []string
 }
 
-func (h httpAuth) Authenticate(token string) ([]string, error) {
+func (h httpAuth) Authenticate(userID string, secret string) ([]string, error) {
 	input, err := json.Marshal(
 		struct {
-			Token string `json:"token"`
+			UserID string `json:"user_id"`
+			Secret string `json:"secret"`
 		}{
-			Token: token,
+			UserID: userID,
+			Secret: secret,
 		},
 	)
 	if err != nil {

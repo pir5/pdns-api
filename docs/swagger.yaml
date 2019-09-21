@@ -432,8 +432,8 @@ paths:
             type: object
       summary: enable record
 securityDefinitions:
-  Bearer:
+  ID:
     in: header
-    name: Authorization
+    name: PIR5-SECRET
     type: apiKey
 swagger: "2.0"

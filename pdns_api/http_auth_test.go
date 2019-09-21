@@ -16,19 +16,22 @@ func Test_httpAuth_Authenticate(t *testing.T) {
 	}
 	tests := []struct {
 		name    string
-		token   string
+		userID  string
+		secret  string
 		fields  fields
 		want    []string
 		wantErr bool
 	}{
 		{
-			name:  "ok",
-			token: "ok",
-			want:  []string{"test.com"},
+			name:   "ok",
+			userID: "user",
+			secret: "secret",
+			want:   []string{"test.com"},
 		},
 		{
 			name:    "authenticate failed",
-			token:   "unsuccess",
+			userID:  "unsuccess",
+			secret:  "unsuccess",
 			wantErr: true,
 		},
 	}
@@ -37,7 +40,7 @@ func Test_httpAuth_Authenticate(t *testing.T) {
 			handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				bufbody := new(bytes.Buffer)
 				bufbody.ReadFrom(r.Body)
-				if "{\"token\":\"ok\"}" == bufbody.String() {
+				if "{\"user_id\":\"user\",\"secret\":\"secret\"}" == bufbody.String() {
 					fmt.Fprintln(w, `{"domains": ["test.com"]}`)
 				}
 			})
@@ -54,7 +57,7 @@ func Test_httpAuth_Authenticate(t *testing.T) {
 				endpoint:      "http://localhost:8080",
 				requestHeader: tt.fields.requestHeader,
 			}
-			got, err := h.Authenticate(tt.token)
+			got, err := h.Authenticate(tt.userID, tt.secret)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("httpAuth.Authenticate() error = %v, wantErr %v", err, tt.wantErr)
 				return

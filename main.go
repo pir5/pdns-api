@@ -20,9 +20,12 @@ import (
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @host 127.0.0.1:8080
 // @BasePath /v1
-// @securityDefinitions.apikey Bearer
+// @securityDefinitions.apikey ID
 // @in header
-// @name Authorization
+// @name PIR5-ID
+// @securityDefinitions.apikey Secret
+// @in header
+// @name PIR5-SECRET
 // Commands lists the available commands and help topics.
 // The order here is the order in which they are printed by 'pdns-api help'.
 var commands = []*pdns_api.Command{

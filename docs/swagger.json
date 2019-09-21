@@ -634,9 +634,9 @@
         }
     },
     "securityDefinitions": {
-        "Bearer": {
+        "ID": {
             "type": "apiKey",
-            "name": "Authorization",
+            "name": "PIR5-SECRET",
             "in": "header"
         }
     }
