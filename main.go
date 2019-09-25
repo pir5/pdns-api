@@ -34,7 +34,7 @@ var commands = []*pdns_api.Command{
 
 func main() {
 	cmdFlags := pdns_api.GlobalFlags{}
-	cmdFlags.ConfPath = flag.String("config", "/etc/pdns-api/api.conf", "config file path")
+	cmdFlags.ConfPath = flag.String("config", "/etc/pdns-api/api.toml", "config file path")
 	cmdFlags.PidPath = flag.String("pid", "/tmp/pdns-api.pid", "pid file path")
 	cmdFlags.LogPath = flag.String("logfile", "", "log file path")
 	flag.Usage = usage
