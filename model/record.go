@@ -78,7 +78,7 @@ func (d *Record) UpdateByID(id string, newRecord *Record) (bool, error) {
 	return true, nil
 }
 func (d *Record) DeleteByID(id string) (bool, error) {
-	r := d.db.Where("id = ?", id).Take(&d)
+	r := d.db.New().Where("id = ?", id).Take(&d)
 	if r.Error != nil {
 		if r.RecordNotFound() {
 			return false, nil
