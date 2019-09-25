@@ -124,7 +124,6 @@ func (h *domainHandler) deleteDomain(c echo.Context) error {
 // @Accept  json
 // @Produce  json
 // @Param domain body model.Domain true "Domain Object"
-
 // @Success 201 {object} model.Domain
 // @Failure 403 {object} pdns_api.HTTPError
 // @Failure 404 {object} pdns_api.HTTPError
