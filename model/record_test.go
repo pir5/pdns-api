@@ -19,7 +19,7 @@ func TestRecord_FindBy(t *testing.T) {
 		TTL       int
 		Prio      int
 		Disabled  bool
-		OlderName string
+		OrderName string
 		Auth      bool
 		Domain    Domain
 	}
@@ -165,7 +165,7 @@ func TestRecord_FindBy(t *testing.T) {
 				TTL:       tt.fields.TTL,
 				Prio:      tt.fields.Prio,
 				Disabled:  tt.fields.Disabled,
-				OlderName: tt.fields.OlderName,
+				OrderName: tt.fields.OrderName,
 				Auth:      tt.fields.Auth,
 				Domain:    tt.fields.Domain,
 			}
@@ -192,7 +192,7 @@ func TestRecord_UpdateByID(t *testing.T) {
 		TTL       int
 		Prio      int
 		Disabled  bool
-		OlderName string
+		OrderName string
 		Auth      bool
 		Domain    Domain
 	}
@@ -302,7 +302,7 @@ func TestRecord_UpdateByID(t *testing.T) {
 				TTL:       tt.fields.TTL,
 				Prio:      tt.fields.Prio,
 				Disabled:  tt.fields.Disabled,
-				OlderName: tt.fields.OlderName,
+				OrderName: tt.fields.OrderName,
 				Auth:      tt.fields.Auth,
 				Domain:    tt.fields.Domain,
 			}
@@ -329,7 +329,7 @@ func TestRecord_DeleteByID(t *testing.T) {
 		TTL       int
 		Prio      int
 		Disabled  bool
-		OlderName string
+		OrderName string
 		Auth      bool
 		Domain    Domain
 	}
@@ -434,7 +434,7 @@ func TestRecord_DeleteByID(t *testing.T) {
 				TTL:       tt.fields.TTL,
 				Prio:      tt.fields.Prio,
 				Disabled:  tt.fields.Disabled,
-				OlderName: tt.fields.OlderName,
+				OrderName: tt.fields.OrderName,
 				Auth:      tt.fields.Auth,
 				Domain:    tt.fields.Domain,
 			}
@@ -461,7 +461,7 @@ func TestRecord_Create(t *testing.T) {
 		TTL       int
 		Prio      int
 		Disabled  bool
-		OlderName string
+		OrderName string
 		Auth      bool
 		Domain    Domain
 	}
@@ -552,7 +552,7 @@ func TestRecord_Create(t *testing.T) {
 				TTL:       tt.fields.TTL,
 				Prio:      tt.fields.Prio,
 				Disabled:  tt.fields.Disabled,
-				OlderName: tt.fields.OlderName,
+				OrderName: tt.fields.OrderName,
 				Auth:      tt.fields.Auth,
 				Domain:    tt.fields.Domain,
 			}

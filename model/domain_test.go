@@ -101,7 +101,7 @@ func TestDomain_FindBy(t *testing.T) {
 							TTL:       100,
 							Prio:      1,
 							Disabled:  false,
-							OlderName: "",
+							OrderName: "",
 							Auth:      false,
 						},
 					},
