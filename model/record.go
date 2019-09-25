@@ -1,6 +1,7 @@
 package model
 
 import (
+
 	"github.com/jinzhu/gorm"
 )
 
@@ -78,7 +79,8 @@ func (d *Record) UpdateByID(id string, newRecord *Record) (bool, error) {
 	return true, nil
 }
 func (d *Record) DeleteByID(id string) (bool, error) {
-	r := d.db.New().Where("id = ?", id).Take(&d)
+	record := &Record{}
+	r := d.db.New().Where("id = ?", id).Take(&record)
 	if r.Error != nil {
 		if r.RecordNotFound() {
 			return false, nil
@@ -87,7 +89,7 @@ func (d *Record) DeleteByID(id string) (bool, error) {
 		}
 	}
 
-	r = d.db.Delete(d)
+	r = d.db.Delete(record)
 	if r.Error != nil {
 		return false, r.Error
 	}
