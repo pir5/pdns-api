@@ -2,6 +2,7 @@ package pdns_api
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -35,27 +36,16 @@ func (h *domainHandler) getDomains(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	if globalConfig.IsHTTPAuth() {
-		ret := model.Domains{}
-		domains, err := getAllowDomains(c)
-		if err != nil {
-			return c.JSON(http.StatusForbidden, err)
-		}
-		for _, vv := range domains {
-			for _, v := range ds {
-				if strings.ToLower(v.Name) == strings.ToLower(vv) {
-					ret = append(ret, v)
-				}
-			}
-		}
-		ds = ret
+	ids, err := filterDomains(ds.ToIntreface(), c)
+	if err != nil {
+		return c.JSON(http.StatusForbidden, err)
 	}
 
-	if ds == nil || len(ds) == 0 {
+	if ids == nil || len(ids) == 0 {
 		return c.JSON(http.StatusNotFound, "domains does not exists")
 	}
 
-	return c.JSON(http.StatusOK, ds)
+	return c.JSON(http.StatusOK, ids)
 }
 
 // updateDomain is update domain.
@@ -182,6 +172,34 @@ func NewDomainHandler(d model.DomainModel) *domainHandler {
 	return &domainHandler{
 		domainModel: d,
 	}
+}
+
+func filterDomains(ds []interface{}, c echo.Context) ([]interface{}, error) {
+	ret := []interface{}{}
+	if globalConfig.IsHTTPAuth() {
+		domains, err := getAllowDomains(c)
+		if err != nil {
+			return nil, c.JSON(http.StatusForbidden, err)
+		}
+		for _, vv := range domains {
+			for _, v := range ds {
+				var name string
+				switch v := v.(type) {
+				case model.Domain:
+					name = v.Name
+				case model.Record:
+					name = v.Domain.Name
+				default:
+					return nil, fmt.Errorf("unmatch type %s", v)
+				}
+
+				if strings.ToLower(name) == strings.ToLower(vv) {
+					ret = append(ret, v)
+				}
+			}
+		}
+	}
+	return ret, nil
 }
 func DomainEndpoints(g *echo.Group, db *gorm.DB) {
 	h := NewDomainHandler(model.NewDomainModel(db))

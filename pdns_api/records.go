@@ -2,7 +2,6 @@ package pdns_api
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
@@ -34,28 +33,16 @@ func (h *recordHandler) getRecords(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	if globalConfig.IsHTTPAuth() {
-		ret := model.Records{}
-		domains, err := getAllowDomains(c)
-		if err != nil {
-			return c.JSON(http.StatusForbidden, err)
-		}
-
-		for _, vv := range domains {
-			for _, v := range ds {
-				if strings.ToLower(v.Domain.Name) == strings.ToLower(vv) {
-					ret = append(ret, v)
-				}
-			}
-		}
-		ds = ret
+	ids, err := filterDomains(ds.ToIntreface(), c)
+	if err != nil {
+		return c.JSON(http.StatusForbidden, err)
 	}
 
-	if ds == nil || len(ds) == 0 {
+	if ids == nil || len(ids) == 0 {
 		return c.JSON(http.StatusNotFound, "records does not exists")
 	}
 
-	return c.JSON(http.StatusOK, ds)
+	return c.JSON(http.StatusOK, ids)
 }
 
 // updateRecord is update record.

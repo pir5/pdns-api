@@ -31,6 +31,15 @@ type Domain struct {
 
 type Domains []Domain
 
+func (ds *Domains) ToIntreface() []interface{} {
+	ret := []interface{}{}
+	if ds != nil {
+		for _, d := range *ds {
+			ret = append(ret, d)
+		}
+	}
+	return ret
+}
 func (d *Domain) FindBy(params map[string]interface{}) (Domains, error) {
 	query := d.db.Preload("Records")
 	for k, v := range params {

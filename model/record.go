@@ -32,6 +32,16 @@ func NewRecordModel(db *gorm.DB) *Record {
 		db: db,
 	}
 }
+func (rs *Records) ToIntreface() []interface{} {
+	ret := []interface{}{}
+	if rs != nil {
+		for _, d := range *rs {
+			ret = append(ret, d)
+		}
+	}
+	return ret
+}
+
 func (d *Record) FindBy(params map[string]interface{}) (Records, error) {
 	query := d.db.Preload("Domain")
 	for k, v := range params {
