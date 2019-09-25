@@ -8,8 +8,8 @@ import (
 )
 
 type httpAuth struct {
-	endpoint      string
-	requestHeader map[string]string `toml:"request_header"`
+	Endpoint      string            `mapstructure:"endpoint"`
+	RequestHeader map[string]string `mapstructure:"request_header"`
 }
 
 type httpAuthResponse struct {
@@ -30,12 +30,12 @@ func (h httpAuth) Authenticate(userID string, secret string) ([]string, error) {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", h.endpoint, bytes.NewBuffer(input))
+	req, err := http.NewRequest("POST", h.Endpoint, bytes.NewBuffer(input))
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	for k, v := range h.requestHeader {
+	for k, v := range h.RequestHeader {
 		req.Header.Add(k, v)
 	}
 

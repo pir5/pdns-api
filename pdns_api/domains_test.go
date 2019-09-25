@@ -15,7 +15,7 @@ type domainModelStub struct {
 
 func init() {
 	globalConfig = Config{
-		TokenAuth: tokenAuth{
+		Auth: auth{
 			AuthType: AuthTypeHTTP,
 		},
 	}
