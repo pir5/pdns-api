@@ -121,21 +121,12 @@ paths:
             type: object
       summary: get domains
     post:
-      consumes:
-      - application/json
-      description: create domain
-      parameters:
-      - description: Domain Object
-        in: body
-        name: domain
-        required: true
-        schema:
-          $ref: '#/definitions/model.Domain'
-          type: object
-      produces:
-      - application/json
       responses:
-        "201": {}
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.Domain'
+            type: object
         "403":
           description: Forbidden
           schema:
@@ -151,7 +142,6 @@ paths:
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
             type: object
-      summary: create domain
   /domains/{name}:
     delete:
       consumes:
@@ -166,7 +156,11 @@ paths:
       produces:
       - application/json
       responses:
-        "204": {}
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/model.Domain'
+            type: object
         "403":
           description: Forbidden
           schema:
@@ -188,7 +182,7 @@ paths:
       - application/json
       description: update domain
       parameters:
-      - description: Domain Name
+      - description: Dorain Name
         in: path
         name: name
         required: true
@@ -203,7 +197,11 @@ paths:
       produces:
       - application/json
       responses:
-        "200": {}
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/nil'
+            type: object
         "403":
           description: Forbidden
           schema:
@@ -269,7 +267,11 @@ paths:
       produces:
       - application/json
       responses:
-        "201": {}
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.Record'
+            type: object
         "403":
           description: Forbidden
           schema:
@@ -287,6 +289,40 @@ paths:
             type: object
       summary: create record
   /records/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete record
+      parameters:
+      - description: 'Record ID '
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/model.Record'
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+      summary: delete record
     put:
       consumes:
       - application/json
@@ -307,7 +343,11 @@ paths:
       produces:
       - application/json
       responses:
-        "200": {}
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Record'
+            type: object
         "403":
           description: Forbidden
           schema:
@@ -324,37 +364,6 @@ paths:
             $ref: '#/definitions/pdns_api.HTTPError'
             type: object
       summary: update record
-  /records/{name}:
-    delete:
-      consumes:
-      - application/json
-      description: delete record
-      parameters:
-      - description: 'Record ID '
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "204": {}
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
-      summary: delete record
   /records/disable/{id}:
     put:
       consumes:
@@ -376,7 +385,11 @@ paths:
       produces:
       - application/json
       responses:
-        "200": {}
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Record'
+            type: object
         "403":
           description: Forbidden
           schema:
@@ -414,7 +427,11 @@ paths:
       produces:
       - application/json
       responses:
-        "200": {}
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Record'
+            type: object
         "403":
           description: Forbidden
           schema:
@@ -433,6 +450,10 @@ paths:
       summary: enable record
 securityDefinitions:
   ID:
+    in: header
+    name: PIR5-ID
+    type: apiKey
+  Secret:
     in: header
     name: PIR5-SECRET
     type: apiKey

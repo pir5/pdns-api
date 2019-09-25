@@ -52,7 +52,7 @@ func (h *recordHandler) getRecords(c echo.Context) error {
 // @Produce  json
 // @Param id path int true "Record ID "
 // @Param record body model.Record true "Record Object"
-// @Success 200
+// @Success 200 {object} model.Record
 // @Failure 403 {object} pdns_api.HTTPError
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
@@ -85,7 +85,7 @@ func (h *recordHandler) updateRecord(c echo.Context) error {
 // @Produce  json
 // @Param id path int true "Record ID "
 // @Param record body model.Record true "Record Object"
-// @Success 200
+// @Success 200 {object} model.Record
 // @Failure 403 {object} pdns_api.HTTPError
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
@@ -101,7 +101,7 @@ func (h *recordHandler) enableRecord(c echo.Context) error {
 // @Produce  json
 // @Param id path int true "Record ID "
 // @Param record body model.Record true "Record Object"
-// @Success 200
+// @Success 200 {object} model.Record
 // @Failure 403 {object} pdns_api.HTTPError
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
@@ -137,11 +137,11 @@ func changeState(h *recordHandler, c echo.Context, disabled bool) error {
 // @Accept  json
 // @Produce  json
 // @Param id path int true "Record ID "
-// @Success 204
+// @Success 204 {object} model.Record
 // @Failure 403 {object} pdns_api.HTTPError
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
-// @Router /records/{name} [delete]
+// @Router /records/{id} [delete]
 func (h *recordHandler) deleteRecord(c echo.Context) error {
 	err := h.isAllowRecordID(c)
 	if err != nil {
@@ -166,7 +166,7 @@ func (h *recordHandler) deleteRecord(c echo.Context) error {
 // @Accept  json
 // @Produce  json
 // @Param record body model.Record true "Record Object"
-// @Success 201
+// @Success 201 {object} model.Record
 // @Failure 403 {object} pdns_api.HTTPError
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError

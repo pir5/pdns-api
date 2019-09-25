@@ -64,28 +64,14 @@
                 }
             },
             "post": {
-                "description": "create domain",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "create domain",
-                "parameters": [
-                    {
-                        "description": "Domain Object",
-                        "name": "domain",
-                        "in": "body",
-                        "required": true,
+                "responses": {
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "type": "object",
                             "$ref": "#/definitions/model.Domain"
                         }
-                    }
-                ],
-                "responses": {
-                    "201": {},
+                    },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
@@ -123,7 +109,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Domain Name",
+                        "description": "Dorain Name",
                         "name": "name",
                         "in": "path",
                         "required": true
@@ -140,7 +126,13 @@
                     }
                 ],
                 "responses": {
-                    "200": {},
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/nil"
+                        }
+                    },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
@@ -183,7 +175,13 @@
                     }
                 ],
                 "responses": {
-                    "204": {},
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Domain"
+                        }
+                    },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
@@ -280,7 +278,13 @@
                     }
                 ],
                 "responses": {
-                    "201": {},
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
+                    },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
@@ -335,7 +339,13 @@
                     }
                 ],
                 "responses": {
-                    "200": {},
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
+                    },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
@@ -390,7 +400,13 @@
                     }
                 ],
                 "responses": {
-                    "200": {},
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
+                    },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
@@ -445,7 +461,13 @@
                     }
                 ],
                 "responses": {
-                    "200": {},
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
+                    },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
@@ -468,9 +490,7 @@
                         }
                     }
                 }
-            }
-        },
-        "/records/{name}": {
+            },
             "delete": {
                 "description": "delete record",
                 "consumes": [
@@ -490,7 +510,13 @@
                     }
                 ],
                 "responses": {
-                    "204": {},
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
+                    },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
@@ -635,6 +661,11 @@
     },
     "securityDefinitions": {
         "ID": {
+            "type": "apiKey",
+            "name": "PIR5-ID",
+            "in": "header"
+        },
+        "Secret": {
             "type": "apiKey",
             "name": "PIR5-SECRET",
             "in": "header"
