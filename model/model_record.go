@@ -37,7 +37,7 @@ type ModelRecord struct {
 	Name string `json:"name,omitempty"`
 
 	// older name
-	OlderName string `json:"older_name,omitempty"`
+	OlderName string `json:"oldername,omitempty"`
 
 	// prio
 	Prio int64 `json:"prio,omitempty"`

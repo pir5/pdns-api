@@ -68,7 +68,7 @@ func TestDomain_FindBy(t *testing.T) {
 				"ttl",
 				"prio",
 				"disabled",
-				"older_name",
+				"oldername",
 				"auth",
 			}).
 				AddRow(

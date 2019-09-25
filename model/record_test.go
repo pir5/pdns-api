@@ -71,7 +71,7 @@ func TestRecord_FindBy(t *testing.T) {
 				"ttl",
 				"prio",
 				"disabled",
-				"older_name",
+				"oldername",
 				"auth",
 			}).
 				AddRow(
@@ -228,7 +228,7 @@ func TestRecord_UpdateByID(t *testing.T) {
 				"ttl",
 				"prio",
 				"disabled",
-				"older_name",
+				"oldername",
 				"auth",
 			}).
 				AddRow(
@@ -360,7 +360,7 @@ func TestRecord_DeleteByID(t *testing.T) {
 				"ttl",
 				"prio",
 				"disabled",
-				"older_name",
+				"oldername",
 				"auth",
 			}).
 				AddRow(
@@ -517,7 +517,7 @@ func TestRecord_Create(t *testing.T) {
 
 			if tt.retErr == nil {
 				mock.ExpectBegin()
-				mock.ExpectExec("INSERT INTO `records` \\(`domain_id`,`name`,`type`,`content`,`ttl`,`prio`,`disabled`,`older_name`,`auth`\\) VALUES \\(\\?,\\?,\\?,\\?,\\?,\\?,\\?,\\?,\\?\\)").
+				mock.ExpectExec("INSERT INTO `records` \\(`domain_id`,`name`,`type`,`content`,`ttl`,`prio`,`disabled`,`oldername`,`auth`\\) VALUES \\(\\?,\\?,\\?,\\?,\\?,\\?,\\?,\\?,\\?\\)").
 					WithArgs(
 						1,
 						"test.com",
@@ -537,7 +537,7 @@ func TestRecord_Create(t *testing.T) {
 				mock.ExpectCommit()
 
 			} else {
-				mock.ExpectExec("INSERT INTO `records` \\(`domain_id`,`name`,`type`,`content`,`ttl`,`prio`,`disabled`,`older_name`,`auth`\\) VALUES \\(\\?,\\?,\\?,\\?,\\?,\\?,\\?,\\?,\\?\\)").
+				mock.ExpectExec("INSERT INTO `records` \\(`domain_id`,`name`,`type`,`content`,`ttl`,`prio`,`disabled`,`oldername`,`auth`\\) VALUES \\(\\?,\\?,\\?,\\?,\\?,\\?,\\?,\\?,\\?\\)").
 					WillReturnError(tt.retErr)
 			}
 

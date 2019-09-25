@@ -645,7 +645,7 @@
                 "name": {
                     "type": "string"
                 },
-                "older_name": {
+                "oldername": {
                     "type": "string"
                 },
                 "prio": {
@@ -685,7 +685,7 @@
                     "name": {
                         "type": "string"
                     },
-                    "older_name": {
+                    "oldername": {
                         "type": "string"
                     },
                     "prio": {
