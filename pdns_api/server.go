@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/labstack/echo"
 	stdLog "log"
 	"net/http"
 	"os"
@@ -145,6 +146,7 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 		return err
 	}
 	DomainEndpoints(v1, db.Set("gorm:association_autoupdate", false).Set("gorm:association_autocreate", false))
+	RecordEndpoints(v1, db.Set("gorm:association_autoupdate", false).Set("gorm:association_autocreate", false))
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello! PDNS!!1")
 	})
