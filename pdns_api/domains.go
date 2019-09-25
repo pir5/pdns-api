@@ -15,7 +15,7 @@ import (
 // @Summary get domains
 // @Description get domains
 // @Security ID
-// @SecuritySecret
+// @Security Secret
 // @Accept  json
 // @Produce  json
 // @Param id query int false "Domain ID"
@@ -54,7 +54,7 @@ func (h *domainHandler) getDomains(c echo.Context) error {
 // @Summary update domain
 // @Description update domain
 // @Security ID
-// @SecuritySecret
+// @Security Secret
 // @Accept  json
 // @Produce  json
 // @Param name path string true "Dorain Name"
@@ -89,7 +89,7 @@ func (h *domainHandler) updateDomain(c echo.Context) error {
 // @Summary delete domain
 // @Description delete domain
 // @Security ID
-// @SecuritySecret
+// @Security Secret
 // @Accept  json
 // @Produce  json
 // @Param name path string true "Domain Name"
@@ -120,7 +120,7 @@ func (h *domainHandler) deleteDomain(c echo.Context) error {
 // @Summary create domain
 // @Description create domain
 // @Security ID
-// @SecuritySecret
+// @Security Secret
 // @Accept  json
 // @Produce  json
 // @Param domain body model.Domain true "Domain Object"
