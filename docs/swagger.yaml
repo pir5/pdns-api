@@ -119,6 +119,8 @@ paths:
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
             type: object
+      security:
+      - ID: []
       summary: get domains
     post:
       responses:
@@ -176,6 +178,8 @@ paths:
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
             type: object
+      security:
+      - ID: []
       summary: delete domain
     put:
       consumes:
@@ -217,6 +221,8 @@ paths:
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
             type: object
+      security:
+      - ID: []
       summary: update domain
   /records:
     get:
@@ -251,6 +257,8 @@ paths:
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
             type: object
+      security:
+      - ID: []
       summary: get records
     post:
       consumes:
@@ -287,6 +295,8 @@ paths:
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
             type: object
+      security:
+      - ID: []
       summary: create record
   /records/{id}:
     delete:
@@ -322,6 +332,8 @@ paths:
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
             type: object
+      security:
+      - ID: []
       summary: delete record
     put:
       consumes:
@@ -363,6 +375,8 @@ paths:
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
             type: object
+      security:
+      - ID: []
       summary: update record
   /records/disable/{id}:
     put:
@@ -405,6 +419,8 @@ paths:
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
             type: object
+      security:
+      - ID: []
       summary: disable record
   /records/enable/{id}:
     put:
@@ -447,6 +463,8 @@ paths:
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
             type: object
+      security:
+      - ID: []
       summary: enable record
 securityDefinitions:
   ID:

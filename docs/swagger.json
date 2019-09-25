@@ -15,6 +15,11 @@
     "paths": {
         "/domains": {
             "get": {
+                "security": [
+                    {
+                        "ID": []
+                    }
+                ],
                 "description": "get domains",
                 "consumes": [
                     "application/json"
@@ -98,6 +103,11 @@
         },
         "/domains/{name}": {
             "put": {
+                "security": [
+                    {
+                        "ID": []
+                    }
+                ],
                 "description": "update domain",
                 "consumes": [
                     "application/json"
@@ -157,6 +167,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ID": []
+                    }
+                ],
                 "description": "delete domain",
                 "consumes": [
                     "application/json"
@@ -208,6 +223,11 @@
         },
         "/records": {
             "get": {
+                "security": [
+                    {
+                        "ID": []
+                    }
+                ],
                 "description": "get records",
                 "consumes": [
                     "application/json"
@@ -257,6 +277,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ID": []
+                    }
+                ],
                 "description": "create record",
                 "consumes": [
                     "application/json"
@@ -311,6 +336,11 @@
         },
         "/records/disable/{id}": {
             "put": {
+                "security": [
+                    {
+                        "ID": []
+                    }
+                ],
                 "description": "disable record",
                 "consumes": [
                     "application/json"
@@ -372,6 +402,11 @@
         },
         "/records/enable/{id}": {
             "put": {
+                "security": [
+                    {
+                        "ID": []
+                    }
+                ],
                 "description": "enable record",
                 "consumes": [
                     "application/json"
@@ -433,6 +468,11 @@
         },
         "/records/{id}": {
             "put": {
+                "security": [
+                    {
+                        "ID": []
+                    }
+                ],
                 "description": "update record",
                 "consumes": [
                     "application/json"
@@ -492,6 +532,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ID": []
+                    }
+                ],
                 "description": "delete record",
                 "consumes": [
                     "application/json"

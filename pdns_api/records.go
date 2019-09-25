@@ -11,6 +11,8 @@ import (
 // getRecords is getting records.
 // @Summary get records
 // @Description get records
+// @Security ID
+// @SecuritySecret
 // @Accept  json
 // @Produce  json
 // @Param id query int false "Record ID"
@@ -48,6 +50,8 @@ func (h *recordHandler) getRecords(c echo.Context) error {
 // updateRecord is update record.
 // @Summary update record
 // @Description update record
+// @Security ID
+// @SecuritySecret
 // @Accept  json
 // @Produce  json
 // @Param id path int true "Record ID "
@@ -81,6 +85,8 @@ func (h *recordHandler) updateRecord(c echo.Context) error {
 // enableRecord is enable record.
 // @Summary enable record
 // @Description enable record
+// @Security ID
+// @SecuritySecret
 // @Accept  json
 // @Produce  json
 // @Param id path int true "Record ID "
@@ -97,6 +103,8 @@ func (h *recordHandler) enableRecord(c echo.Context) error {
 // disableRecord is disable record.
 // @Summary disable record
 // @Description disable record
+// @Security ID
+// @SecuritySecret
 // @Accept  json
 // @Produce  json
 // @Param id path int true "Record ID "
@@ -134,6 +142,8 @@ func changeState(h *recordHandler, c echo.Context, disabled bool) error {
 // deleteRecord is delete record.
 // @Summary delete record
 // @Description delete record
+// @Security ID
+// @SecuritySecret
 // @Accept  json
 // @Produce  json
 // @Param id path int true "Record ID "
@@ -163,6 +173,8 @@ func (h *recordHandler) deleteRecord(c echo.Context) error {
 // createRecord is create record.
 // @Summary create record
 // @Description create record
+// @Security ID
+// @SecuritySecret
 // @Accept  json
 // @Produce  json
 // @Param record body model.Record true "Record Object"
