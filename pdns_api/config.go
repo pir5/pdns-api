@@ -1,17 +1,48 @@
 package pdns_api
 
 import (
-	"github.com/BurntSushi/toml"
+	"reflect"
+	"strings"
+
+	"github.com/spf13/viper"
 )
 
 const AuthTypeHTTP = "http"
 const AuthTypeToken = "token"
 
+func BindEnvs(iface interface{}, parts ...string) {
+	ifv := reflect.ValueOf(iface)
+	ift := reflect.TypeOf(iface)
+	for i := 0; i < ift.NumField(); i++ {
+		v := ifv.Field(i)
+		t := ift.Field(i)
+		tv, ok := t.Tag.Lookup("mapstructure")
+		if !ok {
+			continue
+		}
+		switch v.Kind() {
+		case reflect.Struct:
+			BindEnvs(v.Interface(), append(parts, tv)...)
+		default:
+			viper.BindEnv(strings.Join(append(parts, tv), "."))
+		}
+	}
+}
 func NewConfig(confPath string) (Config, error) {
 	var conf Config
 	defaultConfig(&conf)
+	viper.SetConfigFile(confPath)
 
-	if _, err := toml.DecodeFile(confPath, &conf); err != nil {
+	viper.AutomaticEnv()
+	viper.SetEnvPrefix("PIR5")
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+
+	if err := viper.ReadInConfig(); err != nil {
+		return conf, err
+	}
+
+	BindEnvs(conf)
+	if err := viper.Unmarshal(&conf); err != nil {
 		return conf, err
 	}
 
@@ -19,17 +50,17 @@ func NewConfig(confPath string) (Config, error) {
 }
 
 type Config struct {
-	Listen    string `toml:"listen"`
-	TokenAuth tokenAuth
-	DB        database `toml:"database"`
+	Listen string   `mapstructure:"listen"`
+	Auth   auth     `mapstructure:"auth"`
+	DB     database `mapstructure:"database"`
 }
 
 type database struct {
-	Host     string
-	Port     int
-	DBName   string `toml:"dbname"`
-	UserName string `toml:"username"`
-	Password string
+	Host     string `mapstructure:"host"`
+	Port     int    `mapstructure:"port"`
+	DBName   string `mapstructure:"dbname"`
+	UserName string `mapstructure:"username"`
+	Password string `mapstructure:"password"`
 }
 
 func defaultConfig(c *Config) {
@@ -40,16 +71,16 @@ func defaultConfig(c *Config) {
 	c.DB.DBName = "pdns"
 }
 
-type tokenAuth struct {
-	AuthType string // token or http
-	Tokens   []string
-	HttpAuth httpAuth
+type auth struct {
+	AuthType string   `mapstructure:"auth_type"` // token or http
+	Tokens   []string `mapstructure:"tokens"`
+	HttpAuth httpAuth `mapstructure:"http_auth"`
 }
 
 func (c Config) IsTokenAuth() bool {
-	return c.TokenAuth.AuthType == AuthTypeToken
+	return c.Auth.AuthType == AuthTypeToken
 }
 
 func (c Config) IsHTTPAuth() bool {
-	return c.TokenAuth.AuthType == AuthTypeHTTP
+	return c.Auth.AuthType == AuthTypeHTTP
 }

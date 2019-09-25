@@ -96,7 +96,7 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 	e.Use(middleware.KeyAuthWithConfig(middleware.KeyAuthConfig{
 		Validator: func(key string, c echo.Context) (bool, error) {
 			if globalConfig.IsTokenAuth() {
-				for _, v := range globalConfig.TokenAuth.Tokens {
+				for _, v := range globalConfig.Auth.Tokens {
 					if key == v {
 						return true, nil
 					}
@@ -112,7 +112,7 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 	e.Use(pmiddleware.HeaderAuthWithConfig(pmiddleware.HeaderAuthConfig{
 		Validator: func(username, password string, c echo.Context) (bool, error) {
 			if globalConfig.IsHTTPAuth() {
-				domains, err := globalConfig.TokenAuth.HttpAuth.Authenticate(username, password)
+				domains, err := globalConfig.Auth.HttpAuth.Authenticate(username, password)
 				if err != nil {
 					return false, err
 				}

@@ -54,8 +54,8 @@ func Test_httpAuth_Authenticate(t *testing.T) {
 			defer ts.Close()
 
 			h := httpAuth{
-				endpoint:      "http://localhost:8080",
-				requestHeader: tt.fields.requestHeader,
+				Endpoint:      "http://localhost:8080",
+				RequestHeader: tt.fields.requestHeader,
 			}
 			got, err := h.Authenticate(tt.userID, tt.secret)
 			if (err != nil) != tt.wantErr {
