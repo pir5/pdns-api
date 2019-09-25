@@ -14,7 +14,7 @@ type Record struct {
 	TTL       int    `json:"ttl"`
 	Prio      int    `json:"prio"`
 	Disabled  bool   `json:"disabled"`
-	OlderName string `json:"oldername"`
+	OlderName string `json:"ordername" gorm:"ordername"`
 	Auth      bool   `json:"auth"`
 	Domain    Domain `json:"-"`
 }
