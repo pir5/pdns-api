@@ -199,6 +199,8 @@ func filterDomains(ds []interface{}, c echo.Context) ([]interface{}, error) {
 				}
 			}
 		}
+	} else {
+		return ds, nil
 	}
 	return ret, nil
 }

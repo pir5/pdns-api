@@ -200,7 +200,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/nil'
+            $ref: '#/definitions/model.Domain'
             type: object
         "403":
           description: Forbidden
