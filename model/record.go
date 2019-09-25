@@ -62,7 +62,8 @@ func (d *Record) FindBy(params map[string]interface{}) (Records, error) {
 	return ds, nil
 }
 func (d *Record) UpdateByID(id string, newRecord *Record) (bool, error) {
-	r := d.db.New().Where("id = ?", id).Take(&d)
+	record := &Record{}
+	r := d.db.New().Where("id = ?", id).Take(&record)
 	if r.Error != nil {
 		if r.RecordNotFound() {
 			return false, nil
@@ -71,8 +72,8 @@ func (d *Record) UpdateByID(id string, newRecord *Record) (bool, error) {
 		}
 	}
 
-	d.Disabled = newRecord.Disabled
-	r = d.db.Save(d)
+	record.Disabled = newRecord.Disabled
+	r = d.db.Save(record)
 	if r.Error != nil {
 		return false, r.Error
 	}
