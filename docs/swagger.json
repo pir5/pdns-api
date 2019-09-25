@@ -69,6 +69,31 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ID": []
+                    }
+                ],
+                "description": "create domain",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "create domain",
+                "parameters": [
+                    {
+                        "description": "Domain Object",
+                        "name": "domain",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Domain"
+                        }
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "Created",

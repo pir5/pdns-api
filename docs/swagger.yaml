@@ -123,6 +123,19 @@ paths:
       - ID: []
       summary: get domains
     post:
+      consumes:
+      - application/json
+      description: create domain
+      parameters:
+      - description: Domain Object
+        in: body
+        name: domain
+        required: true
+        schema:
+          $ref: '#/definitions/model.Domain'
+          type: object
+      produces:
+      - application/json
       responses:
         "201":
           description: Created
@@ -144,6 +157,9 @@ paths:
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
             type: object
+      security:
+      - ID: []
+      summary: create domain
   /domains/{name}:
     delete:
       consumes:
