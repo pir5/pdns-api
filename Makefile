@@ -40,9 +40,3 @@ test: ## Run test
 
 build_binary:
 	$(GO) build $(BUILDOPTS) -ldflags="-s -w" -o $(BINARY)
-build_image:
-	mkdir -p build/linux/amd64 && make build_binary BINARY=build/linux/amd64/pdns-api SYSTEM="GOOS=linux GOARCH=amd64" BUILDOPTS=""
-	docker build -t pir5/pdns-api .
-
-docker_push: build_image
-	docker push pir5/pdns-api:latest
