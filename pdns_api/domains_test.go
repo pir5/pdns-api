@@ -230,7 +230,7 @@ func Test_domainHandler_updateDomain(t *testing.T) {
 			ctx.SetParamValues(tt.queryName)
 
 			ctx.Set(AllowDomainsKey, []string{"ok.com", "notfound.com"})
-			if err := h.updateDomain(ctx); (err != nil) != tt.wantErr {
+			if err := h.updateDomainByName(ctx); (err != nil) != tt.wantErr {
 				t.Errorf("domainHandler.updateDomain() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
@@ -292,7 +292,7 @@ func Test_domainHandler_deleteDomain(t *testing.T) {
 			ctx.SetParamValues(tt.queryName)
 
 			ctx.Set(AllowDomainsKey, []string{"ok.com", "notfound.com"})
-			if err := h.deleteDomain(ctx); (err != nil) != tt.wantErr {
+			if err := h.deleteDomainByName(ctx); (err != nil) != tt.wantErr {
 				t.Errorf("domainHandler.deleteDomain() error = %v, wantErr %v", err, tt.wantErr)
 			}
 

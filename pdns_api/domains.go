@@ -51,7 +51,7 @@ func (h *domainHandler) getDomains(c echo.Context) error {
 	return c.JSON(http.StatusOK, ids)
 }
 
-// updateDomain is update domain.
+// updateDomainByName is update domain.
 // @Summary update domain
 // @Description update domain
 // @Security ID
@@ -66,7 +66,7 @@ func (h *domainHandler) getDomains(c echo.Context) error {
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /domains/{name} [put]
 // @Tags domains
-func (h *domainHandler) updateDomain(c echo.Context) error {
+func (h *domainHandler) updateDomainByName(c echo.Context) error {
 	err := isAllowDomain(c, c.Param("name"))
 	if err != nil {
 		return err
@@ -87,7 +87,56 @@ func (h *domainHandler) updateDomain(c echo.Context) error {
 	return c.JSON(http.StatusOK, nil)
 }
 
-// deleteDomain is delete domain.
+// updateDomainByID is update domain.
+// @Summary update domain
+// @Description update domain
+// @Security ID
+// @Security Secret
+// @Accept  json
+// @Produce  json
+// @Param id path integer true "Dorain ID"
+// @Param domain body model.Domain true "Domain Object"
+// @Success 200 {object} model.Domain
+// @Failure 403 {object} pdns_api.HTTPError
+// @Failure 404 {object} pdns_api.HTTPError
+// @Failure 500 {object} pdns_api.HTTPError
+// @Router /domains/{id} [put]
+// @Tags domains
+func (h *domainHandler) updateDomainByID(c echo.Context) error {
+	whereParams := map[string]interface{}{
+		"id": c.Param("id"),
+	}
+
+	ds, err := h.domainModel.FindBy(whereParams)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	if ds == nil || len(ds) == 0 {
+		return c.JSON(http.StatusNotFound, "domains does not exists")
+	}
+
+	err = isAllowDomain(c, ds[0].Name)
+	if err != nil {
+		return err
+	}
+
+	nd := &model.Domain{}
+	if err := c.Bind(nd); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	updated, err := h.domainModel.UpdateByID(c.Param("id"), nd)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	if !updated {
+		return c.JSON(http.StatusNotFound, "domains does not exists")
+	}
+	return c.JSON(http.StatusOK, nil)
+}
+
+// deleteDomainByName is delete domain.
 // @Summary delete domain
 // @Description delete domain
 // @Security ID
@@ -101,13 +150,58 @@ func (h *domainHandler) updateDomain(c echo.Context) error {
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /domains/{name} [delete]
 // @Tags domains
-func (h *domainHandler) deleteDomain(c echo.Context) error {
+func (h *domainHandler) deleteDomainByName(c echo.Context) error {
 	err := isAllowDomain(c, c.Param("name"))
 	if err != nil {
 		return err
 	}
 
 	deleted, err := h.domainModel.DeleteByName(c.Param("name"))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	if !deleted {
+		return c.JSON(http.StatusNotFound, "domains does not exists")
+	}
+
+	return c.NoContent(http.StatusNoContent)
+}
+
+// deleteDomainByID is delete domain.
+// @Summary delete domain
+// @Description delete domain
+// @Security ID
+// @Security Secret
+// @Accept  json
+// @Produce  json
+// @Param id path interger true "Domain ID"
+// @Success 204 {object} model.Domain
+// @Failure 403 {object} pdns_api.HTTPError
+// @Failure 404 {object} pdns_api.HTTPError
+// @Failure 500 {object} pdns_api.HTTPError
+// @Router /domains/{id} [delete]
+// @Tags domains
+func (h *domainHandler) deleteDomainByID(c echo.Context) error {
+	whereParams := map[string]interface{}{
+		"id": c.Param("id"),
+	}
+
+	ds, err := h.domainModel.FindBy(whereParams)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	if ds == nil || len(ds) == 0 {
+		return c.JSON(http.StatusNotFound, "domains does not exists")
+	}
+
+	err = isAllowDomain(c, ds[0].Name)
+	if err != nil {
+		return err
+	}
+
+	deleted, err := h.domainModel.DeleteByID(c.Param("id"))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
@@ -218,7 +312,9 @@ func filterDomains(ds []interface{}, c echo.Context) ([]interface{}, error) {
 func DomainEndpoints(g *echo.Group, db *gorm.DB) {
 	h := NewDomainHandler(model.NewDomainModel(db))
 	g.GET("/domains", h.getDomains)
-	g.PUT("/domains/:name", h.updateDomain)
-	g.DELETE("/domains/:name", h.deleteDomain)
+	g.PUT("/domains/name/:name", h.updateDomainByName)
+	g.DELETE("/domains/name/:name", h.deleteDomainByName)
+	g.PUT("/domains/:id", h.updateDomainByID)
+	g.DELETE("/domains/:id", h.deleteDomainByID)
 	g.POST("/domains", h.createDomain)
 }
