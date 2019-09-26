@@ -1,0 +1,11 @@
+on: push
+name: CI
+job:
+  checks:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: unit test
+        uses: golang:latest
+        with:
+          args: make test
