@@ -45,7 +45,7 @@ func (d *domainModelStub) FindBy(params map[string]interface{}) (model.Domains, 
 		}
 	} else if params["id"] != nil {
 		switch params["id"].(int) {
-		case 1:
+		case 1, 4:
 			ds = model.Domains{
 				model.Domain{
 					ID:   1,
@@ -84,16 +84,20 @@ func (d *domainModelStub) DeleteByName(name string) (bool, error) {
 
 func (d *domainModelStub) UpdateByID(id string, newDomain *model.Domain) (bool, error) {
 	switch id {
-	case "ok.com":
+	case "1":
 		return true, nil
+	case "4":
+		return false, nil
 	}
 	return false, nil
 }
 
 func (d *domainModelStub) DeleteByID(id string) (bool, error) {
 	switch id {
-	case "ok.com":
+	case "1":
 		return true, nil
+	case "2":
+		return false, nil
 	}
 	return false, nil
 }
@@ -171,7 +175,77 @@ func Test_domainHandler_getDomains(t *testing.T) {
 	}
 }
 
-func Test_domainHandler_updateDomain(t *testing.T) {
+func Test_domainHandler_updateDomainByID(t *testing.T) {
+	type fields struct {
+		domainModel model.DomainModel
+	}
+	tests := []struct {
+		name      string
+		fields    fields
+		args      model.Domain
+		wantErr   bool
+		wantCode  int
+		queryName string
+	}{
+		{
+			name: "ok",
+			fields: fields{
+				domainModel: &domainModelStub{},
+			},
+			args: model.Domain{
+				Name: "ok.com",
+				ID:   9999,
+			},
+			wantErr:   false,
+			wantCode:  http.StatusOK,
+			queryName: "1",
+		},
+		{
+			name: "not found",
+			fields: fields{
+				domainModel: &domainModelStub{},
+			},
+			args: model.Domain{
+				Name: "ok.com",
+				ID:   1111,
+			},
+			wantErr:   false,
+			wantCode:  http.StatusNotFound,
+			queryName: "4",
+		},
+		{
+			name: "deny",
+			fields: fields{
+				domainModel: &domainModelStub{},
+			},
+			wantErr:   false,
+			wantCode:  http.StatusForbidden,
+			queryName: "3",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			h := &domainHandler{
+				domainModel: tt.fields.domainModel,
+			}
+
+			ctx, rec := dummyContext(t, "PUT", "/domains/:", tt.args)
+			ctx.SetParamNames("id")
+			ctx.SetParamValues(tt.queryName)
+
+			ctx.Set(AllowDomainsKey, []string{"ok.com", "notfound.com"})
+			if err := h.updateDomainByID(ctx); (err != nil) != tt.wantErr {
+				t.Errorf("domainHandler.updateDomainByID() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			if rec.Code != tt.wantCode {
+				t.Errorf("domainHandler.updateDomainsByID() got different http status code = %d, wantCode %d", rec.Code, tt.wantCode)
+			}
+		})
+	}
+}
+
+func Test_domainHandler_updateDomainByName(t *testing.T) {
 	type fields struct {
 		domainModel model.DomainModel
 	}
@@ -225,23 +299,23 @@ func Test_domainHandler_updateDomain(t *testing.T) {
 				domainModel: tt.fields.domainModel,
 			}
 
-			ctx, rec := dummyContext(t, "PUT", "/domains/:", tt.args)
+			ctx, rec := dummyContext(t, "PUT", "/domains/name/:", tt.args)
 			ctx.SetParamNames("name")
 			ctx.SetParamValues(tt.queryName)
 
 			ctx.Set(AllowDomainsKey, []string{"ok.com", "notfound.com"})
 			if err := h.updateDomainByName(ctx); (err != nil) != tt.wantErr {
-				t.Errorf("domainHandler.updateDomain() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("domainHandler.updateDomainByName() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
 			if rec.Code != tt.wantCode {
-				t.Errorf("domainHandler.updateDomains() got different http status code = %d, wantCode %d", rec.Code, tt.wantCode)
+				t.Errorf("domainHandler.updateDomainsByName() got different http status code = %d, wantCode %d", rec.Code, tt.wantCode)
 			}
 		})
 	}
 }
 
-func Test_domainHandler_deleteDomain(t *testing.T) {
+func Test_domainHandler_deleteDomainByName(t *testing.T) {
 	type fields struct {
 		domainModel model.DomainModel
 	}
@@ -287,17 +361,80 @@ func Test_domainHandler_deleteDomain(t *testing.T) {
 				domainModel: tt.fields.domainModel,
 			}
 
-			ctx, rec := dummyContext(t, "DELETE", "/domains/:", nil)
+			ctx, rec := dummyContext(t, "DELETE", "/domains/name/:", nil)
 			ctx.SetParamNames("name")
 			ctx.SetParamValues(tt.queryName)
 
 			ctx.Set(AllowDomainsKey, []string{"ok.com", "notfound.com"})
 			if err := h.deleteDomainByName(ctx); (err != nil) != tt.wantErr {
-				t.Errorf("domainHandler.deleteDomain() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("domainHandler.deleteDomainByName() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
 			if rec.Code != tt.wantCode {
-				t.Errorf("domainHandler.deleteDomains() got different http status code = %d, wantCode %d", rec.Code, tt.wantCode)
+				t.Errorf("domainHandler.deleteDomainsByName() got different http status code = %d, wantCode %d", rec.Code, tt.wantCode)
+			}
+
+		})
+	}
+}
+
+func Test_domainHandler_deleteDomainByID(t *testing.T) {
+	type fields struct {
+		domainModel model.DomainModel
+	}
+	tests := []struct {
+		name     string
+		fields   fields
+		wantErr  bool
+		wantCode int
+		queryID  string
+	}{
+		{
+			name: "ok",
+			fields: fields{
+				domainModel: &domainModelStub{},
+			},
+			wantErr:  false,
+			wantCode: http.StatusNoContent,
+			queryID:  "1",
+		},
+		{
+			name: "not found",
+			fields: fields{
+				domainModel: &domainModelStub{},
+			},
+			wantErr:  false,
+			wantCode: http.StatusNotFound,
+			queryID:  "4",
+		},
+		{
+			name: "deny",
+			fields: fields{
+				domainModel: &domainModelStub{},
+			},
+			wantErr:  false,
+			wantCode: http.StatusForbidden,
+			queryID:  "3",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			h := &domainHandler{
+				domainModel: tt.fields.domainModel,
+			}
+
+			ctx, rec := dummyContext(t, "DELETE", "/domains/id/:", nil)
+			ctx.SetParamNames("id")
+			ctx.SetParamValues(tt.queryID)
+
+			ctx.Set(AllowDomainsKey, []string{"ok.com", "notfound.com"})
+			if err := h.deleteDomainByID(ctx); (err != nil) != tt.wantErr {
+				t.Errorf("domainHandler.deleteDomainByID() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			if rec.Code != tt.wantCode {
+				t.Errorf("domainHandler.deleteDomainsByID() got different http status code = %d, wantCode %d", rec.Code, tt.wantCode)
 			}
 
 		})

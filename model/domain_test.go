@@ -510,3 +510,242 @@ func TestDomain_Create(t *testing.T) {
 func newBool(b bool) *bool {
 	return &b
 }
+
+func TestDomain_UpdateByID(t *testing.T) {
+	type fields struct {
+		db             *gorm.DB
+		ID             int
+		Name           string
+		Master         string
+		LastCheck      int
+		Type           string
+		NotifiedSerial int32
+		Account        string
+		Records        Records
+	}
+	type args struct {
+		id        string
+		newDomain *Domain
+	}
+	tests := []struct {
+		name       string
+		domainRows *sqlmock.Rows
+		fields     fields
+		args       args
+		retErr     error
+		want       bool
+		wantErr    bool
+	}{
+		{
+			name:   "ok",
+			fields: fields{},
+			args: args{
+				id: "1",
+				newDomain: &Domain{
+					ID:      1,
+					Name:    "test.com",
+					Account: "update",
+				},
+			},
+			domainRows: sqlmock.NewRows([]string{
+				"id",
+				"name",
+				"master",
+				"last_check",
+				"type",
+				"notified_serial",
+				"account",
+			}).
+				AddRow(
+					1,
+					"test.com",
+					"",
+					1,
+					"",
+					1,
+					"test",
+				),
+			want: true,
+		},
+		{
+			name:   "notfound",
+			fields: fields{},
+			args: args{
+				id: "2",
+			},
+			retErr: gorm.ErrRecordNotFound,
+			want:   false,
+		},
+		{
+			name:   "other error",
+			fields: fields{},
+			args: args{
+				id: "3",
+				newDomain: &Domain{
+					ID:      1,
+					Name:    "test.com",
+					Account: "update",
+				},
+			},
+			retErr:  gorm.ErrInvalidSQL,
+			want:    false,
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			db, mock, err := sqlmock.New()
+			if err != nil {
+				t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+			}
+			defer db.Close()
+
+			if tt.retErr == nil {
+				mock.ExpectQuery("SELECT \\* FROM `domains` WHERE \\(id = \\?\\) LIMIT 1").
+					WithArgs("1").
+					WillReturnRows(tt.domainRows)
+				mock.ExpectBegin()
+				mock.ExpectExec("UPDATE `domains` SET `account` = \\?, `id` = \\?, `name` = \\?  WHERE `domains`.`id` = \\?").
+					WithArgs(`update`, 1, "test.com", 1).WillReturnResult(
+					sqlmock.NewResult(
+						1,
+						1,
+					),
+				)
+				mock.ExpectCommit()
+			} else {
+				mock.ExpectQuery("SELECT \\* FROM `domains` WHERE \\(id = \\?\\) LIMIT 1").
+					WillReturnError(tt.retErr)
+			}
+
+			gdb, _ := gorm.Open("mysql", db)
+			d := &Domain{
+				db:             gdb,
+				ID:             tt.fields.ID,
+				Name:           tt.fields.Name,
+				Master:         tt.fields.Master,
+				LastCheck:      tt.fields.LastCheck,
+				Type:           tt.fields.Type,
+				NotifiedSerial: tt.fields.NotifiedSerial,
+				Account:        tt.fields.Account,
+				Records:        tt.fields.Records,
+			}
+
+			got, err := d.UpdateByID(tt.args.id, tt.args.newDomain)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Domain.UpdateByID() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("Domain.UpdateByID() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDomain_DeleteByID(t *testing.T) {
+	type args struct {
+		id string
+	}
+	tests := []struct {
+		name       string
+		domainRows *sqlmock.Rows
+		args       args
+		retErr     error
+		want       bool
+		wantErr    bool
+	}{
+		{
+			name: "ok",
+			args: args{
+				id: "1",
+			},
+			domainRows: sqlmock.NewRows([]string{
+				"id",
+				"name",
+				"master",
+				"last_check",
+				"type",
+				"notified_serial",
+				"account",
+			}).
+				AddRow(
+					1,
+					"test.com",
+					"",
+					1,
+					"",
+					1,
+					"test",
+				),
+			want: true,
+		},
+		{
+			name: "notfound",
+			args: args{
+				id: "2",
+			},
+			retErr: gorm.ErrRecordNotFound,
+			want:   false,
+		},
+		{
+			name: "other error",
+			args: args{
+				id: "3",
+			},
+			retErr:  gorm.ErrInvalidSQL,
+			want:    false,
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			db, mock, err := sqlmock.New()
+			if err != nil {
+				t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+			}
+			defer db.Close()
+
+			if tt.retErr == nil {
+				mock.ExpectQuery("SELECT \\* FROM `domains` WHERE \\(id = \\?\\) LIMIT 1").
+					WithArgs("1").
+					WillReturnRows(tt.domainRows)
+				mock.ExpectBegin()
+
+				mock.ExpectExec("DELETE FROM `records` WHERE \\(domain_id = \\?\\)").
+					WithArgs(1).WillReturnResult(
+					sqlmock.NewResult(
+						1,
+						1,
+					),
+				)
+
+				mock.ExpectExec("DELETE FROM `domains` WHERE `domains`.`id` = \\?").
+					WithArgs(1).WillReturnResult(
+					sqlmock.NewResult(
+						1,
+						1,
+					),
+				)
+				mock.ExpectCommit()
+			} else {
+				mock.ExpectQuery("SELECT \\* FROM `domains` WHERE \\(id = \\?\\) LIMIT 1").
+					WillReturnError(tt.retErr)
+			}
+
+			gdb, _ := gorm.Open("mysql", db)
+			d := &Domain{
+				db: gdb,
+			}
+
+			got, err := d.DeleteByID(tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Domain.DeleteByID() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("Domain.DeleteByID() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

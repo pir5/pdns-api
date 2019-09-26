@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/jinzhu/gorm"
@@ -103,21 +104,7 @@ func (h *domainHandler) updateDomainByName(c echo.Context) error {
 // @Router /domains/{id} [put]
 // @Tags domains
 func (h *domainHandler) updateDomainByID(c echo.Context) error {
-	whereParams := map[string]interface{}{
-		"id": c.Param("id"),
-	}
-
-	ds, err := h.domainModel.FindBy(whereParams)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err)
-	}
-
-	if ds == nil || len(ds) == 0 {
-		return c.JSON(http.StatusNotFound, "domains does not exists")
-	}
-
-	err = isAllowDomain(c, ds[0].Name)
-	if err != nil {
+	if err := h.isAllowDomainByID(c); err != nil {
 		return err
 	}
 
@@ -183,21 +170,7 @@ func (h *domainHandler) deleteDomainByName(c echo.Context) error {
 // @Router /domains/{id} [delete]
 // @Tags domains
 func (h *domainHandler) deleteDomainByID(c echo.Context) error {
-	whereParams := map[string]interface{}{
-		"id": c.Param("id"),
-	}
-
-	ds, err := h.domainModel.FindBy(whereParams)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err)
-	}
-
-	if ds == nil || len(ds) == 0 {
-		return c.JSON(http.StatusNotFound, "domains does not exists")
-	}
-
-	err = isAllowDomain(c, ds[0].Name)
-	if err != nil {
+	if err := h.isAllowDomainByID(c); err != nil {
 		return err
 	}
 
@@ -260,6 +233,30 @@ func isAllowDomain(c echo.Context, name string) error {
 		}
 	}
 	return c.JSON(http.StatusForbidden, nil)
+}
+func (h *domainHandler) isAllowDomainByID(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	whereParams := map[string]interface{}{
+		"id": id,
+	}
+
+	ds, err := h.domainModel.FindBy(whereParams)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+
+	if ds == nil || len(ds) == 0 {
+		return c.JSON(http.StatusNotFound, "domains does not exists")
+	}
+
+	err = isAllowDomain(c, ds[0].Name)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func getAllowDomains(c echo.Context) ([]string, error) {
