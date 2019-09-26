@@ -197,7 +197,7 @@ func (h *recordHandler) createRecord(c echo.Context) error {
 	if err := h.recordModel.Create(d); err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
-	return c.JSON(http.StatusCreated, nil)
+	return c.JSON(http.StatusCreated, d)
 }
 
 func (h *recordHandler) isAllowRecordID(c echo.Context) error {
