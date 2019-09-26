@@ -1,7 +1,6 @@
 package model
 
 import (
-
 	"github.com/jinzhu/gorm"
 )
 
@@ -14,9 +13,9 @@ type Record struct {
 	Content   string `json:"content"`
 	TTL       int    `json:"ttl"`
 	Prio      int    `json:"prio"`
-	Disabled  bool   `json:"disabled"`
+	Disabled  *bool  `json:"disabled"`
 	OrderName string `json:"ordername" gorm:"column:ordername"`
-	Auth      bool   `json:"auth"`
+	Auth      *bool  `json:"auth"`
 	Domain    Domain `json:"-"`
 }
 
@@ -44,7 +43,7 @@ func (rs *Records) ToIntreface() []interface{} {
 }
 
 func (d *Record) FindBy(params map[string]interface{}) (Records, error) {
-	query := d.db.Preload("Domain")
+	query := d.db.New().Preload("Domain")
 	for k, v := range params {
 		query = query.Where(k+" in(?)", v)
 	}
@@ -62,8 +61,7 @@ func (d *Record) FindBy(params map[string]interface{}) (Records, error) {
 	return ds, nil
 }
 func (d *Record) UpdateByID(id string, newRecord *Record) (bool, error) {
-	record := &Record{}
-	r := d.db.New().Where("id = ?", id).Take(&record)
+	r := d.db.New().Where("id = ?", id).Take(&d)
 	if r.Error != nil {
 		if r.RecordNotFound() {
 			return false, nil
@@ -72,8 +70,9 @@ func (d *Record) UpdateByID(id string, newRecord *Record) (bool, error) {
 		}
 	}
 
-	record.Disabled = newRecord.Disabled
-	r = d.db.Save(record)
+	newRecord.DomainID = d.DomainID
+	r = d.db.Model(&d).Updates(&newRecord)
+
 	if r.Error != nil {
 		return false, r.Error
 	}
@@ -98,7 +97,7 @@ func (d *Record) DeleteByID(id string) (bool, error) {
 }
 
 func (d *Record) Create(newRecord *Record) error {
-	if err := d.db.Create(newRecord).Error; err != nil {
+	if err := d.db.New().Create(newRecord).Error; err != nil {
 		return err
 	}
 	return nil

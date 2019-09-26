@@ -41,7 +41,7 @@ func (ds *Domains) ToIntreface() []interface{} {
 	return ret
 }
 func (d *Domain) FindBy(params map[string]interface{}) (Domains, error) {
-	query := d.db.Preload("Records")
+	query := d.db.New().Preload("Records")
 	for k, v := range params {
 		query = query.Where(k+" in(?)", v)
 	}
@@ -59,7 +59,7 @@ func (d *Domain) FindBy(params map[string]interface{}) (Domains, error) {
 	return ds, nil
 }
 func (d *Domain) UpdateByName(name string, newDomain *Domain) (bool, error) {
-	r := d.db.Where("name = ?", name).Take(&d)
+	r := d.db.New().Where("name = ?", name).Take(&d)
 	if r.Error != nil {
 		if r.RecordNotFound() {
 			return false, nil
@@ -75,7 +75,7 @@ func (d *Domain) UpdateByName(name string, newDomain *Domain) (bool, error) {
 	return true, nil
 }
 func (d *Domain) DeleteByName(name string) (bool, error) {
-	r := d.db.Where("name = ?", name).Take(&d)
+	r := d.db.New().Where("name = ?", name).Take(&d)
 	if r.Error != nil {
 		if r.RecordNotFound() {
 			return false, nil
@@ -113,7 +113,7 @@ func (d *Domain) DeleteByName(name string) (bool, error) {
 }
 
 func (d *Domain) Create(newDomain *Domain) error {
-	if err := d.db.Create(newDomain).Error; err != nil {
+	if err := d.db.New().Create(newDomain).Error; err != nil {
 		return err
 	}
 	return nil

@@ -124,7 +124,7 @@ func changeState(h *recordHandler, c echo.Context, disabled bool) error {
 	}
 
 	nd := &model.Record{
-		Disabled: disabled,
+		Disabled: &disabled,
 	}
 
 	updated, err := h.recordModel.UpdateByID(c.Param("id"), nd)

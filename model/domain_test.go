@@ -100,9 +100,9 @@ func TestDomain_FindBy(t *testing.T) {
 							Content:   "1.1.1.1",
 							TTL:       100,
 							Prio:      1,
-							Disabled:  false,
+							Disabled:  newBool(false),
 							OrderName: "",
-							Auth:      false,
+							Auth:      newBool(false),
 						},
 					},
 				},
@@ -505,4 +505,8 @@ func TestDomain_Create(t *testing.T) {
 			}
 		})
 	}
+}
+
+func newBool(b bool) *bool {
+	return &b
 }

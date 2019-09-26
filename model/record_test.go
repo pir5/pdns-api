@@ -6,6 +6,7 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/jinzhu/gorm"
+	"github.com/k0kubun/pp"
 )
 
 func TestRecord_FindBy(t *testing.T) {
@@ -18,9 +19,9 @@ func TestRecord_FindBy(t *testing.T) {
 		Content   string
 		TTL       int
 		Prio      int
-		Disabled  bool
+		Disabled  *bool
 		OrderName string
-		Auth      bool
+		Auth      *bool
 		Domain    Domain
 	}
 	type args struct {
@@ -95,6 +96,8 @@ func TestRecord_FindBy(t *testing.T) {
 					Content:  "1.1.1.1",
 					TTL:      100,
 					Prio:     1,
+					Disabled: newBool(false),
+					Auth:     newBool(false),
 					Domain: Domain{
 						ID:             1,
 						Name:           "test.com",
@@ -175,6 +178,7 @@ func TestRecord_FindBy(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
+				pp.Println(got)
 				t.Errorf("Record.FindBy() = %v, want %v", got, tt.want)
 			}
 		})
@@ -191,9 +195,9 @@ func TestRecord_UpdateByID(t *testing.T) {
 		Content   string
 		TTL       int
 		Prio      int
-		Disabled  bool
+		Disabled  *bool
 		OrderName string
-		Auth      bool
+		Auth      *bool
 		Domain    Domain
 	}
 	type args struct {
@@ -328,9 +332,9 @@ func TestRecord_DeleteByID(t *testing.T) {
 		Content   string
 		TTL       int
 		Prio      int
-		Disabled  bool
+		Disabled  *bool
 		OrderName string
-		Auth      bool
+		Auth      *bool
 		Domain    Domain
 	}
 	type args struct {
@@ -460,9 +464,9 @@ func TestRecord_Create(t *testing.T) {
 		Content   string
 		TTL       int
 		Prio      int
-		Disabled  bool
+		Disabled  *bool
 		OrderName string
-		Auth      bool
+		Auth      *bool
 		Domain    Domain
 	}
 	type args struct {
@@ -487,8 +491,8 @@ func TestRecord_Create(t *testing.T) {
 					Content:  "1.1.1.1",
 					TTL:      100,
 					Prio:     200,
-					Disabled: false,
-					Auth:     false,
+					Disabled: newBool(false),
+					Auth:     newBool(false),
 				},
 			},
 			want: true,
