@@ -13,7 +13,7 @@ type Record struct {
 	Content   string `json:"content"`
 	TTL       int    `json:"ttl"`
 	Prio      int    `json:"prio"`
-	Disabled  *bool  `json:"disabled"`
+	Disabled  *bool  `json:"disabled" gorm:"default:false"`
 	OrderName string `json:"ordername" gorm:"column:ordername"`
 	Auth      *bool  `json:"auth"`
 	Domain    Domain `json:"-"`
