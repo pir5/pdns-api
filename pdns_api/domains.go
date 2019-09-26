@@ -24,6 +24,7 @@ import (
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /domains [get]
+// @Tags domains
 func (h *domainHandler) getDomains(c echo.Context) error {
 	whereParams := map[string]interface{}{}
 	for k, v := range c.QueryParams() {
@@ -64,6 +65,7 @@ func (h *domainHandler) getDomains(c echo.Context) error {
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /domains/{name} [put]
+// @Tags domains
 func (h *domainHandler) updateDomain(c echo.Context) error {
 	err := isAllowDomain(c, c.Param("name"))
 	if err != nil {
@@ -98,6 +100,7 @@ func (h *domainHandler) updateDomain(c echo.Context) error {
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /domains/{name} [delete]
+// @Tags domains
 func (h *domainHandler) deleteDomain(c echo.Context) error {
 	err := isAllowDomain(c, c.Param("name"))
 	if err != nil {
@@ -129,6 +132,7 @@ func (h *domainHandler) deleteDomain(c echo.Context) error {
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /domains [post]
+// @Tags domains
 func (h *domainHandler) createDomain(c echo.Context) error {
 	d := &model.Domain{}
 	if err := c.Bind(d); err != nil {

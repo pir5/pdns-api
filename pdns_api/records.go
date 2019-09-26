@@ -21,6 +21,7 @@ import (
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /records [get]
+// @Tags records
 func (h *recordHandler) getRecords(c echo.Context) error {
 	whereParams := map[string]interface{}{}
 	for k, v := range c.QueryParams() {
@@ -61,6 +62,7 @@ func (h *recordHandler) getRecords(c echo.Context) error {
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /records/{id} [put]
+// @Tags records
 func (h *recordHandler) updateRecord(c echo.Context) error {
 	if err := h.isAllowRecordID(c); err != nil {
 		return err
@@ -96,6 +98,7 @@ func (h *recordHandler) updateRecord(c echo.Context) error {
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /records/enable/{id} [put]
+// @Tags records
 func (h *recordHandler) enableRecord(c echo.Context) error {
 	return changeState(h, c, false)
 }
@@ -114,6 +117,7 @@ func (h *recordHandler) enableRecord(c echo.Context) error {
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /records/disable/{id} [put]
+// @Tags records
 func (h *recordHandler) disableRecord(c echo.Context) error {
 	return changeState(h, c, true)
 }
@@ -152,6 +156,7 @@ func changeState(h *recordHandler, c echo.Context, disabled bool) error {
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /records/{id} [delete]
+// @Tags records
 func (h *recordHandler) deleteRecord(c echo.Context) error {
 	err := h.isAllowRecordID(c)
 	if err != nil {
@@ -183,6 +188,7 @@ func (h *recordHandler) deleteRecord(c echo.Context) error {
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /records [post]
+// @Tags records
 func (h *recordHandler) createRecord(c echo.Context) error {
 	d := &model.Record{}
 	if err := c.Bind(d); err != nil {

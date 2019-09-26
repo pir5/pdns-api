@@ -20,6 +20,7 @@ func init() {
 		},
 	}
 }
+
 func (d *domainModelStub) FindBy(params map[string]interface{}) (model.Domains, error) {
 	ds := model.Domains{}
 
@@ -75,6 +76,22 @@ func (d *domainModelStub) UpdateByName(name string, newDomain *model.Domain) (bo
 
 func (d *domainModelStub) DeleteByName(name string) (bool, error) {
 	switch name {
+	case "ok.com":
+		return true, nil
+	}
+	return false, nil
+}
+
+func (d *domainModelStub) UpdateByID(id string, newDomain *model.Domain) (bool, error) {
+	switch id {
+	case "ok.com":
+		return true, nil
+	}
+	return false, nil
+}
+
+func (d *domainModelStub) DeleteByID(id string) (bool, error) {
+	switch id {
 	case "ok.com":
 		return true, nil
 	}
