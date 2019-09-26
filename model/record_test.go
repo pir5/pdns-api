@@ -491,8 +491,6 @@ func TestRecord_Create(t *testing.T) {
 					Content:  "1.1.1.1",
 					TTL:      100,
 					Prio:     200,
-					Disabled: newBool(false),
-					Auth:     newBool(false),
 				},
 			},
 			want: true,
@@ -555,9 +553,7 @@ func TestRecord_Create(t *testing.T) {
 				Content:   tt.fields.Content,
 				TTL:       tt.fields.TTL,
 				Prio:      tt.fields.Prio,
-				Disabled:  tt.fields.Disabled,
 				OrderName: tt.fields.OrderName,
-				Auth:      tt.fields.Auth,
 				Domain:    tt.fields.Domain,
 			}
 			err = d.Create(tt.args.newRecord)

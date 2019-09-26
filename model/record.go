@@ -13,9 +13,9 @@ type Record struct {
 	Content   string `json:"content"`
 	TTL       int    `json:"ttl"`
 	Prio      int    `json:"prio"`
-	Disabled  *bool  `json:"disabled" gorm:"default:false"`
+	Disabled  *bool  `json:"disabled"`
 	OrderName string `json:"ordername" gorm:"column:ordername"`
-	Auth      *bool  `json:"auth" gorm:"default:false`
+	Auth      *bool  `json:"auth"`
 	Domain    Domain `json:"-"`
 }
 
@@ -98,6 +98,13 @@ func (d *Record) DeleteByID(id string) (bool, error) {
 }
 
 func (d *Record) Create(newRecord *Record) error {
+	f := false
+	if newRecord.Disabled == nil {
+		newRecord.Disabled = &f
+	}
+	if newRecord.Auth == nil {
+		newRecord.Auth = &f
+	}
 	if err := d.db.New().Create(newRecord).Error; err != nil {
 		return err
 	}
