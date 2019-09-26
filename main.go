@@ -18,7 +18,6 @@ import (
 // @description This is PDNS RESTful API Server.
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-// @host 127.0.0.1:9090
 // @BasePath /v1
 // @securityDefinitions.apikey ID
 // @in header

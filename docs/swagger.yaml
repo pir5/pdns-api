@@ -76,7 +76,7 @@ definitions:
     type: array
   pdns_api.HTTPError:
     type: object
-host: 127.0.0.1:9090
+host: '{{.Host}}'
 info:
   contact: {}
   description: This is PDNS RESTful API Server.
