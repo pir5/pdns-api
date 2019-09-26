@@ -6,12 +6,14 @@ package docs
 
 import (
 	"bytes"
+	"encoding/json"
 
 	"github.com/alecthomas/template"
 	"github.com/swaggo/swag"
 )
 
 var doc = `{
+    "schemes": {{ marshal .Schemes }},
     "swagger": "2.0",
     "info": {
         "description": "This is PDNS RESTful API Server.",
@@ -995,17 +997,23 @@ type swaggerInfo struct {
 	Version     string
 	Host        string
 	BasePath    string
+	Schemes     []string
 	Title       string
 	Description string
 }
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
-var SwaggerInfo swaggerInfo
+var SwaggerInfo = swaggerInfo{Schemes: []string{}}
 
 type s struct{}
 
 func (s *s) ReadDoc() string {
-	t, err := template.New("swagger_info").Parse(doc)
+	t, err := template.New("swagger_info").Funcs(template.FuncMap{
+		"marshal": func(v interface{}) string {
+			a, _ := json.Marshal(v)
+			return string(a)
+		},
+	}).Parse(doc)
 	if err != nil {
 		return doc
 	}
