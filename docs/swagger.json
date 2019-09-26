@@ -18,6 +18,9 @@
                 "security": [
                     {
                         "ID": []
+                    },
+                    {
+                        "Secret": []
                     }
                 ],
                 "description": "get domains",
@@ -72,6 +75,9 @@
                 "security": [
                     {
                         "ID": []
+                    },
+                    {
+                        "Secret": []
                     }
                 ],
                 "description": "create domain",
@@ -131,6 +137,9 @@
                 "security": [
                     {
                         "ID": []
+                    },
+                    {
+                        "Secret": []
                     }
                 ],
                 "description": "update domain",
@@ -195,6 +204,9 @@
                 "security": [
                     {
                         "ID": []
+                    },
+                    {
+                        "Secret": []
                     }
                 ],
                 "description": "delete domain",
@@ -251,6 +263,9 @@
                 "security": [
                     {
                         "ID": []
+                    },
+                    {
+                        "Secret": []
                     }
                 ],
                 "description": "get records",
@@ -305,6 +320,9 @@
                 "security": [
                     {
                         "ID": []
+                    },
+                    {
+                        "Secret": []
                     }
                 ],
                 "description": "create record",
@@ -364,6 +382,9 @@
                 "security": [
                     {
                         "ID": []
+                    },
+                    {
+                        "Secret": []
                     }
                 ],
                 "description": "disable record",
@@ -430,6 +451,9 @@
                 "security": [
                     {
                         "ID": []
+                    },
+                    {
+                        "Secret": []
                     }
                 ],
                 "description": "enable record",
@@ -496,6 +520,9 @@
                 "security": [
                     {
                         "ID": []
+                    },
+                    {
+                        "Secret": []
                     }
                 ],
                 "description": "update record",
@@ -560,6 +587,9 @@
                 "security": [
                     {
                         "ID": []
+                    },
+                    {
+                        "Secret": []
                     }
                 ],
                 "description": "delete record",

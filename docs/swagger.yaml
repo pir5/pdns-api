@@ -121,6 +121,7 @@ paths:
             type: object
       security:
       - ID: []
+      - Secret: []
       summary: get domains
     post:
       consumes:
@@ -159,6 +160,7 @@ paths:
             type: object
       security:
       - ID: []
+      - Secret: []
       summary: create domain
   /domains/{name}:
     delete:
@@ -196,6 +198,7 @@ paths:
             type: object
       security:
       - ID: []
+      - Secret: []
       summary: delete domain
     put:
       consumes:
@@ -239,6 +242,7 @@ paths:
             type: object
       security:
       - ID: []
+      - Secret: []
       summary: update domain
   /records:
     get:
@@ -275,6 +279,7 @@ paths:
             type: object
       security:
       - ID: []
+      - Secret: []
       summary: get records
     post:
       consumes:
@@ -313,6 +318,7 @@ paths:
             type: object
       security:
       - ID: []
+      - Secret: []
       summary: create record
   /records/{id}:
     delete:
@@ -350,6 +356,7 @@ paths:
             type: object
       security:
       - ID: []
+      - Secret: []
       summary: delete record
     put:
       consumes:
@@ -393,6 +400,7 @@ paths:
             type: object
       security:
       - ID: []
+      - Secret: []
       summary: update record
   /records/disable/{id}:
     put:
@@ -437,6 +445,7 @@ paths:
             type: object
       security:
       - ID: []
+      - Secret: []
       summary: disable record
   /records/enable/{id}:
     put:
@@ -481,6 +490,7 @@ paths:
             type: object
       security:
       - ID: []
+      - Secret: []
       summary: enable record
 securityDefinitions:
   ID:

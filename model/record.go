@@ -15,7 +15,7 @@ type Record struct {
 	Prio      int    `json:"prio"`
 	Disabled  *bool  `json:"disabled" gorm:"default:false"`
 	OrderName string `json:"ordername" gorm:"column:ordername"`
-	Auth      *bool  `json:"auth"`
+	Auth      *bool  `json:"auth" gorm:"default:false`
 	Domain    Domain `json:"-"`
 }
 
@@ -72,7 +72,7 @@ func (d *Record) UpdateByID(id string, newRecord *Record) (bool, error) {
 	}
 
 	newRecord.DomainID = d.DomainID
-	r = d.db.Model(&d).Updates(&newRecord)
+	r = d.db.Model(&record).Updates(&newRecord)
 
 	if r.Error != nil {
 		return false, r.Error

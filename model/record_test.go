@@ -282,8 +282,8 @@ func TestRecord_UpdateByID(t *testing.T) {
 					WithArgs("1").
 					WillReturnRows(tt.recordRows)
 				mock.ExpectBegin()
-				mock.ExpectExec("UPDATE `records` SET `content` = \\?, `domain_id` = \\?, `type` = \\? WHERE `records`.`id` = \\?").
-					WithArgs(`2.2.2.2`, 1, "CNAME", 1).WillReturnResult(
+				mock.ExpectExec("UPDATE `records` SET `content` = \\?, `type` = \\? WHERE `records`.`id` = \\?").
+					WithArgs(`2.2.2.2`, "CNAME", 1).WillReturnResult(
 					sqlmock.NewResult(
 						1,
 						1,
