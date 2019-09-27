@@ -66,8 +66,8 @@ func (d *recordModelStub) Create(newRecord *model.Record) error {
 }
 func Test_recordHandler_getRecords(t *testing.T) {
 	type fields struct {
-		recordModel model.RecordModel
-		domainModel model.DomainModel
+		recordModel model.RecordModeler
+		domainModel model.DomainModeler
 	}
 	tests := []struct {
 		name     string
@@ -141,8 +141,8 @@ func Test_recordHandler_getRecords(t *testing.T) {
 
 func Test_recordHandler_updateRecord(t *testing.T) {
 	type fields struct {
-		recordModel model.RecordModel
-		domainModel model.DomainModel
+		recordModel model.RecordModeler
+		domainModel model.DomainModeler
 	}
 	tests := []struct {
 		name     string
@@ -216,8 +216,8 @@ func Test_recordHandler_updateRecord(t *testing.T) {
 
 func Test_recordHandler_deleteRecord(t *testing.T) {
 	type fields struct {
-		recordModel model.RecordModel
-		domainModel model.DomainModel
+		recordModel model.RecordModeler
+		domainModel model.DomainModeler
 	}
 	tests := []struct {
 		name     string
@@ -281,8 +281,8 @@ func Test_recordHandler_deleteRecord(t *testing.T) {
 
 func Test_recordHandler_createRecord(t *testing.T) {
 	type fields struct {
-		recordModel model.RecordModel
-		domainModel model.DomainModel
+		recordModel model.RecordModeler
+		domainModel model.DomainModeler
 	}
 	tests := []struct {
 		name     string
@@ -357,8 +357,8 @@ func Test_recordHandler_createRecord(t *testing.T) {
 
 func Test_recordHandler_enableRecord(t *testing.T) {
 	type fields struct {
-		recordModel model.RecordModel
-		domainModel model.DomainModel
+		recordModel model.RecordModeler
+		domainModel model.DomainModeler
 	}
 	type args struct {
 		c echo.Context
@@ -424,8 +424,8 @@ func Test_recordHandler_enableRecord(t *testing.T) {
 
 func Test_recordHandler_disableRecord(t *testing.T) {
 	type fields struct {
-		recordModel model.RecordModel
-		domainModel model.DomainModel
+		recordModel model.RecordModeler
+		domainModel model.DomainModeler
 	}
 	type args struct {
 		c echo.Context

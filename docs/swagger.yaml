@@ -76,7 +76,7 @@ definitions:
     type: array
   pdns_api.HTTPError:
     type: object
-host: 127.0.0.1:8080
+host: '{{.Host}}'
 info:
   contact: {}
   description: This is PDNS RESTful API Server.
@@ -123,6 +123,8 @@ paths:
       - ID: []
       - Secret: []
       summary: get domains
+      tags:
+      - domains
     post:
       consumes:
       - application/json
@@ -159,6 +161,94 @@ paths:
       - ID: []
       - Secret: []
       summary: create domain
+      tags:
+      - domains
+  /domains/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete domain
+      parameters:
+      - description: Domain ID
+        in: path
+        name: id
+        required: true
+        type: interger
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/model.Domain'
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+      security:
+      - ID: []
+      - Secret: []
+      summary: delete domain
+      tags:
+      - domains
+    put:
+      consumes:
+      - application/json
+      description: update domain
+      parameters:
+      - description: Dorain ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Domain Object
+        in: body
+        name: domain
+        required: true
+        schema:
+          $ref: '#/definitions/model.Domain'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Domain'
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pdns_api.HTTPError'
+            type: object
+      security:
+      - ID: []
+      - Secret: []
+      summary: update domain
+      tags:
+      - domains
   /domains/{name}:
     delete:
       consumes:
@@ -194,6 +284,8 @@ paths:
       - ID: []
       - Secret: []
       summary: delete domain
+      tags:
+      - domains
     put:
       consumes:
       - application/json
@@ -235,6 +327,8 @@ paths:
       - ID: []
       - Secret: []
       summary: update domain
+      tags:
+      - domains
   /records:
     get:
       consumes:
@@ -272,6 +366,8 @@ paths:
       - ID: []
       - Secret: []
       summary: get records
+      tags:
+      - records
     post:
       consumes:
       - application/json
@@ -311,6 +407,8 @@ paths:
       - ID: []
       - Secret: []
       summary: create record
+      tags:
+      - records
   /records/{id}:
     delete:
       consumes:
@@ -346,6 +444,8 @@ paths:
       - ID: []
       - Secret: []
       summary: delete record
+      tags:
+      - records
     put:
       consumes:
       - application/json
@@ -387,6 +487,8 @@ paths:
       - ID: []
       - Secret: []
       summary: update record
+      tags:
+      - records
   /records/disable/{id}:
     put:
       consumes:
@@ -429,6 +531,8 @@ paths:
       - ID: []
       - Secret: []
       summary: disable record
+      tags:
+      - records
   /records/enable/{id}:
     put:
       consumes:
@@ -471,6 +575,30 @@ paths:
       - ID: []
       - Secret: []
       summary: enable record
+      tags:
+      - records
+  /viron:
+    get:
+      consumes:
+      - application/json
+      description: get global menu
+      operationId: viron#get
+      produces:
+      - application/json
+      summary: get global menu
+      tags:
+      - viron
+  /viron_authtype:
+    get:
+      consumes:
+      - application/json
+      description: get auth type
+      operationId: viron_authtype#get
+      produces:
+      - application/json
+      summary: get auth type
+      tags:
+      - viron
 securityDefinitions:
   ID:
     in: header
@@ -481,3 +609,7 @@ securityDefinitions:
     name: PIR5-SECRET
     type: apiKey
 swagger: "2.0"
+tags:
+- name: domains
+- name: records
+- name: viron

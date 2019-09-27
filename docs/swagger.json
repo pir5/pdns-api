@@ -10,7 +10,7 @@
         },
         "version": "1.0"
     },
-    "host": "127.0.0.1:8080",
+    "host": "{{.Host}}",
     "basePath": "/v1",
     "paths": {
         "/domains": {
@@ -29,6 +29,9 @@
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "domains"
                 ],
                 "summary": "get domains",
                 "parameters": [
@@ -87,6 +90,9 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "domains"
+                ],
                 "summary": "create domain",
                 "parameters": [
                     {
@@ -128,6 +134,138 @@
                 }
             }
         },
+        "/domains/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "ID": []
+                    },
+                    {
+                        "Secret": []
+                    }
+                ],
+                "description": "update domain",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "domains"
+                ],
+                "summary": "update domain",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Dorain ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Domain Object",
+                        "name": "domain",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Domain"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Domain"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ID": []
+                    },
+                    {
+                        "Secret": []
+                    }
+                ],
+                "description": "delete domain",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "domains"
+                ],
+                "summary": "delete domain",
+                "parameters": [
+                    {
+                        "type": "interger",
+                        "description": "Domain ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Domain"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/domains/{name}": {
             "put": {
                 "security": [
@@ -144,6 +282,9 @@
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "domains"
                 ],
                 "summary": "update domain",
                 "parameters": [
@@ -208,6 +349,9 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "domains"
+                ],
                 "summary": "delete domain",
                 "parameters": [
                     {
@@ -262,6 +406,9 @@
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "records"
                 ],
                 "summary": "get records",
                 "parameters": [
@@ -319,6 +466,9 @@
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "records"
                 ],
                 "summary": "create record",
                 "parameters": [
@@ -381,6 +531,9 @@
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "records"
                 ],
                 "summary": "disable record",
                 "parameters": [
@@ -447,6 +600,9 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "records"
+                ],
                 "summary": "enable record",
                 "parameters": [
                     {
@@ -512,6 +668,9 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "records"
+                ],
                 "summary": "update record",
                 "parameters": [
                     {
@@ -575,6 +734,9 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "records"
+                ],
                 "summary": "delete record",
                 "parameters": [
                     {
@@ -611,6 +773,38 @@
                         }
                     }
                 }
+            }
+        },
+        "/viron": {
+            "get": {
+                "description": "get global menu",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "viron"
+                ],
+                "summary": "get global menu",
+                "operationId": "viron#get"
+            }
+        },
+        "/viron_authtype": {
+            "get": {
+                "description": "get auth type",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "viron"
+                ],
+                "summary": "get auth type",
+                "operationId": "viron_authtype#get"
             }
         }
     },
@@ -742,5 +936,16 @@
             "name": "PIR5-SECRET",
             "in": "header"
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "domains"
+        },
+        {
+            "name": "records"
+        },
+        {
+            "name": "viron"
+        }
+    ]
 }

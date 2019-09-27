@@ -6,14 +6,12 @@ package docs
 
 import (
 	"bytes"
-	"encoding/json"
 
 	"github.com/alecthomas/template"
 	"github.com/swaggo/swag"
 )
 
 var doc = `{
-    "schemes": {{ marshal .Schemes }},
     "swagger": "2.0",
     "info": {
         "description": "This is PDNS RESTful API Server.",
@@ -25,7 +23,7 @@ var doc = `{
         },
         "version": "1.0"
     },
-    "host": "127.0.0.1:8080",
+    "host": "{{.Host}}",
     "basePath": "/v1",
     "paths": {
         "/domains": {
@@ -44,6 +42,9 @@ var doc = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "domains"
                 ],
                 "summary": "get domains",
                 "parameters": [
@@ -102,6 +103,9 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "domains"
+                ],
                 "summary": "create domain",
                 "parameters": [
                     {
@@ -143,6 +147,138 @@ var doc = `{
                 }
             }
         },
+        "/domains/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "ID": []
+                    },
+                    {
+                        "Secret": []
+                    }
+                ],
+                "description": "update domain",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "domains"
+                ],
+                "summary": "update domain",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Dorain ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Domain Object",
+                        "name": "domain",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Domain"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Domain"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ID": []
+                    },
+                    {
+                        "Secret": []
+                    }
+                ],
+                "description": "delete domain",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "domains"
+                ],
+                "summary": "delete domain",
+                "parameters": [
+                    {
+                        "type": "interger",
+                        "description": "Domain ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Domain"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/pdns_api.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/domains/{name}": {
             "put": {
                 "security": [
@@ -159,6 +295,9 @@ var doc = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "domains"
                 ],
                 "summary": "update domain",
                 "parameters": [
@@ -223,6 +362,9 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "domains"
+                ],
                 "summary": "delete domain",
                 "parameters": [
                     {
@@ -277,6 +419,9 @@ var doc = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "records"
                 ],
                 "summary": "get records",
                 "parameters": [
@@ -334,6 +479,9 @@ var doc = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "records"
                 ],
                 "summary": "create record",
                 "parameters": [
@@ -396,6 +544,9 @@ var doc = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "records"
                 ],
                 "summary": "disable record",
                 "parameters": [
@@ -462,6 +613,9 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "records"
+                ],
                 "summary": "enable record",
                 "parameters": [
                     {
@@ -527,6 +681,9 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "records"
+                ],
                 "summary": "update record",
                 "parameters": [
                     {
@@ -590,6 +747,9 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "records"
+                ],
                 "summary": "delete record",
                 "parameters": [
                     {
@@ -626,6 +786,38 @@ var doc = `{
                         }
                     }
                 }
+            }
+        },
+        "/viron": {
+            "get": {
+                "description": "get global menu",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "viron"
+                ],
+                "summary": "get global menu",
+                "operationId": "viron#get"
+            }
+        },
+        "/viron_authtype": {
+            "get": {
+                "description": "get auth type",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "viron"
+                ],
+                "summary": "get auth type",
+                "operationId": "viron_authtype#get"
             }
         }
     },
@@ -757,30 +949,35 @@ var doc = `{
             "name": "PIR5-SECRET",
             "in": "header"
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "domains"
+        },
+        {
+            "name": "records"
+        },
+        {
+            "name": "viron"
+        }
+    ]
 }`
 
 type swaggerInfo struct {
 	Version     string
 	Host        string
 	BasePath    string
-	Schemes     []string
 	Title       string
 	Description string
 }
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
-var SwaggerInfo = swaggerInfo{ Schemes: []string{}}
+var SwaggerInfo swaggerInfo
 
 type s struct{}
 
 func (s *s) ReadDoc() string {
-	t, err := template.New("swagger_info").Funcs(template.FuncMap{
-		"marshal": func(v interface {}) string {
-			a, _ := json.Marshal(v)
-			return string(a)
-		},
-	}).Parse(doc)
+	t, err := template.New("swagger_info").Parse(doc)
 	if err != nil {
 		return doc
 	}

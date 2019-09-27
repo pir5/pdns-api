@@ -45,7 +45,7 @@ func Test_httpAuth_Authenticate(t *testing.T) {
 				}
 			})
 
-			l, _ := net.Listen("tcp", "127.0.0.1:8080")
+			l, _ := net.Listen("tcp", "127.0.0.1:0")
 			ts := httptest.Server{
 				Listener: l,
 				Config:   &http.Server{Handler: handler},
@@ -54,7 +54,7 @@ func Test_httpAuth_Authenticate(t *testing.T) {
 			defer ts.Close()
 
 			h := httpAuth{
-				Endpoint:      "http://localhost:8080",
+				Endpoint:      ts.URL,
 				RequestHeader: tt.fields.requestHeader,
 			}
 			got, err := h.Authenticate(tt.userID, tt.secret)

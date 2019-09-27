@@ -21,6 +21,7 @@ import (
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /records [get]
+// @Tags records
 func (h *recordHandler) getRecords(c echo.Context) error {
 	whereParams := map[string]interface{}{}
 	for k, v := range c.QueryParams() {
@@ -61,6 +62,7 @@ func (h *recordHandler) getRecords(c echo.Context) error {
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /records/{id} [put]
+// @Tags records
 func (h *recordHandler) updateRecord(c echo.Context) error {
 	if err := h.isAllowRecordID(c); err != nil {
 		return err
@@ -96,6 +98,7 @@ func (h *recordHandler) updateRecord(c echo.Context) error {
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /records/enable/{id} [put]
+// @Tags records
 func (h *recordHandler) enableRecord(c echo.Context) error {
 	return changeState(h, c, false)
 }
@@ -114,6 +117,7 @@ func (h *recordHandler) enableRecord(c echo.Context) error {
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /records/disable/{id} [put]
+// @Tags records
 func (h *recordHandler) disableRecord(c echo.Context) error {
 	return changeState(h, c, true)
 }
@@ -152,6 +156,7 @@ func changeState(h *recordHandler, c echo.Context, disabled bool) error {
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /records/{id} [delete]
+// @Tags records
 func (h *recordHandler) deleteRecord(c echo.Context) error {
 	err := h.isAllowRecordID(c)
 	if err != nil {
@@ -183,6 +188,7 @@ func (h *recordHandler) deleteRecord(c echo.Context) error {
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /records [post]
+// @Tags records
 func (h *recordHandler) createRecord(c echo.Context) error {
 	d := &model.Record{}
 	if err := c.Bind(d); err != nil {
@@ -241,11 +247,11 @@ func (h *recordHandler) isAllowDomainID(c echo.Context, domainID int) error {
 }
 
 type recordHandler struct {
-	recordModel model.RecordModel
-	domainModel model.DomainModel
+	recordModel model.RecordModeler
+	domainModel model.DomainModeler
 }
 
-func NewRecordHandler(r model.RecordModel, d model.DomainModel) *recordHandler {
+func NewRecordHandler(r model.RecordModeler, d model.DomainModeler) *recordHandler {
 	return &recordHandler{
 		recordModel: r,
 		domainModel: d,
@@ -253,8 +259,8 @@ func NewRecordHandler(r model.RecordModel, d model.DomainModel) *recordHandler {
 }
 func RecordEndpoints(g *echo.Group, db *gorm.DB) {
 	h := NewRecordHandler(
-		model.NewRecordModel(db),
-		model.NewDomainModel(db),
+		model.NewRecordModeler(db),
+		model.NewDomainModeler(db),
 	)
 	g.GET("/records", h.getRecords)
 	g.PUT("/records/:id", h.updateRecord)

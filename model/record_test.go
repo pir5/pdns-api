@@ -11,18 +11,7 @@ import (
 
 func TestRecord_FindBy(t *testing.T) {
 	type fields struct {
-		db        *gorm.DB
-		ID        int
-		DomainID  int
-		Name      string
-		Type      string
-		Content   string
-		TTL       int
-		Prio      int
-		Disabled  *bool
-		OrderName string
-		Auth      *bool
-		Domain    Domain
+		db *gorm.DB
 	}
 	type args struct {
 		params map[string]interface{}
@@ -158,19 +147,8 @@ func TestRecord_FindBy(t *testing.T) {
 
 			gdb, _ := gorm.Open("mysql", db)
 
-			d := &Record{
-				db:        gdb,
-				ID:        tt.fields.ID,
-				DomainID:  tt.fields.DomainID,
-				Name:      tt.fields.Name,
-				Type:      tt.fields.Type,
-				Content:   tt.fields.Content,
-				TTL:       tt.fields.TTL,
-				Prio:      tt.fields.Prio,
-				Disabled:  tt.fields.Disabled,
-				OrderName: tt.fields.OrderName,
-				Auth:      tt.fields.Auth,
-				Domain:    tt.fields.Domain,
+			d := &RecordModel{
+				db: gdb,
 			}
 			got, err := d.FindBy(tt.args.params)
 			if (err != nil) != tt.wantErr {
@@ -187,18 +165,7 @@ func TestRecord_FindBy(t *testing.T) {
 
 func TestRecord_UpdateByID(t *testing.T) {
 	type fields struct {
-		db        *gorm.DB
-		ID        int
-		DomainID  int
-		Name      string
-		Type      string
-		Content   string
-		TTL       int
-		Prio      int
-		Disabled  *bool
-		OrderName string
-		Auth      *bool
-		Domain    Domain
+		db *gorm.DB
 	}
 	type args struct {
 		id        string
@@ -282,8 +249,8 @@ func TestRecord_UpdateByID(t *testing.T) {
 					WithArgs("1").
 					WillReturnRows(tt.recordRows)
 				mock.ExpectBegin()
-				mock.ExpectExec("UPDATE `records` SET `content` = \\?, `type` = \\? WHERE `records`.`id` = \\?").
-					WithArgs(`2.2.2.2`, "CNAME", 1).WillReturnResult(
+				mock.ExpectExec("UPDATE `records` SET `content` = \\?, `domain_id` = \\?, `type` = \\? WHERE `records`.`id` = \\?").
+					WithArgs(`2.2.2.2`, 1, "CNAME", 1).WillReturnResult(
 					sqlmock.NewResult(
 						1,
 						1,
@@ -296,19 +263,8 @@ func TestRecord_UpdateByID(t *testing.T) {
 			}
 
 			gdb, _ := gorm.Open("mysql", db)
-			d := &Record{
-				db:        gdb,
-				ID:        tt.fields.ID,
-				DomainID:  tt.fields.DomainID,
-				Name:      tt.fields.Name,
-				Type:      tt.fields.Type,
-				Content:   tt.fields.Content,
-				TTL:       tt.fields.TTL,
-				Prio:      tt.fields.Prio,
-				Disabled:  tt.fields.Disabled,
-				OrderName: tt.fields.OrderName,
-				Auth:      tt.fields.Auth,
-				Domain:    tt.fields.Domain,
+			d := &RecordModel{
+				db: gdb,
 			}
 			got, err := d.UpdateByID(tt.args.id, tt.args.newRecord)
 			if (err != nil) != tt.wantErr {
@@ -324,18 +280,7 @@ func TestRecord_UpdateByID(t *testing.T) {
 
 func TestRecord_DeleteByID(t *testing.T) {
 	type fields struct {
-		db        *gorm.DB
-		ID        int
-		DomainID  int
-		Name      string
-		Type      string
-		Content   string
-		TTL       int
-		Prio      int
-		Disabled  *bool
-		OrderName string
-		Auth      *bool
-		Domain    Domain
+		db *gorm.DB
 	}
 	type args struct {
 		id string
@@ -428,19 +373,8 @@ func TestRecord_DeleteByID(t *testing.T) {
 			}
 
 			gdb, _ := gorm.Open("mysql", db)
-			d := &Record{
-				db:        gdb,
-				ID:        tt.fields.ID,
-				DomainID:  tt.fields.DomainID,
-				Name:      tt.fields.Name,
-				Type:      tt.fields.Type,
-				Content:   tt.fields.Content,
-				TTL:       tt.fields.TTL,
-				Prio:      tt.fields.Prio,
-				Disabled:  tt.fields.Disabled,
-				OrderName: tt.fields.OrderName,
-				Auth:      tt.fields.Auth,
-				Domain:    tt.fields.Domain,
+			d := &RecordModel{
+				db: gdb,
 			}
 			got, err := d.DeleteByID(tt.args.id)
 			if (err != nil) != tt.wantErr {
@@ -456,18 +390,7 @@ func TestRecord_DeleteByID(t *testing.T) {
 
 func TestRecord_Create(t *testing.T) {
 	type fields struct {
-		db        *gorm.DB
-		ID        int
-		DomainID  int
-		Name      string
-		Type      string
-		Content   string
-		TTL       int
-		Prio      int
-		Disabled  *bool
-		OrderName string
-		Auth      *bool
-		Domain    Domain
+		db *gorm.DB
 	}
 	type args struct {
 		newRecord *Record
@@ -544,17 +467,8 @@ func TestRecord_Create(t *testing.T) {
 			}
 
 			gdb, _ := gorm.Open("mysql", db)
-			d := &Record{
-				db:        gdb,
-				ID:        tt.fields.ID,
-				DomainID:  tt.fields.DomainID,
-				Name:      tt.fields.Name,
-				Type:      tt.fields.Type,
-				Content:   tt.fields.Content,
-				TTL:       tt.fields.TTL,
-				Prio:      tt.fields.Prio,
-				OrderName: tt.fields.OrderName,
-				Domain:    tt.fields.Domain,
+			d := &RecordModel{
+				db: gdb,
 			}
 			err = d.Create(tt.args.newRecord)
 			if (err != nil) != tt.wantErr {

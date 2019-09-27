@@ -4,8 +4,10 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+type RecordModel struct {
+	db *gorm.DB
+}
 type Record struct {
-	db        *gorm.DB
 	ID        int    `json:"id"`
 	DomainID  int    `json:"domain_id"`
 	Name      string `json:"name"`
@@ -20,15 +22,15 @@ type Record struct {
 }
 
 type Records []Record
-type RecordModel interface {
+type RecordModeler interface {
 	FindBy(map[string]interface{}) (Records, error)
 	UpdateByID(string, *Record) (bool, error)
 	DeleteByID(string) (bool, error)
 	Create(*Record) error
 }
 
-func NewRecordModel(db *gorm.DB) *Record {
-	return &Record{
+func NewRecordModeler(db *gorm.DB) *RecordModel {
+	return &RecordModel{
 		db: db,
 	}
 }
@@ -42,8 +44,8 @@ func (rs *Records) ToIntreface() []interface{} {
 	return ret
 }
 
-func (d *Record) FindBy(params map[string]interface{}) (Records, error) {
-	query := d.db.New().Preload("Domain")
+func (d *RecordModel) FindBy(params map[string]interface{}) (Records, error) {
+	query := d.db.Preload("Domain")
 	for k, v := range params {
 		query = query.Where(k+" in(?)", v)
 	}
@@ -60,9 +62,9 @@ func (d *Record) FindBy(params map[string]interface{}) (Records, error) {
 
 	return ds, nil
 }
-func (d *Record) UpdateByID(id string, newRecord *Record) (bool, error) {
+func (d *RecordModel) UpdateByID(id string, newRecord *Record) (bool, error) {
 	record := &Record{}
-	r := d.db.New().Where("id = ?", id).Take(&record)
+	r := d.db.Where("id = ?", id).Take(&record)
 	if r.Error != nil {
 		if r.RecordNotFound() {
 			return false, nil
@@ -71,7 +73,7 @@ func (d *Record) UpdateByID(id string, newRecord *Record) (bool, error) {
 		}
 	}
 
-	newRecord.DomainID = d.DomainID
+	newRecord.DomainID = record.DomainID
 	r = d.db.Model(&record).Updates(&newRecord)
 
 	if r.Error != nil {
@@ -79,9 +81,9 @@ func (d *Record) UpdateByID(id string, newRecord *Record) (bool, error) {
 	}
 	return true, nil
 }
-func (d *Record) DeleteByID(id string) (bool, error) {
+func (d *RecordModel) DeleteByID(id string) (bool, error) {
 	record := &Record{}
-	r := d.db.New().Where("id = ?", id).Take(&record)
+	r := d.db.Where("id = ?", id).Take(&record)
 	if r.Error != nil {
 		if r.RecordNotFound() {
 			return false, nil
@@ -97,7 +99,7 @@ func (d *Record) DeleteByID(id string) (bool, error) {
 	return true, nil
 }
 
-func (d *Record) Create(newRecord *Record) error {
+func (d *RecordModel) Create(newRecord *Record) error {
 	f := false
 	if newRecord.Disabled == nil {
 		newRecord.Disabled = &f
@@ -105,7 +107,7 @@ func (d *Record) Create(newRecord *Record) error {
 	if newRecord.Auth == nil {
 		newRecord.Auth = &f
 	}
-	if err := d.db.New().Create(newRecord).Error; err != nil {
+	if err := d.db.Create(newRecord).Error; err != nil {
 		return err
 	}
 	return nil
