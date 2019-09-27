@@ -52,7 +52,6 @@ func vironGlobalMenu(c echo.Context) error {
     "domains",
     "records"
   ],
-  "thumbnail": "https://avatars3.githubusercontent.com/u/23251378?v=3&s=200",
   "pages": [
     {
       "section": "manage",
