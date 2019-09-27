@@ -10,15 +10,7 @@ import (
 
 func TestDomain_FindBy(t *testing.T) {
 	type fields struct {
-		db             *gorm.DB
-		ID             int
-		Name           string
-		Master         string
-		LastCheck      int
-		Type           string
-		NotifiedSerial int32
-		Account        string
-		Records        Records
+		db *gorm.DB
 	}
 	type args struct {
 		params map[string]interface{}
@@ -92,7 +84,6 @@ func TestDomain_FindBy(t *testing.T) {
 					Account:        "test",
 					Records: Records{
 						Record{
-							db:        (*gorm.DB)(nil),
 							ID:        1,
 							DomainID:  1,
 							Name:      "test.com",
@@ -157,16 +148,8 @@ func TestDomain_FindBy(t *testing.T) {
 			}
 
 			gdb, _ := gorm.Open("mysql", db)
-			d := &Domain{
-				db:             gdb,
-				ID:             tt.fields.ID,
-				Name:           tt.fields.Name,
-				Master:         tt.fields.Master,
-				LastCheck:      tt.fields.LastCheck,
-				Type:           tt.fields.Type,
-				NotifiedSerial: tt.fields.NotifiedSerial,
-				Account:        tt.fields.Account,
-				Records:        tt.fields.Records,
+			d := &DomainModel{
+				db: gdb,
 			}
 
 			got, err := d.FindBy(tt.args.params)
@@ -183,15 +166,7 @@ func TestDomain_FindBy(t *testing.T) {
 
 func TestDomain_UpdateByName(t *testing.T) {
 	type fields struct {
-		db             *gorm.DB
-		ID             int
-		Name           string
-		Master         string
-		LastCheck      int
-		Type           string
-		NotifiedSerial int32
-		Account        string
-		Records        Records
+		db *gorm.DB
 	}
 	type args struct {
 		name      string
@@ -289,16 +264,8 @@ func TestDomain_UpdateByName(t *testing.T) {
 			}
 
 			gdb, _ := gorm.Open("mysql", db)
-			d := &Domain{
-				db:             gdb,
-				ID:             tt.fields.ID,
-				Name:           tt.fields.Name,
-				Master:         tt.fields.Master,
-				LastCheck:      tt.fields.LastCheck,
-				Type:           tt.fields.Type,
-				NotifiedSerial: tt.fields.NotifiedSerial,
-				Account:        tt.fields.Account,
-				Records:        tt.fields.Records,
+			d := &DomainModel{
+				db: gdb,
 			}
 
 			got, err := d.UpdateByName(tt.args.name, tt.args.newDomain)
@@ -404,7 +371,7 @@ func TestDomain_DeleteByName(t *testing.T) {
 			}
 
 			gdb, _ := gorm.Open("mysql", db)
-			d := &Domain{
+			d := &DomainModel{
 				db: gdb,
 			}
 
@@ -422,15 +389,7 @@ func TestDomain_DeleteByName(t *testing.T) {
 
 func TestDomain_Create(t *testing.T) {
 	type fields struct {
-		db             *gorm.DB
-		ID             int
-		Name           string
-		Master         string
-		LastCheck      int
-		Type           string
-		NotifiedSerial int32
-		Account        string
-		Records        Records
+		db *gorm.DB
 	}
 	type args struct {
 		newDomain *Domain
@@ -486,16 +445,8 @@ func TestDomain_Create(t *testing.T) {
 			}
 
 			gdb, _ := gorm.Open("mysql", db)
-			d := &Domain{
-				db:             gdb,
-				ID:             tt.fields.ID,
-				Name:           tt.fields.Name,
-				Master:         tt.fields.Master,
-				LastCheck:      tt.fields.LastCheck,
-				Type:           tt.fields.Type,
-				NotifiedSerial: tt.fields.NotifiedSerial,
-				Account:        tt.fields.Account,
-				Records:        tt.fields.Records,
+			d := &DomainModel{
+				db: gdb,
 			}
 
 			err = d.Create(tt.args.newDomain)
@@ -513,15 +464,7 @@ func newBool(b bool) *bool {
 
 func TestDomain_UpdateByID(t *testing.T) {
 	type fields struct {
-		db             *gorm.DB
-		ID             int
-		Name           string
-		Master         string
-		LastCheck      int
-		Type           string
-		NotifiedSerial int32
-		Account        string
-		Records        Records
+		db *gorm.DB
 	}
 	type args struct {
 		id        string
@@ -619,16 +562,8 @@ func TestDomain_UpdateByID(t *testing.T) {
 			}
 
 			gdb, _ := gorm.Open("mysql", db)
-			d := &Domain{
-				db:             gdb,
-				ID:             tt.fields.ID,
-				Name:           tt.fields.Name,
-				Master:         tt.fields.Master,
-				LastCheck:      tt.fields.LastCheck,
-				Type:           tt.fields.Type,
-				NotifiedSerial: tt.fields.NotifiedSerial,
-				Account:        tt.fields.Account,
-				Records:        tt.fields.Records,
+			d := &DomainModel{
+				db: gdb,
 			}
 
 			got, err := d.UpdateByID(tt.args.id, tt.args.newDomain)
@@ -734,7 +669,7 @@ func TestDomain_DeleteByID(t *testing.T) {
 			}
 
 			gdb, _ := gorm.Open("mysql", db)
-			d := &Domain{
+			d := &DomainModel{
 				db: gdb,
 			}
 

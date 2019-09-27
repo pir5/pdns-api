@@ -108,7 +108,7 @@ func (d *domainModelStub) Create(newDomain *model.Domain) error {
 
 func Test_domainHandler_getDomains(t *testing.T) {
 	type fields struct {
-		domainModel model.DomainModel
+		domainModel model.DomainModeler
 	}
 	tests := []struct {
 		name      string
@@ -177,7 +177,7 @@ func Test_domainHandler_getDomains(t *testing.T) {
 
 func Test_domainHandler_updateDomainByID(t *testing.T) {
 	type fields struct {
-		domainModel model.DomainModel
+		domainModel model.DomainModeler
 	}
 	tests := []struct {
 		name      string
@@ -247,7 +247,7 @@ func Test_domainHandler_updateDomainByID(t *testing.T) {
 
 func Test_domainHandler_updateDomainByName(t *testing.T) {
 	type fields struct {
-		domainModel model.DomainModel
+		domainModel model.DomainModeler
 	}
 	tests := []struct {
 		name      string
@@ -317,7 +317,7 @@ func Test_domainHandler_updateDomainByName(t *testing.T) {
 
 func Test_domainHandler_deleteDomainByName(t *testing.T) {
 	type fields struct {
-		domainModel model.DomainModel
+		domainModel model.DomainModeler
 	}
 	tests := []struct {
 		name      string
@@ -380,7 +380,7 @@ func Test_domainHandler_deleteDomainByName(t *testing.T) {
 
 func Test_domainHandler_deleteDomainByID(t *testing.T) {
 	type fields struct {
-		domainModel model.DomainModel
+		domainModel model.DomainModeler
 	}
 	tests := []struct {
 		name     string
@@ -443,7 +443,7 @@ func Test_domainHandler_deleteDomainByID(t *testing.T) {
 
 func Test_domainHandler_createDomain(t *testing.T) {
 	type fields struct {
-		domainModel model.DomainModel
+		domainModel model.DomainModeler
 	}
 	type args struct {
 		c echo.Context

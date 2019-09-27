@@ -247,11 +247,11 @@ func (h *recordHandler) isAllowDomainID(c echo.Context, domainID int) error {
 }
 
 type recordHandler struct {
-	recordModel model.RecordModel
-	domainModel model.DomainModel
+	recordModel model.RecordModeler
+	domainModel model.DomainModeler
 }
 
-func NewRecordHandler(r model.RecordModel, d model.DomainModel) *recordHandler {
+func NewRecordHandler(r model.RecordModeler, d model.DomainModeler) *recordHandler {
 	return &recordHandler{
 		recordModel: r,
 		domainModel: d,
@@ -259,8 +259,8 @@ func NewRecordHandler(r model.RecordModel, d model.DomainModel) *recordHandler {
 }
 func RecordEndpoints(g *echo.Group, db *gorm.DB) {
 	h := NewRecordHandler(
-		model.NewRecordModel(db),
-		model.NewDomainModel(db),
+		model.NewRecordModeler(db),
+		model.NewDomainModeler(db),
 	)
 	g.GET("/records", h.getRecords)
 	g.PUT("/records/:id", h.updateRecord)

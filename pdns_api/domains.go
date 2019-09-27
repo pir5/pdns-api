@@ -268,10 +268,10 @@ func getAllowDomains(c echo.Context) ([]string, error) {
 }
 
 type domainHandler struct {
-	domainModel model.DomainModel
+	domainModel model.DomainModeler
 }
 
-func NewDomainHandler(d model.DomainModel) *domainHandler {
+func NewDomainHandler(d model.DomainModeler) *domainHandler {
 	return &domainHandler{
 		domainModel: d,
 	}
@@ -307,7 +307,7 @@ func filterDomains(ds []interface{}, c echo.Context) ([]interface{}, error) {
 	return ret, nil
 }
 func DomainEndpoints(g *echo.Group, db *gorm.DB) {
-	h := NewDomainHandler(model.NewDomainModel(db))
+	h := NewDomainHandler(model.NewDomainModeler(db))
 	g.GET("/domains", h.getDomains)
 	g.PUT("/domains/name/:name", h.updateDomainByName)
 	g.DELETE("/domains/name/:name", h.deleteDomainByName)

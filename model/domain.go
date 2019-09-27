@@ -4,7 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type DomainModel interface {
+type DomainModeler interface {
 	FindBy(map[string]interface{}) (Domains, error)
 	UpdateByName(name string, newDoamin *Domain) (bool, error)
 	DeleteByName(name string) (bool, error)
@@ -13,14 +13,17 @@ type DomainModel interface {
 	Create(newDoamin *Domain) error
 }
 
-func NewDomainModel(db *gorm.DB) *Domain {
-	return &Domain{
+func NewDomainModeler(db *gorm.DB) *DomainModel {
+	return &DomainModel{
 		db: db,
 	}
 }
 
+type DomainModel struct {
+	db *gorm.DB
+}
+
 type Domain struct {
-	db             *gorm.DB
 	ID             int     `json:"id"`
 	Name           string  `json:"name"`
 	Master         string  `json:"master"`
@@ -42,8 +45,11 @@ func (ds *Domains) ToIntreface() []interface{} {
 	}
 	return ret
 }
-func (d *Domain) FindBy(params map[string]interface{}) (Domains, error) {
-	query := d.db.New().Preload("Records")
+func (d *DomainModel) TableName() string {
+	return "domains"
+}
+func (d *DomainModel) FindBy(params map[string]interface{}) (Domains, error) {
+	query := d.db.Preload("Records")
 	for k, v := range params {
 		query = query.Where(k+" in(?)", v)
 	}
@@ -61,7 +67,7 @@ func (d *Domain) FindBy(params map[string]interface{}) (Domains, error) {
 	return ds, nil
 }
 
-func (d *Domain) updateBy(db *gorm.DB, newDomain *Domain) (bool, error) {
+func (d *DomainModel) updateBy(db *gorm.DB, newDomain *Domain) (bool, error) {
 	r := db.Take(&d)
 	if r.Error != nil {
 		if r.RecordNotFound() {
@@ -78,16 +84,17 @@ func (d *Domain) updateBy(db *gorm.DB, newDomain *Domain) (bool, error) {
 	return true, nil
 }
 
-func (d *Domain) UpdateByName(name string, newDomain *Domain) (bool, error) {
-	return d.updateBy(d.db.New().Where("name = ?", name), newDomain)
+func (d *DomainModel) UpdateByName(name string, newDomain *Domain) (bool, error) {
+	return d.updateBy(d.db.Where("name = ?", name), newDomain)
 }
 
-func (d *Domain) UpdateByID(id string, newDomain *Domain) (bool, error) {
-	return d.updateBy(d.db.New().Where("id = ?", id), newDomain)
+func (d *DomainModel) UpdateByID(id string, newDomain *Domain) (bool, error) {
+	return d.updateBy(d.db.Where("id = ?", id), newDomain)
 }
 
-func (d *Domain) DeleteBy(db *gorm.DB) (bool, error) {
-	r := db.Take(&d)
+func (d *DomainModel) DeleteBy(db *gorm.DB) (bool, error) {
+	domain := Domain{}
+	r := db.Take(&domain)
 	if r.Error != nil {
 		if r.RecordNotFound() {
 			return false, nil
@@ -103,7 +110,7 @@ func (d *Domain) DeleteBy(db *gorm.DB) (bool, error) {
 		}
 	}()
 
-	r = tx.Where("domain_id = ?", d.ID).Delete(&Record{})
+	r = tx.Where("domain_id = ?", domain.ID).Delete(&Record{})
 	if r.Error != nil {
 		if !r.RecordNotFound() {
 			tx.Rollback()
@@ -111,7 +118,7 @@ func (d *Domain) DeleteBy(db *gorm.DB) (bool, error) {
 		}
 	}
 
-	r = tx.Delete(d)
+	r = tx.Delete(&domain)
 	if r.Error != nil {
 		tx.Rollback()
 		return false, r.Error
@@ -124,16 +131,16 @@ func (d *Domain) DeleteBy(db *gorm.DB) (bool, error) {
 	return true, nil
 }
 
-func (d *Domain) DeleteByID(id string) (bool, error) {
-	return d.DeleteBy(d.db.New().Where("id = ?", id))
+func (d *DomainModel) DeleteByID(id string) (bool, error) {
+	return d.DeleteBy(d.db.Where("id = ?", id))
 }
 
-func (d *Domain) DeleteByName(name string) (bool, error) {
-	return d.DeleteBy(d.db.New().Where("name  = ?", name))
+func (d *DomainModel) DeleteByName(name string) (bool, error) {
+	return d.DeleteBy(d.db.Where("name  = ?", name))
 }
 
-func (d *Domain) Create(newDomain *Domain) error {
-	if err := d.db.New().Create(newDomain).Error; err != nil {
+func (d *DomainModel) Create(newDomain *Domain) error {
+	if err := d.db.Create(newDomain).Error; err != nil {
 		return err
 	}
 	return nil
