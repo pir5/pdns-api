@@ -56,7 +56,7 @@ func vironGlobalMenu(c echo.Context) error {
     {
       "section": "manage",
       "id": "domains",
-      "name": "ドメイン操作",
+      "name": "Domains",
       "components": [
         {
           "api": {
@@ -84,7 +84,7 @@ func vironGlobalMenu(c echo.Context) error {
     {
       "section": "manage",
       "id": "records",
-      "name": "レコード操作",
+      "name": "Records",
       "components": [
         {
           "api": {
