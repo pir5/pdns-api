@@ -102,11 +102,7 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "Created",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.Domain"
-                        }
+                        "description": "Created"
                     },
                     "403": {
                         "description": "Forbidden",
@@ -171,11 +167,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.Domain"
-                        }
+                        "description": "OK"
                     },
                     "403": {
                         "description": "Forbidden",
@@ -228,11 +220,7 @@
                 ],
                 "responses": {
                     "204": {
-                        "description": "No Content",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.Domain"
-                        }
+                        "description": "No Content"
                     },
                     "403": {
                         "description": "Forbidden",
@@ -416,11 +404,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.Record"
-                        }
+                        "description": "OK"
                     },
                     "403": {
                         "description": "Forbidden",
@@ -485,11 +469,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.Record"
-                        }
+                        "description": "OK"
                     },
                     "403": {
                         "description": "Forbidden",
@@ -554,11 +534,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.Record"
-                        }
+                        "description": "OK"
                     },
                     "403": {
                         "description": "Forbidden",
@@ -611,11 +587,7 @@
                 ],
                 "responses": {
                     "204": {
-                        "description": "No Content",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.Record"
-                        }
+                        "description": "No Content"
                     },
                     "403": {
                         "description": "Forbidden",
