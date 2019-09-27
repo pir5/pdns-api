@@ -4,8 +4,6 @@ definitions:
     properties:
       account:
         type: string
-      db:
-        type: string
       id:
         type: integer
       last_check:
@@ -27,8 +25,6 @@ definitions:
       auth:
         type: boolean
       content:
-        type: string
-      db:
         type: string
       disabled:
         type: boolean
@@ -53,8 +49,6 @@ definitions:
         auth:
           type: boolean
         content:
-          type: string
-        db:
           type: string
         disabled:
           type: boolean
