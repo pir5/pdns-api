@@ -61,7 +61,7 @@ func (h *domainHandler) getDomains(c echo.Context) error {
 // @Produce  json
 // @Param name path string true "Dorain Name"
 // @Param domain body model.Domain true "Domain Object"
-// @Success 200 {object} model.Domain
+// @Success 200 "OK"
 // @Failure 403 {object} pdns_api.HTTPError
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
@@ -131,7 +131,7 @@ func (h *domainHandler) updateDomainByID(c echo.Context) error {
 // @Accept  json
 // @Produce  json
 // @Param name path string true "Domain Name"
-// @Success 204 {object} model.Domain
+// @Success 204 "No Content"
 // @Failure 403 {object} pdns_api.HTTPError
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
@@ -194,7 +194,7 @@ func (h *domainHandler) deleteDomainByID(c echo.Context) error {
 // @Accept  json
 // @Produce  json
 // @Param domain body model.Domain true "Domain Object"
-// @Success 201 {object} model.Domain
+// @Success 201 "Created"
 // @Failure 403 {object} pdns_api.HTTPError
 // @Failure 404 {object} pdns_api.HTTPError
 // @Failure 500 {object} pdns_api.HTTPError
