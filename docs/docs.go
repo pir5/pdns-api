@@ -828,9 +828,6 @@ var doc = `{
                 "account": {
                     "type": "string"
                 },
-                "db": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
                 },
@@ -862,9 +859,6 @@ var doc = `{
                     "type": "boolean"
                 },
                 "content": {
-                    "type": "string"
-                },
-                "db": {
                     "type": "string"
                 },
                 "disabled": {
@@ -902,9 +896,6 @@ var doc = `{
                         "type": "boolean"
                     },
                     "content": {
-                        "type": "string"
-                    },
-                    "db": {
                         "type": "string"
                     },
                     "disabled": {

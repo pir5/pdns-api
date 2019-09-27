@@ -815,9 +815,6 @@
                 "account": {
                     "type": "string"
                 },
-                "db": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
                 },
@@ -849,9 +846,6 @@
                     "type": "boolean"
                 },
                 "content": {
-                    "type": "string"
-                },
-                "db": {
                     "type": "string"
                 },
                 "disabled": {
@@ -889,9 +883,6 @@
                         "type": "boolean"
                     },
                     "content": {
-                        "type": "string"
-                    },
-                    "db": {
                         "type": "string"
                     },
                     "disabled": {
