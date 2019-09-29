@@ -21,8 +21,8 @@ import (
 // @Produce  json
 // @Param id query int false "Domain ID"
 // @Param name query string false "Name"
-// @Success 200 {array} model.Domain
-// @Failure 404 {object} pdns_api.HTTPError
+// @Success 200 {array} model.Domains
+// @Failure 404 {object} model.Domains
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /domains [get]
 // @Tags domains
@@ -43,10 +43,6 @@ func (h *domainHandler) getDomains(c echo.Context) error {
 	ids, err := filterDomains(ds.ToIntreface(), c)
 	if err != nil {
 		return c.JSON(http.StatusForbidden, err)
-	}
-
-	if ids == nil || len(ids) == 0 {
-		return c.JSON(http.StatusNotFound, "domains does not exists")
 	}
 
 	return c.JSON(http.StatusOK, ids)

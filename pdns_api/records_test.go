@@ -93,7 +93,7 @@ func Test_recordHandler_getRecords(t *testing.T) {
 				recordModel: &recordModelStub{},
 			},
 			wantErr:  false,
-			wantCode: http.StatusNotFound,
+			wantCode: http.StatusOK,
 			queryID:  "0",
 		},
 		{
@@ -113,7 +113,7 @@ func Test_recordHandler_getRecords(t *testing.T) {
 				recordModel: &recordModelStub{},
 			},
 			wantErr:  false,
-			wantCode: http.StatusNotFound,
+			wantCode: http.StatusOK,
 			queryID:  "3",
 		},
 	}

@@ -132,7 +132,7 @@ func Test_domainHandler_getDomains(t *testing.T) {
 				domainModel: &domainModelStub{},
 			},
 			wantErr:   false,
-			wantCode:  http.StatusNotFound,
+			wantCode:  http.StatusOK,
 			queryName: "notfound",
 		},
 		{
@@ -150,7 +150,7 @@ func Test_domainHandler_getDomains(t *testing.T) {
 				domainModel: &domainModelStub{},
 			},
 			wantErr:   false,
-			wantCode:  http.StatusNotFound,
+			wantCode:  http.StatusOK,
 			queryName: "deny",
 		},
 	}

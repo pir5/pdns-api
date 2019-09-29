@@ -17,8 +17,8 @@ import (
 // @Produce  json
 // @Param id query int false "Record ID"
 // @Param domain_id query int false "Domain ID"
-// @Success 200 {array} model.Record
-// @Failure 404 {object} pdns_api.HTTPError
+// @Success 200 {array} model.Records
+// @Failure 404 {object} model.Records
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /records [get]
 // @Tags records
@@ -39,10 +39,6 @@ func (h *recordHandler) getRecords(c echo.Context) error {
 	ids, err := filterDomains(ds.ToIntreface(), c)
 	if err != nil {
 		return c.JSON(http.StatusForbidden, err)
-	}
-
-	if ids == nil || len(ids) == 0 {
-		return c.JSON(http.StatusNotFound, "records does not exists")
 	}
 
 	return c.JSON(http.StatusOK, ids)

@@ -20,6 +20,28 @@ definitions:
       type:
         type: string
     type: object
+  model.Domains:
+    items:
+      properties:
+        account:
+          type: string
+        id:
+          type: integer
+        last_check:
+          type: integer
+        master:
+          type: string
+        name:
+          type: string
+        notified_serial:
+          type: integer
+        records:
+          $ref: '#/definitions/model.Records'
+          type: object
+        type:
+          type: string
+      type: object
+    type: array
   model.Record:
     properties:
       auth:
@@ -101,12 +123,12 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.Domain'
+              $ref: '#/definitions/model.Domains'
             type: array
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/pdns_api.HTTPError'
+            $ref: '#/definitions/model.Domains'
             type: object
         "500":
           description: Internal Server Error
@@ -353,12 +375,12 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.Record'
+              $ref: '#/definitions/model.Records'
             type: array
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/pdns_api.HTTPError'
+            $ref: '#/definitions/model.Records'
             type: object
         "500":
           description: Internal Server Error

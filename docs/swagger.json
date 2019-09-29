@@ -54,7 +54,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.Domain"
+                                "$ref": "#/definitions/model.Domains"
                             }
                         }
                     },
@@ -62,7 +62,7 @@
                         "description": "Not Found",
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/pdns_api.HTTPError"
+                            "$ref": "#/definitions/model.Domains"
                         }
                     },
                     "500": {
@@ -443,7 +443,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.Record"
+                                "$ref": "#/definitions/model.Records"
                             }
                         }
                     },
@@ -451,7 +451,7 @@
                         "description": "Not Found",
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/pdns_api.HTTPError"
+                            "$ref": "#/definitions/model.Records"
                         }
                     },
                     "500": {
@@ -864,6 +864,39 @@
                 },
                 "type": {
                     "type": "string"
+                }
+            }
+        },
+        "model.Domains": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "account": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "type": "integer"
+                    },
+                    "last_check": {
+                        "type": "integer"
+                    },
+                    "master": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "notified_serial": {
+                        "type": "integer"
+                    },
+                    "records": {
+                        "type": "object",
+                        "$ref": "#/definitions/model.Records"
+                    },
+                    "type": {
+                        "type": "string"
+                    }
                 }
             }
         },
