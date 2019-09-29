@@ -51,7 +51,7 @@ func (h *recordHandler) getRecords(c echo.Context) error {
 // @Security Secret
 // @Accept  json
 // @Produce  json
-// @Param id path int true "Record ID "
+// @Param id path integer true "Record ID "
 // @Param record body model.Record true "Record Object"
 // @Success 200 {object} model.Record
 // @Failure 403 {object} pdns_api.HTTPError
@@ -87,7 +87,7 @@ func (h *recordHandler) updateRecord(c echo.Context) error {
 // @Security Secret
 // @Accept  json
 // @Produce  json
-// @Param id path int true "Record ID "
+// @Param id path integer true "Record ID "
 // @Param record body model.Record true "Record Object"
 // @Success 200 {object} model.Record
 // @Failure 403 {object} pdns_api.HTTPError
@@ -106,7 +106,7 @@ func (h *recordHandler) enableRecord(c echo.Context) error {
 // @Security Secret
 // @Accept  json
 // @Produce  json
-// @Param id path int true "Record ID "
+// @Param id path integer true "Record ID "
 // @Param record body model.Record true "Record Object"
 // @Success 200 {object} model.Record
 // @Failure 403 {object} pdns_api.HTTPError
@@ -146,7 +146,7 @@ func changeState(h *recordHandler, c echo.Context, disabled bool) error {
 // @Security Secret
 // @Accept  json
 // @Produce  json
-// @Param id path int true "Record ID "
+// @Param id path integer true "Record ID "
 // @Success 204 {object} model.Record
 // @Failure 403 {object} pdns_api.HTTPError
 // @Failure 404 {object} pdns_api.HTTPError
