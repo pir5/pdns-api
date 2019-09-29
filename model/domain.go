@@ -24,13 +24,13 @@ type DomainModel struct {
 }
 
 type Domain struct {
-	ID             int     `json:"id"`
-	Name           string  `json:"name"`
+	ID             int     `json:"id" validate:"required"`
+	Name           string  `json:"name" validate:"required"`
 	Master         string  `json:"master"`
 	LastCheck      int     `json:"last_check"`
-	Type           string  `json:"type"`
+	Type           string  `json:"type" validate:"required"`
 	NotifiedSerial int32   `json:"notified_serial"`
-	Account        string  `json:"account"`
+	Account        string  `json:"account" validate:"required"`
 	Records        Records `json:"records"`
 }
 

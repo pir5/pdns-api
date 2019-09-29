@@ -302,6 +302,7 @@ func filterDomains(ds []interface{}, c echo.Context) ([]interface{}, error) {
 	}
 	return ret, nil
 }
+
 func DomainEndpoints(g *echo.Group, db *gorm.DB) {
 	h := NewDomainHandler(model.NewDomainModeler(db))
 	g.GET("/domains", h.getDomains)
