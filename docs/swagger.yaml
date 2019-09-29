@@ -441,6 +441,9 @@ paths:
       responses:
         "204":
           description: No Content
+          schema:
+            $ref: '#/definitions/model.Record'
+            type: object
         "403":
           description: Forbidden
           schema:
@@ -484,6 +487,9 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/model.Record'
+            type: object
         "403":
           description: Forbidden
           schema:
@@ -528,6 +534,9 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/model.Record'
+            type: object
         "403":
           description: Forbidden
           schema:
@@ -572,6 +581,9 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/model.Record'
+            type: object
         "403":
           description: Forbidden
           schema:

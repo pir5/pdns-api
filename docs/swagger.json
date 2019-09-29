@@ -557,7 +557,11 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
                     },
                     "403": {
                         "description": "Forbidden",
@@ -625,7 +629,11 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
                     },
                     "403": {
                         "description": "Forbidden",
@@ -693,7 +701,11 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
                     },
                     "403": {
                         "description": "Forbidden",
@@ -749,7 +761,11 @@
                 ],
                 "responses": {
                     "204": {
-                        "description": "No Content"
+                        "description": "No Content",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
                     },
                     "403": {
                         "description": "Forbidden",
