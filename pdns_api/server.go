@@ -73,6 +73,7 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 	e := echo.New()
 	e.Logger = logger
 	e.StdLogger = stdLog.New(e.Logger.Output(), e.Logger.Prefix()+": ", 0)
+	e.Validator = NewValidator()
 
 	e.GET("/status", status)
 
