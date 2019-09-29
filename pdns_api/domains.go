@@ -22,7 +22,7 @@ import (
 // @Param id query int false "Domain ID"
 // @Param name query string false "Name"
 // @Success 200 {array} model.Domain
-// @Failure 404 {object} model.Domain
+// @Failure 404 {array} model.Domain
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /domains [get]
 // @Tags domains

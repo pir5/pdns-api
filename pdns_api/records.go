@@ -18,7 +18,7 @@ import (
 // @Param id query int false "Record ID"
 // @Param domain_id query int false "Domain ID"
 // @Success 200 {array} model.Record
-// @Failure 404 {object} model.Record
+// @Failure 404 {array} model.Record
 // @Failure 500 {object} pdns_api.HTTPError
 // @Router /records [get]
 // @Tags records

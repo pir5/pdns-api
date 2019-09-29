@@ -61,8 +61,10 @@
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.Domain"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Domain"
+                            }
                         }
                     },
                     "500": {
@@ -438,8 +440,10 @@
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.Record"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Record"
+                            }
                         }
                     },
                     "500": {
