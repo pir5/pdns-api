@@ -20,28 +20,6 @@ definitions:
       type:
         type: string
     type: object
-  model.Domains:
-    items:
-      properties:
-        account:
-          type: string
-        id:
-          type: integer
-        last_check:
-          type: integer
-        master:
-          type: string
-        name:
-          type: string
-        notified_serial:
-          type: integer
-        records:
-          $ref: '#/definitions/model.Records'
-          type: object
-        type:
-          type: string
-      type: object
-    type: array
   model.Record:
     properties:
       auth:
@@ -123,12 +101,12 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.Domains'
+              $ref: '#/definitions/model.Domain'
             type: array
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/model.Domains'
+            $ref: '#/definitions/model.Domain'
             type: object
         "500":
           description: Internal Server Error
@@ -366,12 +344,12 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.Records'
+              $ref: '#/definitions/model.Record'
             type: array
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/model.Records'
+            $ref: '#/definitions/model.Record'
             type: object
         "500":
           description: Internal Server Error
@@ -441,6 +419,9 @@ paths:
       responses:
         "204":
           description: No Content
+          schema:
+            $ref: '#/definitions/model.Record'
+            type: object
         "403":
           description: Forbidden
           schema:
@@ -484,6 +465,9 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/model.Record'
+            type: object
         "403":
           description: Forbidden
           schema:
@@ -528,6 +512,9 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/model.Record'
+            type: object
         "403":
           description: Forbidden
           schema:
@@ -572,6 +559,9 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/model.Record'
+            type: object
         "403":
           description: Forbidden
           schema:

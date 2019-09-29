@@ -54,7 +54,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.Domains"
+                                "$ref": "#/definitions/model.Domain"
                             }
                         }
                     },
@@ -62,7 +62,7 @@
                         "description": "Not Found",
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/model.Domains"
+                            "$ref": "#/definitions/model.Domain"
                         }
                     },
                     "500": {
@@ -431,7 +431,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.Records"
+                                "$ref": "#/definitions/model.Record"
                             }
                         }
                     },
@@ -439,7 +439,7 @@
                         "description": "Not Found",
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/model.Records"
+                            "$ref": "#/definitions/model.Record"
                         }
                     },
                     "500": {
@@ -557,7 +557,11 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
                     },
                     "403": {
                         "description": "Forbidden",
@@ -625,7 +629,11 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
                     },
                     "403": {
                         "description": "Forbidden",
@@ -693,7 +701,11 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
                     },
                     "403": {
                         "description": "Forbidden",
@@ -749,7 +761,11 @@
                 ],
                 "responses": {
                     "204": {
-                        "description": "No Content"
+                        "description": "No Content",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Record"
+                        }
                     },
                     "403": {
                         "description": "Forbidden",
@@ -836,39 +852,6 @@
                 },
                 "type": {
                     "type": "string"
-                }
-            }
-        },
-        "model.Domains": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "account": {
-                        "type": "string"
-                    },
-                    "id": {
-                        "type": "integer"
-                    },
-                    "last_check": {
-                        "type": "integer"
-                    },
-                    "master": {
-                        "type": "string"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "notified_serial": {
-                        "type": "integer"
-                    },
-                    "records": {
-                        "type": "object",
-                        "$ref": "#/definitions/model.Records"
-                    },
-                    "type": {
-                        "type": "string"
-                    }
                 }
             }
         },
