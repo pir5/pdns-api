@@ -202,6 +202,10 @@ func (h *domainHandler) createDomain(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
+	if err := c.Validate(d); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
 	err := isAllowDomain(c, d.Name)
 	if err != nil {
 		return err
