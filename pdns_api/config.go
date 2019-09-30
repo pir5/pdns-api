@@ -50,9 +50,10 @@ func NewConfig(confPath string) (Config, error) {
 }
 
 type Config struct {
-	Listen string   `mapstructure:"listen"`
-	Auth   auth     `mapstructure:"auth"`
-	DB     database `mapstructure:"database"`
+	Listen   string   `mapstructure:"listen"`
+	Endpoint string   `mapstructure:"endpoint"`
+	Auth     auth     `mapstructure:"auth"`
+	DB       database `mapstructure:"database"`
 }
 
 type database struct {
