@@ -152,6 +152,9 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 	v1.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	docs.SwaggerInfo.Host = globalConfig.Listen
+	if globalConfig.Endpoint != "" {
+		docs.SwaggerInfo.Host = globalConfig.Endpoint
+	}
 
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
