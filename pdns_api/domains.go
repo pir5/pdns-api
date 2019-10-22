@@ -10,6 +10,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
 	"github.com/pir5/pdns-api/model"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 // getDomains is getting domains.
@@ -199,6 +200,10 @@ func (h *domainHandler) deleteDomainByID(c echo.Context) error {
 func (h *domainHandler) createDomain(c echo.Context) error {
 	d := &model.Domain{}
 	if err := c.Bind(d); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	if err := validator.New().Struct(d); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
