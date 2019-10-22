@@ -464,6 +464,7 @@ func Test_domainHandler_createDomain(t *testing.T) {
 			args: model.Domain{
 				Name: "ok.com",
 				ID:   9999,
+				Type: "NATIVE",
 			},
 			wantErr:   false,
 			wantCode:  http.StatusCreated,
@@ -477,6 +478,7 @@ func Test_domainHandler_createDomain(t *testing.T) {
 			args: model.Domain{
 				Name: "deny.com",
 				ID:   1,
+				Type: "NATIVE",
 			},
 			wantErr:   false,
 			wantCode:  http.StatusForbidden,
@@ -490,10 +492,38 @@ func Test_domainHandler_createDomain(t *testing.T) {
 			args: model.Domain{
 				Name: "@.com",
 				ID:   1,
+				Type: "NATIVE",
 			},
 			wantErr:   false,
 			wantCode:  http.StatusBadRequest,
 			queryName: "@.com",
+		},
+		{
+			name: "invalid domain type",
+			fields: fields{
+				domainModel: &domainModelStub{},
+			},
+			args: model.Domain{
+				Name: "example.com",
+				ID:   1,
+				Type: "NG",
+			},
+			wantErr:   false,
+			wantCode:  http.StatusBadRequest,
+			queryName: "example.com",
+		},
+		{
+			name: "empty domain type",
+			fields: fields{
+				domainModel: &domainModelStub{},
+			},
+			args: model.Domain{
+				Name: "example.com",
+				ID:   1,
+			},
+			wantErr:   false,
+			wantCode:  http.StatusBadRequest,
+			queryName: "example.com",
 		},
 	}
 	for _, tt := range tests {
