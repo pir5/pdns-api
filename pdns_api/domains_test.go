@@ -474,9 +474,26 @@ func Test_domainHandler_createDomain(t *testing.T) {
 			fields: fields{
 				domainModel: &domainModelStub{},
 			},
+			args: model.Domain{
+				Name: "deny.com",
+				ID:   1,
+			},
 			wantErr:   false,
 			wantCode:  http.StatusForbidden,
 			queryName: "deny.com",
+		},
+		{
+			name: "invalid domain name",
+			fields: fields{
+				domainModel: &domainModelStub{},
+			},
+			args: model.Domain{
+				Name: "@.com",
+				ID:   1,
+			},
+			wantErr:   false,
+			wantCode:  http.StatusBadRequest,
+			queryName: "@.com",
 		},
 	}
 	for _, tt := range tests {
