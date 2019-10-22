@@ -74,6 +74,9 @@ func (h *domainHandler) updateDomainByName(c echo.Context) error {
 	if err := c.Bind(nd); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
+	if err := validator.New().Struct(nd); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
 	updated, err := h.domainModel.UpdateByName(c.Param("name"), nd)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
@@ -108,6 +111,9 @@ func (h *domainHandler) updateDomainByID(c echo.Context) error {
 	nd := &model.Domain{}
 	if err := c.Bind(nd); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
+	}
+	if err := validator.New().Struct(nd); err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 	updated, err := h.domainModel.UpdateByID(c.Param("id"), nd)
 	if err != nil {

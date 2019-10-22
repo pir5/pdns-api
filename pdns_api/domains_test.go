@@ -195,6 +195,7 @@ func Test_domainHandler_updateDomainByID(t *testing.T) {
 			args: model.Domain{
 				Name: "ok.com",
 				ID:   9999,
+				Type: "NATIVE",
 			},
 			wantErr:   false,
 			wantCode:  http.StatusOK,
@@ -208,6 +209,7 @@ func Test_domainHandler_updateDomainByID(t *testing.T) {
 			args: model.Domain{
 				Name: "ok.com",
 				ID:   1111,
+				Type: "NATIVE",
 			},
 			wantErr:   false,
 			wantCode:  http.StatusNotFound,
@@ -218,9 +220,42 @@ func Test_domainHandler_updateDomainByID(t *testing.T) {
 			fields: fields{
 				domainModel: &domainModelStub{},
 			},
+			args: model.Domain{
+				Name: "deny.com",
+				ID:   1,
+				Type: "NATIVE",
+			},
 			wantErr:   false,
 			wantCode:  http.StatusForbidden,
 			queryName: "3",
+		},
+		{
+			name: "invalid domain name",
+			fields: fields{
+				domainModel: &domainModelStub{},
+			},
+			args: model.Domain{
+				Name: "@.com",
+				ID:   1,
+				Type: "NATIVE",
+			},
+			wantErr:   false,
+			wantCode:  http.StatusBadRequest,
+			queryName: "1",
+		},
+		{
+			name: "invalid domain type",
+			fields: fields{
+				domainModel: &domainModelStub{},
+			},
+			args: model.Domain{
+				Name: "ok.com",
+				ID:   1,
+				Type: "NG",
+			},
+			wantErr:   false,
+			wantCode:  http.StatusBadRequest,
+			queryName: "1",
 		},
 	}
 	for _, tt := range tests {
@@ -239,6 +274,7 @@ func Test_domainHandler_updateDomainByID(t *testing.T) {
 			}
 
 			if rec.Code != tt.wantCode {
+				t.Errorf("%+v", rec)
 				t.Errorf("domainHandler.updateDomainsByID() got different http status code = %d, wantCode %d", rec.Code, tt.wantCode)
 			}
 		})
@@ -265,6 +301,7 @@ func Test_domainHandler_updateDomainByName(t *testing.T) {
 			args: model.Domain{
 				Name: "ok.com",
 				ID:   9999,
+				Type: "NATIVE",
 			},
 			wantErr:   false,
 			wantCode:  http.StatusOK,
@@ -278,6 +315,7 @@ func Test_domainHandler_updateDomainByName(t *testing.T) {
 			args: model.Domain{
 				Name: "ok.com",
 				ID:   1111,
+				Type: "NATIVE",
 			},
 			wantErr:   false,
 			wantCode:  http.StatusNotFound,
@@ -288,9 +326,42 @@ func Test_domainHandler_updateDomainByName(t *testing.T) {
 			fields: fields{
 				domainModel: &domainModelStub{},
 			},
+			args: model.Domain{
+				Name: "deny.com",
+				ID:   1,
+				Type: "NATIVE",
+			},
 			wantErr:   false,
 			wantCode:  http.StatusForbidden,
 			queryName: "deny",
+		},
+		{
+			name: "invalid domain name",
+			fields: fields{
+				domainModel: &domainModelStub{},
+			},
+			args: model.Domain{
+				Name: "@.com",
+				ID:   1,
+				Type: "NATIVE",
+			},
+			wantErr:   false,
+			wantCode:  http.StatusBadRequest,
+			queryName: "ok.com",
+		},
+		{
+			name: "invalid domain type",
+			fields: fields{
+				domainModel: &domainModelStub{},
+			},
+			args: model.Domain{
+				Name: "ok.com",
+				ID:   1,
+				Type: "NG",
+			},
+			wantErr:   false,
+			wantCode:  http.StatusBadRequest,
+			queryName: "ok.com",
 		},
 	}
 	for _, tt := range tests {
