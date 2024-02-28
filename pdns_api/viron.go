@@ -47,7 +47,7 @@ func vironGlobalMenu(c echo.Context) error {
 	encodedJSON := []byte(`{
   "theme": "standard",
   "color": "white",
-  "name": "Viron example - local",
+  "name": "PDNS API",
   "tags": [
     "domains",
     "records"
