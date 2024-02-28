@@ -15,15 +15,15 @@ func NewConfig(confPath string) (Config, error) {
 	defaultConfig(&conf)
 	viper.SetConfigFile(confPath)
 
-	viper.AutomaticEnv()
 	viper.SetEnvPrefix("PIR5")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	bindEnvs(conf)
+	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
 		return conf, err
 	}
 
-	bindEnvs(conf)
 	if err := viper.Unmarshal(&conf); err != nil {
 		return conf, err
 	}
