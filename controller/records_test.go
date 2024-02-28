@@ -1,4 +1,4 @@
-package pdns_api
+package controller
 
 import (
 	"fmt"

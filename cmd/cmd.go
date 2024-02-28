@@ -1,4 +1,4 @@
-package pdns_api
+package cmd
 
 import (
 	"flag"

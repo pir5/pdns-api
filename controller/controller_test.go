@@ -1,4 +1,4 @@
-package pdns_api
+package controller
 
 import (
 	"bytes"
@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/labstack/echo/v4"
-	"github.com/stretchr/testify/assert"
+	"github.com/tj/assert"
 )
 
 func dummyContext(t *testing.T, reqType, reqPath string, args interface{}) (echo.Context, *httptest.ResponseRecorder) {

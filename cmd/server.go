@@ -1,4 +1,4 @@
-package pdns_api
+package cmd
 
 import (
 	"context"
@@ -19,7 +19,9 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
+	"github.com/pir5/pdns-api/controller"
 	"github.com/pir5/pdns-api/docs"
+	"github.com/pir5/pdns-api/pdns_api"
 )
 
 type HTTPError struct {
@@ -41,17 +43,13 @@ func init() {
 
 }
 
-var globalConfig Config
-
 // runServer executes sub command and return exit code.
 func runServer(cmdFlags *GlobalFlags, args []string) error {
-	c, err := NewConfig(*cmdFlags.ConfPath)
+	config, err := pdns_api.NewConfig(*cmdFlags.ConfPath)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(2)
 	}
-
-	globalConfig = c
 
 	logger := log.New("pdns-api")
 	pidfile.SetPidfilePath(*cmdFlags.PidPath)
@@ -91,8 +89,8 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 
 	e.Use(middleware.KeyAuthWithConfig(middleware.KeyAuthConfig{
 		Validator: func(key string, c echo.Context) (bool, error) {
-			if globalConfig.IsTokenAuth() {
-				for _, v := range globalConfig.Auth.Tokens {
+			if config.IsTokenAuth() {
+				for _, v := range config.Auth.Tokens {
 					if key == v {
 						return true, nil
 					}
@@ -101,12 +99,12 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 			return true, nil
 		},
 		Skipper: func(c echo.Context) bool {
-			return !globalConfig.IsTokenAuth()
+			return !config.IsTokenAuth()
 		},
 	}))
 
 	go func() {
-		if err := e.Start(globalConfig.Listen); err != nil {
+		if err := e.Start(config.Listen); err != nil {
 			e.Logger.Fatalf("shutting down the server: %s", err)
 		}
 	}()
@@ -114,23 +112,23 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 	v1 := e.Group("/v1")
 
 	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
-		globalConfig.DB.UserName,
-		globalConfig.DB.Password,
-		globalConfig.DB.Host,
-		globalConfig.DB.Port,
-		globalConfig.DB.DBName,
+		config.DB.UserName,
+		config.DB.Password,
+		config.DB.Host,
+		config.DB.Port,
+		config.DB.DBName,
 	))
 	if err != nil {
 		return err
 	}
-	DomainEndpoints(v1, db.Set("gorm:association_autoupdate", false).Set("gorm:association_autocreate", false))
-	RecordEndpoints(v1, db.Set("gorm:association_autoupdate", false).Set("gorm:association_autocreate", false))
-	VironEndpoints(v1)
+	controller.DomainEndpoints(v1, db.Set("gorm:association_autoupdate", false).Set("gorm:association_autocreate", false))
+	controller.RecordEndpoints(v1, db.Set("gorm:association_autoupdate", false).Set("gorm:association_autocreate", false))
+	controller.VironEndpoints(v1)
 	v1.GET("/swagger/*", echoSwagger.WrapHandler)
 
-	docs.SwaggerInfo.Host = globalConfig.Listen
-	if globalConfig.Endpoint != "" {
-		u, err := url.Parse(globalConfig.Endpoint)
+	docs.SwaggerInfo.Host = config.Listen
+	if config.Endpoint != "" {
+		u, err := url.Parse(config.Endpoint)
 		if err != nil {
 			return err
 		}

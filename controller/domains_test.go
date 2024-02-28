@@ -1,4 +1,4 @@
-package pdns_api
+package controller
 
 import (
 	"fmt"
@@ -10,10 +10,6 @@ import (
 )
 
 type domainModelStub struct {
-}
-
-func init() {
-	globalConfig = Config{}
 }
 
 func (d *domainModelStub) FindBy(params map[string]interface{}) (model.Domains, error) {

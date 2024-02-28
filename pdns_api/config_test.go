@@ -13,7 +13,7 @@ func TestNewConfig(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    Config
+		want    *Config
 		wantErr bool
 	}{
 		{
@@ -21,7 +21,7 @@ func TestNewConfig(t *testing.T) {
 			args: args{
 				confPath: "./test.toml",
 			},
-			want: Config{
+			want: &Config{
 				Listen: "0.0.0.0:1000",
 				DB: database{
 					Host:     "127.0.0.1",

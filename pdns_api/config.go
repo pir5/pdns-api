@@ -10,7 +10,7 @@ import (
 const AuthTypeHTTP = "http"
 const AuthTypeToken = "token"
 
-func NewConfig(confPath string) (Config, error) {
+func NewConfig(confPath string) (*Config, error) {
 	var conf Config
 	defaultConfig(&conf)
 	viper.SetConfigFile(confPath)
@@ -21,14 +21,14 @@ func NewConfig(confPath string) (Config, error) {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
-		return conf, err
+		return nil, err
 	}
 
 	if err := viper.Unmarshal(&conf); err != nil {
-		return conf, err
+		return nil, err
 	}
 
-	return conf, nil
+	return &conf, nil
 }
 func bindEnvs(iface interface{}, path ...string) {
 	var refType reflect.Type

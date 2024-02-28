@@ -10,7 +10,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/pir5/pdns-api/pdns_api"
+	"github.com/pir5/pdns-api/cmd"
 )
 
 // @title PDNS-API
@@ -31,12 +31,12 @@ import (
 
 // Commands lists the available commands and help topics.
 // The order here is the order in which they are printed by 'pdns-api help'.
-var commands = []*pdns_api.Command{
-	pdns_api.CmdServer,
+var commands = []*cmd.Command{
+	cmd.CmdServer,
 }
 
 func main() {
-	cmdFlags := pdns_api.GlobalFlags{}
+	cmdFlags := cmd.GlobalFlags{}
 	cmdFlags.ConfPath = flag.String("config", "/etc/pdns-api/api.toml", "config file path")
 	cmdFlags.PidPath = flag.String("pid", "/tmp/pdns-api.pid", "pid file path")
 	cmdFlags.LogPath = flag.String("logfile", "", "log file path")
