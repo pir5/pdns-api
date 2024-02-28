@@ -23,15 +23,6 @@ func TestNewConfig(t *testing.T) {
 			},
 			want: Config{
 				Listen: "0.0.0.0:1000",
-				Auth: auth{
-					AuthType: "http",
-					HttpAuth: httpAuth{
-						Endpoint: "http://127.0.0.1:2000",
-						RequestHeader: map[string]string{
-							"a": "b",
-						},
-					},
-				},
 				DB: database{
 					Host:     "127.0.0.1",
 					Port:     3306,

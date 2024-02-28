@@ -13,11 +13,7 @@ type domainModelStub struct {
 }
 
 func init() {
-	globalConfig = Config{
-		Auth: auth{
-			AuthType: AuthTypeHTTP,
-		},
-	}
+	globalConfig = Config{}
 }
 
 func (d *domainModelStub) FindBy(params map[string]interface{}) (model.Domains, error) {

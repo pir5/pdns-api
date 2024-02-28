@@ -112,11 +112,9 @@ func defaultConfig(c *Config) {
 }
 
 type auth struct {
-	AuthType string   `mapstructure:"auth_type"` // token or http
-	Tokens   []string `mapstructure:"tokens"`
-	HttpAuth httpAuth `mapstructure:"http_auth"`
+	Tokens []string `mapstructure:"tokens"`
 }
 
 func (c Config) IsTokenAuth() bool {
-	return c.Auth.AuthType == AuthTypeToken
+	return len(c.Auth.Tokens) > 0
 }
