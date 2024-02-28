@@ -65,7 +65,13 @@ func (d *DomainModel) FindBy(req *http.Request, params map[string]interface{}) (
 			return nil, 0, r.Error
 		}
 	}
-	totalCount := query.Find(&Domain{}).RowsAffected
+
+	totalCount := int64(0)
+	r = query.Model(&Domains{}).Count(&totalCount)
+	if r.Error != nil {
+		return nil, 0, r.Error
+	}
+
 	return ds, totalCount, nil
 }
 
