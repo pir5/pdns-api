@@ -17,12 +17,10 @@ func Paginate(r *http.Request) func(db *gorm.DB) *gorm.DB {
 			page = 1
 		}
 
-		pageSize, _ := strconv.Atoi(q.Get("limit"))
-		switch {
-		case pageSize > DefaultPageSize:
-			pageSize = DefaultPageSize
-		case pageSize <= 0:
-			pageSize = 10
+		pageSize := DefaultPageSize
+		requestPageSize, _ := strconv.Atoi(q.Get("limit"))
+		if DefaultPageSize > requestPageSize && requestPageSize > 0 {
+			pageSize = requestPageSize
 		}
 
 		offset := (page - 1) * pageSize
