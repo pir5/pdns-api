@@ -20,7 +20,6 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
 	"github.com/pir5/pdns-api/docs"
-	pmiddleware "github.com/pir5/pdns-api/middleware"
 )
 
 type HTTPError struct {
@@ -100,12 +99,6 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 				}
 			}
 			return true, nil
-
-		},
-	}))
-	e.Use(pmiddleware.HeaderAuthWithConfig(pmiddleware.HeaderAuthConfig{
-		Validator: func(username, password string, c echo.Context) (bool, error) {
-			return false, nil
 		},
 		Skipper: func(c echo.Context) bool {
 			return !globalConfig.IsTokenAuth()
