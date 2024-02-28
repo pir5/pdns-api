@@ -159,6 +159,7 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 		}
 		docs.SwaggerInfo.Schemes = []string{u.Scheme}
 		docs.SwaggerInfo.Host = u.Host
+		docs.SwaggerInfo.BasePath = u.Path
 	}
 
 	quit := make(chan os.Signal)
