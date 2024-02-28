@@ -6,7 +6,6 @@ toolchain go1.22.0
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.3.3
-	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/facebookgo/pidfile v0.0.0-20150612191647-f242e2999868
 	github.com/jinzhu/gorm v1.9.16
 	github.com/k0kubun/pp v3.0.1+incompatible

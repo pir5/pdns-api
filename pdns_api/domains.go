@@ -20,7 +20,7 @@ import (
 // @Security Secret
 // @Accept  json
 // @Produce  json
-// @Param id query int false "Domain ID"
+// @Param id query integer false "Domain ID"
 // @Param name query string false "Name"
 // @Success 200 {array} model.Domain
 // @Failure 404 {array} model.Domain
@@ -95,7 +95,7 @@ func (h *domainHandler) updateDomainByName(c echo.Context) error {
 // @Security Secret
 // @Accept  json
 // @Produce  json
-// @Param id path integer true "Dorain ID"
+// @Param id path int true "Dorain ID"
 // @Param domain body model.Domain true "Domain Object"
 // @Success 200 {object} model.Domain
 // @Failure 403 {object} pdns_api.HTTPError
@@ -165,7 +165,7 @@ func (h *domainHandler) deleteDomainByName(c echo.Context) error {
 // @Security Secret
 // @Accept  json
 // @Produce  json
-// @Param id path interger true "Domain ID"
+// @Param id path integer true "Domain ID"
 // @Success 204 {object} model.Domain
 // @Failure 403 {object} pdns_api.HTTPError
 // @Failure 404 {object} pdns_api.HTTPError

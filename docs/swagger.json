@@ -10,7 +10,6 @@
         },
         "version": "1.0"
     },
-    "host": "{{.Host}}",
     "basePath": "/v1",
     "paths": {
         "/domains": {
@@ -70,7 +69,6 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     }
@@ -103,7 +101,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.Domain"
                         }
                     }
@@ -115,21 +112,18 @@
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     }
@@ -171,7 +165,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.Domain"
                         }
                     }
@@ -180,28 +173,24 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.Domain"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     }
@@ -229,7 +218,7 @@
                 "summary": "delete domain",
                 "parameters": [
                     {
-                        "type": "interger",
+                        "type": "integer",
                         "description": "Domain ID",
                         "name": "id",
                         "in": "path",
@@ -240,28 +229,24 @@
                     "204": {
                         "description": "No Content",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.Domain"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     }
@@ -303,7 +288,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.Domain"
                         }
                     }
@@ -315,21 +299,18 @@
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     }
@@ -371,21 +352,18 @@
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     }
@@ -449,7 +427,6 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     }
@@ -482,7 +459,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.Record"
                         }
                     }
@@ -491,28 +467,24 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.Record"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     }
@@ -554,7 +526,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.Record"
                         }
                     }
@@ -563,28 +534,24 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.Record"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     }
@@ -626,7 +593,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.Record"
                         }
                     }
@@ -635,28 +601,24 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.Record"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     }
@@ -698,7 +660,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.Record"
                         }
                     }
@@ -707,28 +668,24 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.Record"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     }
@@ -767,28 +724,24 @@
                     "204": {
                         "description": "No Content",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.Record"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/pdns_api.HTTPError"
                         }
                     }
@@ -808,7 +761,8 @@
                     "viron"
                 ],
                 "summary": "get global menu",
-                "operationId": "viron#get"
+                "operationId": "viron#get",
+                "responses": {}
             }
         },
         "/viron_authtype": {
@@ -824,13 +778,17 @@
                     "viron"
                 ],
                 "summary": "get auth type",
-                "operationId": "viron_authtype#get"
+                "operationId": "viron_authtype#get",
+                "responses": {}
             }
         }
     },
     "definitions": {
         "model.Domain": {
             "type": "object",
+            "required": [
+                "name"
+            ],
             "properties": {
                 "account": {
                     "type": "string"
@@ -851,11 +809,18 @@
                     "type": "integer"
                 },
                 "records": {
-                    "type": "object",
-                    "$ref": "#/definitions/model.Records"
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Record"
+                    }
                 },
                 "type": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "NATIVE",
+                        "MASTER",
+                        "SLAVE"
+                    ]
                 }
             }
         },
@@ -894,46 +859,11 @@
                 }
             }
         },
-        "model.Records": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "auth": {
-                        "type": "boolean"
-                    },
-                    "content": {
-                        "type": "string"
-                    },
-                    "disabled": {
-                        "type": "boolean"
-                    },
-                    "domain_id": {
-                        "type": "integer"
-                    },
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "ordername": {
-                        "type": "string"
-                    },
-                    "prio": {
-                        "type": "integer"
-                    },
-                    "ttl": {
-                        "type": "integer"
-                    },
-                    "type": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
         "pdns_api.HTTPError": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "message": {}
+            }
         }
     },
     "securityDefinitions": {
@@ -947,16 +877,5 @@
             "name": "PIR5-SECRET",
             "in": "header"
         }
-    },
-    "tags": [
-        {
-            "name": "domains"
-        },
-        {
-            "name": "records"
-        },
-        {
-            "name": "viron"
-        }
-    ]
+    }
 }

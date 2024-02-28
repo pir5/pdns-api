@@ -24,7 +24,8 @@ depends:
 	$(GO) get -u github.com/swaggo/echo-swagger
 
 swag:
-	swag i
+	swag init --parseInternal --parseDependency --parseDepth 2
+
 run: swag
 	$(GO) run main.go --config ./misc/develop.toml server
 tidy:

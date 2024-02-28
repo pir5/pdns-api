@@ -35,7 +35,7 @@ func vironAuthType(c echo.Context) error {
 
 }
 
-//vironGlobalMenu
+// vironGlobalMenu
 // @Summary get global menu
 // @Description get global menu
 // @ID viron#get

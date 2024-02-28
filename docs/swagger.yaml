@@ -15,10 +15,17 @@ definitions:
       notified_serial:
         type: integer
       records:
-        $ref: '#/definitions/model.Records'
-        type: object
+        items:
+          $ref: '#/definitions/model.Record'
+        type: array
       type:
+        enum:
+        - NATIVE
+        - MASTER
+        - SLAVE
         type: string
+    required:
+    - name
     type: object
   model.Record:
     properties:
@@ -43,34 +50,10 @@ definitions:
       type:
         type: string
     type: object
-  model.Records:
-    items:
-      properties:
-        auth:
-          type: boolean
-        content:
-          type: string
-        disabled:
-          type: boolean
-        domain_id:
-          type: integer
-        id:
-          type: integer
-        name:
-          type: string
-        ordername:
-          type: string
-        prio:
-          type: integer
-        ttl:
-          type: integer
-        type:
-          type: string
-      type: object
-    type: array
   pdns_api.HTTPError:
+    properties:
+      message: {}
     type: object
-host: '{{.Host}}'
 info:
   contact: {}
   description: This is PDNS RESTful API Server.
@@ -113,7 +96,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
       security:
       - ID: []
       - Secret: []
@@ -131,7 +113,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.Domain'
-          type: object
       produces:
       - application/json
       responses:
@@ -141,17 +122,14 @@ paths:
           description: Forbidden
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "404":
           description: Not Found
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
       security:
       - ID: []
       - Secret: []
@@ -168,7 +146,7 @@ paths:
         in: path
         name: id
         required: true
-        type: interger
+        type: integer
       produces:
       - application/json
       responses:
@@ -176,22 +154,18 @@ paths:
           description: No Content
           schema:
             $ref: '#/definitions/model.Domain'
-            type: object
         "403":
           description: Forbidden
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "404":
           description: Not Found
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
       security:
       - ID: []
       - Secret: []
@@ -214,7 +188,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.Domain'
-          type: object
       produces:
       - application/json
       responses:
@@ -222,22 +195,18 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.Domain'
-            type: object
         "403":
           description: Forbidden
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "404":
           description: Not Found
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
       security:
       - ID: []
       - Secret: []
@@ -264,17 +233,14 @@ paths:
           description: Forbidden
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "404":
           description: Not Found
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
       security:
       - ID: []
       - Secret: []
@@ -297,7 +263,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.Domain'
-          type: object
       produces:
       - application/json
       responses:
@@ -307,17 +272,14 @@ paths:
           description: Forbidden
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "404":
           description: Not Found
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
       security:
       - ID: []
       - Secret: []
@@ -357,7 +319,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
       security:
       - ID: []
       - Secret: []
@@ -375,7 +336,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.Record'
-          type: object
       produces:
       - application/json
       responses:
@@ -383,22 +343,18 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/model.Record'
-            type: object
         "403":
           description: Forbidden
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "404":
           description: Not Found
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
       security:
       - ID: []
       - Secret: []
@@ -423,22 +379,18 @@ paths:
           description: No Content
           schema:
             $ref: '#/definitions/model.Record'
-            type: object
         "403":
           description: Forbidden
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "404":
           description: Not Found
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
       security:
       - ID: []
       - Secret: []
@@ -461,7 +413,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.Record'
-          type: object
       produces:
       - application/json
       responses:
@@ -469,22 +420,18 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.Record'
-            type: object
         "403":
           description: Forbidden
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "404":
           description: Not Found
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
       security:
       - ID: []
       - Secret: []
@@ -508,7 +455,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.Record'
-          type: object
       produces:
       - application/json
       responses:
@@ -516,22 +462,18 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.Record'
-            type: object
         "403":
           description: Forbidden
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "404":
           description: Not Found
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
       security:
       - ID: []
       - Secret: []
@@ -555,7 +497,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.Record'
-          type: object
       produces:
       - application/json
       responses:
@@ -563,22 +504,18 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.Record'
-            type: object
         "403":
           description: Forbidden
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "404":
           description: Not Found
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/pdns_api.HTTPError'
-            type: object
       security:
       - ID: []
       - Secret: []
@@ -593,6 +530,7 @@ paths:
       operationId: viron#get
       produces:
       - application/json
+      responses: {}
       summary: get global menu
       tags:
       - viron
@@ -604,6 +542,7 @@ paths:
       operationId: viron_authtype#get
       produces:
       - application/json
+      responses: {}
       summary: get auth type
       tags:
       - viron
@@ -617,7 +556,3 @@ securityDefinitions:
     name: PIR5-SECRET
     type: apiKey
 swagger: "2.0"
-tags:
-- name: domains
-- name: records
-- name: viron

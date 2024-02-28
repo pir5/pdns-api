@@ -6,6 +6,7 @@ import (
 	"fmt"
 	stdLog "log"
 	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
 	"time"
@@ -152,7 +153,12 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 
 	docs.SwaggerInfo.Host = globalConfig.Listen
 	if globalConfig.Endpoint != "" {
-		docs.SwaggerInfo.Host = globalConfig.Endpoint
+		u, err := url.Parse(globalConfig.Endpoint)
+		if err != nil {
+			return err
+		}
+		docs.SwaggerInfo.Schemes = []string{u.Scheme}
+		docs.SwaggerInfo.Host = u.Host
 	}
 
 	quit := make(chan os.Signal)
