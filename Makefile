@@ -37,3 +37,8 @@ test: tidy  ## Run test
 
 build_binary:
 	$(GO) build $(BUILDOPTS) -ldflags="-s -w" -o $(BINARY)
+
+lint:
+	@echo "$(INFO_COLOR)==> $(RESET)$(BOLD)Linting$(RESET)"
+	staticcheck ./...
+

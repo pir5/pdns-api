@@ -40,7 +40,7 @@ func Test_httpAuth_Authenticate(t *testing.T) {
 			handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				bufbody := new(bytes.Buffer)
 				bufbody.ReadFrom(r.Body)
-				if "{\"user_id\":\"user\",\"secret\":\"secret\"}" == bufbody.String() {
+				if bufbody.String() == `{"user_id":"user","secret":"secret"}` {
 					fmt.Fprintln(w, `{"domains": ["test.com"]}`)
 				}
 			})

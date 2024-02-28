@@ -120,7 +120,3 @@ type auth struct {
 func (c Config) IsTokenAuth() bool {
 	return c.Auth.AuthType == AuthTypeToken
 }
-
-func (c Config) IsHTTPAuth() bool {
-	return c.Auth.AuthType == AuthTypeHTTP
-}

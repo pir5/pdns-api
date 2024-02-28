@@ -3,7 +3,7 @@ package pdns_api
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -46,7 +46,7 @@ func (h httpAuth) Authenticate(userID string, secret string) ([]string, error) {
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}

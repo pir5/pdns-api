@@ -36,12 +36,7 @@ func (h *recordHandler) getRecords(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	ids, err := filterDomains(ds.ToIntreface(), c)
-	if err != nil {
-		return c.JSON(http.StatusForbidden, err)
-	}
-
-	return c.JSON(http.StatusOK, ids)
+	return c.JSON(http.StatusOK, ds)
 }
 
 // updateRecord is update record.
@@ -60,10 +55,6 @@ func (h *recordHandler) getRecords(c echo.Context) error {
 // @Router /records/{id} [put]
 // @Tags records
 func (h *recordHandler) updateRecord(c echo.Context) error {
-	if err := h.isAllowRecordID(c); err != nil {
-		return err
-	}
-
 	nd := &model.Record{}
 	if err := c.Bind(nd); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
@@ -119,10 +110,6 @@ func (h *recordHandler) disableRecord(c echo.Context) error {
 }
 
 func changeState(h *recordHandler, c echo.Context, disabled bool) error {
-	if err := h.isAllowRecordID(c); err != nil {
-		return err
-	}
-
 	nd := &model.Record{
 		Disabled: &disabled,
 	}
@@ -154,11 +141,6 @@ func changeState(h *recordHandler, c echo.Context, disabled bool) error {
 // @Router /records/{id} [delete]
 // @Tags records
 func (h *recordHandler) deleteRecord(c echo.Context) error {
-	err := h.isAllowRecordID(c)
-	if err != nil {
-		return err
-	}
-
 	deleted, err := h.recordModel.DeleteByID(c.Param("id"))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
@@ -191,55 +173,10 @@ func (h *recordHandler) createRecord(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	err := h.isAllowDomainID(c, d.DomainID)
-	if err != nil {
-		return err
-	}
-
 	if err := h.recordModel.Create(d); err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 	return c.JSON(http.StatusCreated, d)
-}
-
-func (h *recordHandler) isAllowRecordID(c echo.Context) error {
-	if !globalConfig.IsHTTPAuth() {
-		return nil
-	}
-
-	ds, err := h.recordModel.FindBy(map[string]interface{}{
-		"id": []string{c.Param("id")},
-	})
-
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err)
-	}
-
-	if ds == nil || len(ds) == 0 {
-		return c.JSON(http.StatusNotFound, "records does not exists")
-	}
-
-	return h.isAllowDomainID(c, ds[0].DomainID)
-}
-
-func (h *recordHandler) isAllowDomainID(c echo.Context, domainID int) error {
-	if !globalConfig.IsHTTPAuth() {
-		return nil
-	}
-
-	ds, err := h.domainModel.FindBy(map[string]interface{}{
-		"id": domainID,
-	})
-
-	if err != nil {
-		return c.JSON(http.StatusForbidden, nil)
-	}
-
-	if ds == nil || len(ds) == 0 {
-		return c.JSON(http.StatusNotFound, "domains does not exists")
-	}
-
-	return isAllowDomain(c, ds[0].Name)
 }
 
 type recordHandler struct {

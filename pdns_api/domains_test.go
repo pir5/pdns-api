@@ -6,7 +6,6 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/labstack/echo/v4"
 	"github.com/pir5/pdns-api/model"
 )
 
@@ -35,13 +34,6 @@ func (d *domainModelStub) FindBy(params map[string]interface{}) (model.Domains, 
 			}
 		case "error_please":
 			return nil, fmt.Errorf("give error to you")
-		case "deny":
-			ds = model.Domains{
-				model.Domain{
-					ID:   1,
-					Name: "deny.com",
-				},
-			}
 		}
 	} else if params["id"] != nil {
 		switch params["id"].(int) {
@@ -144,15 +136,6 @@ func Test_domainHandler_getDomains(t *testing.T) {
 			wantCode:  http.StatusInternalServerError,
 			queryName: "error_please",
 		},
-		{
-			name: "deny",
-			fields: fields{
-				domainModel: &domainModelStub{},
-			},
-			wantErr:   false,
-			wantCode:  http.StatusOK,
-			queryName: "deny",
-		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -164,7 +147,6 @@ func Test_domainHandler_getDomains(t *testing.T) {
 			q.Set("name", tt.queryName)
 			ctx, rec := dummyContext(t, "GET", "/domains?"+q.Encode(), nil)
 
-			ctx.Set(AllowDomainsKey, []string{"ok.com"})
 			if err := h.getDomains(ctx); (err != nil) != tt.wantErr {
 				t.Errorf("domainHandler.getDomains() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -216,20 +198,6 @@ func Test_domainHandler_updateDomainByID(t *testing.T) {
 			queryName: "4",
 		},
 		{
-			name: "deny",
-			fields: fields{
-				domainModel: &domainModelStub{},
-			},
-			args: model.Domain{
-				Name: "deny.com",
-				ID:   1,
-				Type: "NATIVE",
-			},
-			wantErr:   false,
-			wantCode:  http.StatusForbidden,
-			queryName: "3",
-		},
-		{
 			name: "invalid domain name",
 			fields: fields{
 				domainModel: &domainModelStub{},
@@ -268,7 +236,6 @@ func Test_domainHandler_updateDomainByID(t *testing.T) {
 			ctx.SetParamNames("id")
 			ctx.SetParamValues(tt.queryName)
 
-			ctx.Set(AllowDomainsKey, []string{"ok.com", "notfound.com"})
 			if err := h.updateDomainByID(ctx); (err != nil) != tt.wantErr {
 				t.Errorf("domainHandler.updateDomainByID() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -322,20 +289,6 @@ func Test_domainHandler_updateDomainByName(t *testing.T) {
 			queryName: "notfound.com",
 		},
 		{
-			name: "deny",
-			fields: fields{
-				domainModel: &domainModelStub{},
-			},
-			args: model.Domain{
-				Name: "deny.com",
-				ID:   1,
-				Type: "NATIVE",
-			},
-			wantErr:   false,
-			wantCode:  http.StatusForbidden,
-			queryName: "deny",
-		},
-		{
 			name: "invalid domain name",
 			fields: fields{
 				domainModel: &domainModelStub{},
@@ -374,7 +327,6 @@ func Test_domainHandler_updateDomainByName(t *testing.T) {
 			ctx.SetParamNames("name")
 			ctx.SetParamValues(tt.queryName)
 
-			ctx.Set(AllowDomainsKey, []string{"ok.com", "notfound.com"})
 			if err := h.updateDomainByName(ctx); (err != nil) != tt.wantErr {
 				t.Errorf("domainHandler.updateDomainByName() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -415,15 +367,6 @@ func Test_domainHandler_deleteDomainByName(t *testing.T) {
 			wantCode:  http.StatusNotFound,
 			queryName: "notfound.com",
 		},
-		{
-			name: "deny",
-			fields: fields{
-				domainModel: &domainModelStub{},
-			},
-			wantErr:   false,
-			wantCode:  http.StatusForbidden,
-			queryName: "deny",
-		},
 	}
 
 	for _, tt := range tests {
@@ -436,7 +379,6 @@ func Test_domainHandler_deleteDomainByName(t *testing.T) {
 			ctx.SetParamNames("name")
 			ctx.SetParamValues(tt.queryName)
 
-			ctx.Set(AllowDomainsKey, []string{"ok.com", "notfound.com"})
 			if err := h.deleteDomainByName(ctx); (err != nil) != tt.wantErr {
 				t.Errorf("domainHandler.deleteDomainByName() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -478,15 +420,6 @@ func Test_domainHandler_deleteDomainByID(t *testing.T) {
 			wantCode: http.StatusNotFound,
 			queryID:  "4",
 		},
-		{
-			name: "deny",
-			fields: fields{
-				domainModel: &domainModelStub{},
-			},
-			wantErr:  false,
-			wantCode: http.StatusForbidden,
-			queryID:  "3",
-		},
 	}
 
 	for _, tt := range tests {
@@ -499,7 +432,6 @@ func Test_domainHandler_deleteDomainByID(t *testing.T) {
 			ctx.SetParamNames("id")
 			ctx.SetParamValues(tt.queryID)
 
-			ctx.Set(AllowDomainsKey, []string{"ok.com", "notfound.com"})
 			if err := h.deleteDomainByID(ctx); (err != nil) != tt.wantErr {
 				t.Errorf("domainHandler.deleteDomainByID() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -515,9 +447,6 @@ func Test_domainHandler_deleteDomainByID(t *testing.T) {
 func Test_domainHandler_createDomain(t *testing.T) {
 	type fields struct {
 		domainModel model.DomainModeler
-	}
-	type args struct {
-		c echo.Context
 	}
 	tests := []struct {
 		name      string
@@ -540,20 +469,6 @@ func Test_domainHandler_createDomain(t *testing.T) {
 			wantErr:   false,
 			wantCode:  http.StatusCreated,
 			queryName: "ok.com",
-		},
-		{
-			name: "deny",
-			fields: fields{
-				domainModel: &domainModelStub{},
-			},
-			args: model.Domain{
-				Name: "deny.com",
-				ID:   1,
-				Type: "NATIVE",
-			},
-			wantErr:   false,
-			wantCode:  http.StatusForbidden,
-			queryName: "deny.com",
 		},
 		{
 			name: "invalid domain name",
@@ -607,7 +522,6 @@ func Test_domainHandler_createDomain(t *testing.T) {
 			ctx.SetParamNames("name")
 			ctx.SetParamValues(tt.queryName)
 
-			ctx.Set(AllowDomainsKey, []string{"ok.com"})
 			if err := h.createDomain(ctx); (err != nil) != tt.wantErr {
 				t.Errorf("domainHandler.createDomain() error = %v, wantErr %v", err, tt.wantErr)
 			}

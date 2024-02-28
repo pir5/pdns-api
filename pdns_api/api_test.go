@@ -14,11 +14,11 @@ func dummyContext(t *testing.T, reqType, reqPath string, args interface{}) (echo
 	var rp []byte
 	var jsonerr error
 	if args != nil {
-		switch args.(type) {
+		switch v := args.(type) {
 		case string:
-			rp = []byte(args.(string))
+			rp = []byte(v)
 		default:
-			rp, jsonerr = json.Marshal(args)
+			rp, jsonerr = json.Marshal(v)
 			assert.NoError(t, jsonerr)
 		}
 	}

@@ -15,11 +15,6 @@ type (
 	HeaderAuthValidator func(string, string, echo.Context) (bool, error)
 )
 
-const (
-	basic        = "basic"
-	defaultRealm = "Restricted"
-)
-
 var (
 	DefaultHeaderAuthConfig = HeaderAuthConfig{
 		Skipper: em.DefaultSkipper,

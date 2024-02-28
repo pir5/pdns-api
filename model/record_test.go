@@ -10,15 +10,11 @@ import (
 )
 
 func TestRecord_FindBy(t *testing.T) {
-	type fields struct {
-		db *gorm.DB
-	}
 	type args struct {
 		params map[string]interface{}
 	}
 	tests := []struct {
 		name       string
-		fields     fields
 		domainRows *sqlmock.Rows
 		recordRows *sqlmock.Rows
 		retErr     error
@@ -27,8 +23,7 @@ func TestRecord_FindBy(t *testing.T) {
 		wantErr    bool
 	}{
 		{
-			name:   "ok",
-			fields: fields{},
+			name: "ok",
 			args: args{
 				params: map[string]interface{}{
 					"id": 1,
@@ -98,8 +93,7 @@ func TestRecord_FindBy(t *testing.T) {
 			},
 		},
 		{
-			name:   "notfound",
-			fields: fields{},
+			name: "notfound",
 			args: args{
 				params: map[string]interface{}{
 					"id": 1,
@@ -109,8 +103,7 @@ func TestRecord_FindBy(t *testing.T) {
 			want:   nil,
 		},
 		{
-			name:   "other error",
-			fields: fields{},
+			name: "other error",
 			args: args{
 				params: map[string]interface{}{
 					"id": 1,
@@ -164,16 +157,12 @@ func TestRecord_FindBy(t *testing.T) {
 }
 
 func TestRecord_UpdateByID(t *testing.T) {
-	type fields struct {
-		db *gorm.DB
-	}
 	type args struct {
 		id        string
 		newRecord *Record
 	}
 	tests := []struct {
 		name       string
-		fields     fields
 		args       args
 		recordRows *sqlmock.Rows
 		retErr     error
@@ -181,8 +170,7 @@ func TestRecord_UpdateByID(t *testing.T) {
 		wantErr    bool
 	}{
 		{
-			name:   "ok",
-			fields: fields{},
+			name: "ok",
 			args: args{
 				id: "1",
 				newRecord: &Record{
@@ -217,8 +205,7 @@ func TestRecord_UpdateByID(t *testing.T) {
 			want: true,
 		},
 		{
-			name:   "notfound",
-			fields: fields{},
+			name: "notfound",
 			args: args{
 				id: "2",
 			},
@@ -226,8 +213,7 @@ func TestRecord_UpdateByID(t *testing.T) {
 			want:   false,
 		},
 		{
-			name:   "other error",
-			fields: fields{},
+			name: "other error",
 			args: args{
 				id: "3",
 			},
@@ -279,15 +265,11 @@ func TestRecord_UpdateByID(t *testing.T) {
 }
 
 func TestRecord_DeleteByID(t *testing.T) {
-	type fields struct {
-		db *gorm.DB
-	}
 	type args struct {
 		id string
 	}
 	tests := []struct {
 		name       string
-		fields     fields
 		args       args
 		recordRows *sqlmock.Rows
 		retErr     error
@@ -295,8 +277,7 @@ func TestRecord_DeleteByID(t *testing.T) {
 		wantErr    bool
 	}{
 		{
-			name:   "ok",
-			fields: fields{},
+			name: "ok",
 			args: args{
 				id: "1",
 			},
@@ -327,8 +308,7 @@ func TestRecord_DeleteByID(t *testing.T) {
 			want: true,
 		},
 		{
-			name:   "notfound",
-			fields: fields{},
+			name: "notfound",
 			args: args{
 				id: "2",
 			},
@@ -336,8 +316,7 @@ func TestRecord_DeleteByID(t *testing.T) {
 			want:   false,
 		},
 		{
-			name:   "other error",
-			fields: fields{},
+			name: "other error",
 			args: args{
 				id: "3",
 			},
@@ -389,23 +368,18 @@ func TestRecord_DeleteByID(t *testing.T) {
 }
 
 func TestRecord_Create(t *testing.T) {
-	type fields struct {
-		db *gorm.DB
-	}
 	type args struct {
 		newRecord *Record
 	}
 	tests := []struct {
 		name    string
-		fields  fields
 		args    args
 		retErr  error
 		want    bool
 		wantErr bool
 	}{
 		{
-			name:   "ok",
-			fields: fields{},
+			name: "ok",
 			args: args{
 				newRecord: &Record{
 					DomainID: 1,
@@ -419,8 +393,7 @@ func TestRecord_Create(t *testing.T) {
 			want: true,
 		},
 		{
-			name:   "other error",
-			fields: fields{},
+			name: "other error",
 			args: args{
 				newRecord: &Record{
 					Content: "2.2.2.2",

@@ -9,9 +9,6 @@ import (
 )
 
 func TestDomain_FindBy(t *testing.T) {
-	type fields struct {
-		db *gorm.DB
-	}
 	type args struct {
 		params map[string]interface{}
 	}
@@ -19,15 +16,13 @@ func TestDomain_FindBy(t *testing.T) {
 		name       string
 		domainRows *sqlmock.Rows
 		recordRows *sqlmock.Rows
-		fields     fields
 		args       args
 		retErr     error
 		want       Domains
 		wantErr    bool
 	}{
 		{
-			name:   "ok",
-			fields: fields{},
+			name: "ok",
 			args: args{
 				params: map[string]interface{}{
 					"id": 1,
@@ -100,8 +95,7 @@ func TestDomain_FindBy(t *testing.T) {
 			},
 		},
 		{
-			name:   "notfound",
-			fields: fields{},
+			name: "notfound",
 			args: args{
 				params: map[string]interface{}{
 					"id": 1,
@@ -111,8 +105,7 @@ func TestDomain_FindBy(t *testing.T) {
 			want:   nil,
 		},
 		{
-			name:   "other error",
-			fields: fields{},
+			name: "other error",
 			args: args{
 				params: map[string]interface{}{
 					"id": 1,
@@ -165,9 +158,6 @@ func TestDomain_FindBy(t *testing.T) {
 }
 
 func TestDomain_UpdateByName(t *testing.T) {
-	type fields struct {
-		db *gorm.DB
-	}
 	type args struct {
 		name      string
 		newDomain *Domain
@@ -175,15 +165,13 @@ func TestDomain_UpdateByName(t *testing.T) {
 	tests := []struct {
 		name       string
 		domainRows *sqlmock.Rows
-		fields     fields
 		args       args
 		retErr     error
 		want       bool
 		wantErr    bool
 	}{
 		{
-			name:   "ok",
-			fields: fields{},
+			name: "ok",
 			args: args{
 				name: "test.com",
 				newDomain: &Domain{
@@ -213,8 +201,7 @@ func TestDomain_UpdateByName(t *testing.T) {
 			want: true,
 		},
 		{
-			name:   "notfound",
-			fields: fields{},
+			name: "notfound",
 			args: args{
 				name: "test.com",
 			},
@@ -222,8 +209,7 @@ func TestDomain_UpdateByName(t *testing.T) {
 			want:   false,
 		},
 		{
-			name:   "other error",
-			fields: fields{},
+			name: "other error",
 			args: args{
 				name: "test.com",
 				newDomain: &Domain{
@@ -388,22 +374,17 @@ func TestDomain_DeleteByName(t *testing.T) {
 }
 
 func TestDomain_Create(t *testing.T) {
-	type fields struct {
-		db *gorm.DB
-	}
 	type args struct {
 		newDomain *Domain
 	}
 	tests := []struct {
 		name    string
-		fields  fields
 		args    args
 		retErr  error
 		wantErr bool
 	}{
 		{
-			name:   "ok",
-			fields: fields{},
+			name: "ok",
 			args: args{
 				newDomain: &Domain{
 					ID:   1,
@@ -412,8 +393,7 @@ func TestDomain_Create(t *testing.T) {
 			},
 		},
 		{
-			name:   "other error",
-			fields: fields{},
+			name: "other error",
 			args: args{
 				newDomain: &Domain{},
 			},
@@ -463,9 +443,6 @@ func newBool(b bool) *bool {
 }
 
 func TestDomain_UpdateByID(t *testing.T) {
-	type fields struct {
-		db *gorm.DB
-	}
 	type args struct {
 		id        string
 		newDomain *Domain
@@ -473,15 +450,13 @@ func TestDomain_UpdateByID(t *testing.T) {
 	tests := []struct {
 		name       string
 		domainRows *sqlmock.Rows
-		fields     fields
 		args       args
 		retErr     error
 		want       bool
 		wantErr    bool
 	}{
 		{
-			name:   "ok",
-			fields: fields{},
+			name: "ok",
 			args: args{
 				id: "1",
 				newDomain: &Domain{
@@ -511,8 +486,7 @@ func TestDomain_UpdateByID(t *testing.T) {
 			want: true,
 		},
 		{
-			name:   "notfound",
-			fields: fields{},
+			name: "notfound",
 			args: args{
 				id: "2",
 			},
@@ -520,8 +494,7 @@ func TestDomain_UpdateByID(t *testing.T) {
 			want:   false,
 		},
 		{
-			name:   "other error",
-			fields: fields{},
+			name: "other error",
 			args: args{
 				id: "3",
 				newDomain: &Domain{
