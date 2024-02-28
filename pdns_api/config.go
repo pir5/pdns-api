@@ -10,24 +10,6 @@ import (
 const AuthTypeHTTP = "http"
 const AuthTypeToken = "token"
 
-func BindEnvs(iface interface{}, parts ...string) {
-	ifv := reflect.ValueOf(iface)
-	ift := reflect.TypeOf(iface)
-	for i := 0; i < ift.NumField(); i++ {
-		v := ifv.Field(i)
-		t := ift.Field(i)
-		tv, ok := t.Tag.Lookup("mapstructure")
-		if !ok {
-			continue
-		}
-		switch v.Kind() {
-		case reflect.Struct:
-			BindEnvs(v.Interface(), append(parts, tv)...)
-		default:
-			viper.BindEnv(strings.Join(append(parts, tv), "."))
-		}
-	}
-}
 func NewConfig(confPath string) (Config, error) {
 	var conf Config
 	defaultConfig(&conf)
@@ -41,12 +23,69 @@ func NewConfig(confPath string) (Config, error) {
 		return conf, err
 	}
 
-	BindEnvs(conf)
+	bindEnvs(conf)
 	if err := viper.Unmarshal(&conf); err != nil {
 		return conf, err
 	}
 
 	return conf, nil
+}
+func bindEnvs(iface interface{}, path ...string) {
+	var refType reflect.Type
+	var refVal reflect.Value
+
+	if reflect.ValueOf(iface).Kind() == reflect.Ptr {
+		refVal = reflect.ValueOf(iface).Elem()
+		refType = refVal.Type()
+	} else {
+		refVal = reflect.ValueOf(iface)
+		refType = refVal.Type()
+	}
+
+	for i := 0; i < refType.NumField(); i++ {
+		field := refType.Field(i)
+		tag, ok := field.Tag.Lookup("mapstructure")
+		if !ok {
+			continue // No mapstructure tag, skip this field
+		}
+
+		fieldPath := append(path, tag)
+		envVar := strings.ToUpper(strings.Join(fieldPath, "_"))
+		key := strings.Join(fieldPath, ".")
+
+		// Check if the field is a struct or a pointer to a struct
+		var fieldType reflect.Type
+		if field.Type.Kind() == reflect.Ptr {
+			// The field is a pointer, get the type it points to
+			fieldType = field.Type.Elem()
+		} else {
+			fieldType = field.Type
+		}
+
+		for _, ak := range viper.AllKeys() {
+			if ak == key {
+				continue
+			}
+		}
+		if field.Type.Kind() != reflect.Struct &&
+			fieldType.Kind() != reflect.Struct &&
+			field.Type.Kind() != reflect.Slice &&
+			fieldType.Kind() != reflect.Map {
+			viper.BindEnv(key, envVar)
+		}
+
+		// If the field value is a nil pointer, initialize it with a new zero value of the type it points to.
+		if field.Type.Kind() == reflect.Ptr && refVal.Field(i).IsNil() {
+			refVal.Field(i).Set(reflect.New(fieldType))
+		}
+
+		// Recursively apply environment variable bindings for nested structs
+		if fieldType.Kind() == reflect.Struct {
+			bindEnvs(refVal.Field(i).Interface(), fieldPath...)
+		} else if field.Type.Kind() == reflect.Ptr && fieldType.Kind() == reflect.Struct {
+			bindEnvs(refVal.Field(i).Elem().Interface(), fieldPath...)
+		}
+	}
 }
 
 type Config struct {
