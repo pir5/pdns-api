@@ -38,20 +38,12 @@ type Domain struct {
 
 type Domains []Domain
 
-func (ds *Domains) ToIntreface() []interface{} {
-	ret := []interface{}{}
-	if ds != nil {
-		for _, d := range *ds {
-			ret = append(ret, d)
-		}
-	}
-	return ret
-}
 func (d *DomainModel) TableName() string {
 	return "domains"
 }
+
 func (d *DomainModel) FindBy(req *http.Request, params map[string]interface{}) (Domains, int64, error) {
-	query := d.db.Preload("Records")
+	query := d.db
 	for k, v := range params {
 		query = query.Where(k+" in(?)", v)
 	}

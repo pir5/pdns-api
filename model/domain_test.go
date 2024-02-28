@@ -78,20 +78,7 @@ func TestDomain_FindBy(t *testing.T) {
 					LastCheck:      1,
 					NotifiedSerial: 1,
 					Account:        "test",
-					Records: Records{
-						Record{
-							ID:        1,
-							DomainID:  1,
-							Name:      "test.com",
-							Type:      "A",
-							Content:   "1.1.1.1",
-							TTL:       100,
-							Prio:      1,
-							Disabled:  newBool(false),
-							OrderName: "",
-							Auth:      newBool(false),
-						},
-					},
+					Records:        nil,
 				},
 			},
 		},
@@ -130,18 +117,11 @@ func TestDomain_FindBy(t *testing.T) {
 					WithArgs(1).
 					WillReturnRows(tt.domainRows)
 
-				mock.ExpectQuery("SELECT \\* FROM `records`  WHERE \\(`domain_id` IN \\(\\?\\)\\)").
-					WithArgs(1).
-					WillReturnRows(tt.recordRows)
-
 				mock.ExpectQuery("SELECT count\\(\\*\\) FROM `domains` WHERE \\(id in\\(\\?\\)\\)").
 					WithArgs(1).
 					WillReturnRows(sqlmock.NewRows([]string{"count"}).AddRow(1))
 			} else {
 				mock.ExpectQuery("SELECT \\* FROM `domains` WHERE \\(id in\\(\\?\\)\\) LIMIT 100 OFFSET 0").
-					WillReturnError(tt.retErr)
-
-				mock.ExpectQuery("SELECT \\* FROM `records`  WHERE \\(`domain_id` IN \\(\\?\\)\\)").
 					WillReturnError(tt.retErr)
 			}
 
