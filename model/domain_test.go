@@ -1,6 +1,7 @@
 package model
 
 import (
+	"net/http/httptest"
 	"reflect"
 	"testing"
 
@@ -145,7 +146,8 @@ func TestDomain_FindBy(t *testing.T) {
 				db: gdb,
 			}
 
-			got, err := d.FindBy(tt.args.params)
+			req := httptest.NewRequest("GET", "/", nil)
+			got, _, err := d.FindBy(req, tt.args.params)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Domain.FindBy() error = %v, wantErr %v", err, tt.wantErr)
 				return

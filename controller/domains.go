@@ -32,11 +32,12 @@ func (h *domainHandler) getDomains(c echo.Context) error {
 		whereParams[k] = v
 	}
 
-	ds, err := h.domainModel.FindBy(whereParams)
+	ds, total, err := h.domainModel.FindBy(c.Request(), whereParams)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
+	setPaginationHeader(c.Response().Writer, c.Request(), total)
 	return c.JSON(http.StatusOK, ds)
 }
 

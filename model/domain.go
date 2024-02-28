@@ -1,11 +1,13 @@
 package model
 
 import (
+	"net/http"
+
 	"github.com/jinzhu/gorm"
 )
 
 type DomainModeler interface {
-	FindBy(map[string]interface{}) (Domains, error)
+	FindBy(*http.Request, map[string]interface{}) (Domains, int64, error)
 	UpdateByName(name string, newDoamin *Domain) (bool, error)
 	DeleteByName(name string) (bool, error)
 	UpdateByID(id string, newDoamin *Domain) (bool, error)
@@ -48,23 +50,23 @@ func (ds *Domains) ToIntreface() []interface{} {
 func (d *DomainModel) TableName() string {
 	return "domains"
 }
-func (d *DomainModel) FindBy(params map[string]interface{}) (Domains, error) {
+func (d *DomainModel) FindBy(req *http.Request, params map[string]interface{}) (Domains, int64, error) {
 	query := d.db.Preload("Records")
 	for k, v := range params {
 		query = query.Where(k+" in(?)", v)
 	}
 
 	ds := Domains{}
-	r := query.Find(&ds)
+	r := query.Scopes(Paginate(req)).Find(&ds)
 	if r.Error != nil {
 		if r.RecordNotFound() {
-			return nil, nil
+			return nil, 0, nil
 		} else {
-			return nil, r.Error
+			return nil, 0, r.Error
 		}
 	}
-
-	return ds, nil
+	totalCount := query.Find(&Domain{}).RowsAffected
+	return ds, totalCount, nil
 }
 
 func (d *DomainModel) updateBy(db *gorm.DB, newDomain *Domain) (bool, error) {

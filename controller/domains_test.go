@@ -12,9 +12,9 @@ import (
 type domainModelStub struct {
 }
 
-func (d *domainModelStub) FindBy(params map[string]interface{}) (model.Domains, error) {
+func (d *domainModelStub) FindBy(req *http.Request, params map[string]interface{}) (model.Domains, int64, error) {
 	ds := model.Domains{}
-
+	totalPage := int64(1)
 	if params["name"] != nil {
 		switch params["name"].([]string)[0] {
 		case "ok":
@@ -25,7 +25,7 @@ func (d *domainModelStub) FindBy(params map[string]interface{}) (model.Domains, 
 				},
 			}
 		case "error_please":
-			return nil, fmt.Errorf("give error to you")
+			return nil, 0, fmt.Errorf("give error to you")
 		}
 	} else if params["id"] != nil {
 		switch params["id"].(int) {
@@ -37,7 +37,7 @@ func (d *domainModelStub) FindBy(params map[string]interface{}) (model.Domains, 
 				},
 			}
 		case 2:
-			return nil, fmt.Errorf("give error to you")
+			return nil, 0, fmt.Errorf("give error to you")
 		case 3:
 			ds = model.Domains{
 				model.Domain{
@@ -48,7 +48,7 @@ func (d *domainModelStub) FindBy(params map[string]interface{}) (model.Domains, 
 		}
 	}
 
-	return ds, nil
+	return ds, totalPage, nil
 }
 func (d *domainModelStub) UpdateByName(name string, newDomain *model.Domain) (bool, error) {
 	switch name {
