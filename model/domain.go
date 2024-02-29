@@ -27,13 +27,13 @@ type DomainModel struct {
 }
 
 type Domain struct {
-	ID             int         `json:"id"`
-	Name           null.String `json:"name" validate:"required,fqdn"`
-	Master         null.String `json:"master"`
-	LastCheck      null.Int    `json:"last_check,number"`
-	Type           null.String `json:"type" validate:"oneof=NATIVE MASTER SLAVE"`
-	NotifiedSerial null.Int    `json:"notified_serial,number"`
-	Account        null.String `json:"account"`
+	ID             int         `json:"id" swaggertype:"integer" format:"int64" gorm:"primary_key"`
+	Name           null.String `json:"name" validate:"required,fqdn" swaggertype:"string" format:"string" gorm:"column:name"`
+	Master         null.String `json:"master" swaggertype:"string" format:"string" gorm:"column:master"`
+	LastCheck      null.Int    `json:"last_check,number" swaggertype:"integer" format:"int64" gorm:"column:last_check"`
+	Type           null.String `json:"type" validate:"oneof=NATIVE MASTER SLAVE" swaggertype:"string" format:"string" gorm:"column:type"`
+	NotifiedSerial null.Int    `json:"notified_serial,number" swaggertype:"integer" format:"int64" gorm:"column:notified_serial"`
+	Account        null.String `json:"account" swaggertype:"string" format:"string" gorm:"column:account"`
 	Records        *Records    `json:"records"`
 }
 

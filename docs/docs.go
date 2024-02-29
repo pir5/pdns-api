@@ -798,22 +798,28 @@ const docTemplate = `{
             ],
             "properties": {
                 "account": {
-                    "$ref": "#/definitions/null.String"
+                    "type": "string",
+                    "format": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "format": "int64"
                 },
                 "last_check": {
-                    "$ref": "#/definitions/null.Int"
+                    "type": "integer",
+                    "format": "int64"
                 },
                 "master": {
-                    "$ref": "#/definitions/null.String"
+                    "type": "string",
+                    "format": "string"
                 },
                 "name": {
-                    "$ref": "#/definitions/null.String"
+                    "type": "string",
+                    "format": "string"
                 },
                 "notified_serial": {
-                    "$ref": "#/definitions/null.Int"
+                    "type": "integer",
+                    "format": "int64"
                 },
                 "records": {
                     "type": "array",
@@ -822,7 +828,13 @@ const docTemplate = `{
                     }
                 },
                 "type": {
-                    "$ref": "#/definitions/null.String"
+                    "type": "string",
+                    "format": "string",
+                    "enum": [
+                        "NATIVE",
+                        "MASTER",
+                        "SLAVE"
+                    ]
                 }
             }
         },
@@ -830,58 +842,44 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "auth": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "format": "boolean"
                 },
                 "content": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "string"
                 },
                 "disabled": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "format": "boolean"
                 },
                 "domain_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "format": "int64"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "format": "int64"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "string"
                 },
                 "ordername": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "string"
                 },
                 "prio": {
-                    "type": "integer"
+                    "type": "integer",
+                    "format": "int64"
                 },
                 "ttl": {
-                    "type": "integer"
+                    "type": "integer",
+                    "format": "int64"
                 },
                 "type": {
-                    "type": "string"
-                }
-            }
-        },
-        "null.Int": {
-            "type": "object",
-            "properties": {
-                "int64": {
-                    "type": "integer"
-                },
-                "valid": {
-                    "description": "Valid is true if Int64 is not NULL",
-                    "type": "boolean"
-                }
-            }
-        },
-        "null.String": {
-            "type": "object",
-            "properties": {
-                "string": {
-                    "type": "string"
-                },
-                "valid": {
-                    "description": "Valid is true if String is not NULL",
-                    "type": "boolean"
+                    "type": "string",
+                    "format": "string"
                 }
             }
         },

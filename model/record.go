@@ -8,16 +8,16 @@ type RecordModel struct {
 	db *gorm.DB
 }
 type Record struct {
-	ID        int     `json:"id"`
-	DomainID  int     `json:"domain_id"`
-	Name      string  `json:"name"`
-	Type      string  `json:"type"`
-	Content   string  `json:"content"`
-	TTL       int     `json:"ttl"`
-	Prio      int     `json:"prio"`
-	Disabled  *bool   `json:"disabled"`
-	OrderName string  `json:"ordername" gorm:"column:ordername"`
-	Auth      *bool   `json:"auth"`
+	ID        int     `json:"id" swaggertype:"integer" format:"int64" gorm:"primary_key"`
+	DomainID  int     `json:"domain_id" swaggertype:"integer" format:"int64" gorm:"column:domain_id"`
+	Name      string  `json:"name" swaggertype:"string" format:"string" gorm:"column:name"`
+	Type      string  `json:"type" swaggertype:"string" format:"string" gorm:"column:type"`
+	Content   string  `json:"content" swaggertype:"string" format:"string" gorm:"column:content"`
+	TTL       int     `json:"ttl" swaggertype:"integer" format:"int64" gorm:"column:ttl"`
+	Prio      int     `json:"prio" swaggertype:"integer" format:"int64" gorm:"column:prio"`
+	Disabled  *bool   `json:"disabled" swaggertype:"boolean" format:"boolean" gorm:"column:disabled"`
+	OrderName string  `json:"ordername" swaggertype:"string" format:"string" gorm:"column:ordername"`
+	Auth      *bool   `json:"auth" swaggertype:"boolean" format:"boolean" gorm:"column:auth"`
 	Domain    *Domain `json:"-"`
 }
 

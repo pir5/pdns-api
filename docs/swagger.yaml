@@ -3,64 +3,69 @@ definitions:
   model.Domain:
     properties:
       account:
-        $ref: '#/definitions/null.String'
+        format: string
+        type: string
       id:
+        format: int64
         type: integer
       last_check:
-        $ref: '#/definitions/null.Int'
+        format: int64
+        type: integer
       master:
-        $ref: '#/definitions/null.String'
+        format: string
+        type: string
       name:
-        $ref: '#/definitions/null.String'
+        format: string
+        type: string
       notified_serial:
-        $ref: '#/definitions/null.Int'
+        format: int64
+        type: integer
       records:
         items:
           $ref: '#/definitions/model.Record'
         type: array
       type:
-        $ref: '#/definitions/null.String'
+        enum:
+        - NATIVE
+        - MASTER
+        - SLAVE
+        format: string
+        type: string
     required:
     - name
     type: object
   model.Record:
     properties:
       auth:
+        format: boolean
         type: boolean
       content:
+        format: string
         type: string
       disabled:
+        format: boolean
         type: boolean
       domain_id:
+        format: int64
         type: integer
       id:
+        format: int64
         type: integer
       name:
+        format: string
         type: string
       ordername:
+        format: string
         type: string
       prio:
+        format: int64
         type: integer
       ttl:
+        format: int64
         type: integer
       type:
+        format: string
         type: string
-    type: object
-  null.Int:
-    properties:
-      int64:
-        type: integer
-      valid:
-        description: Valid is true if Int64 is not NULL
-        type: boolean
-    type: object
-  null.String:
-    properties:
-      string:
-        type: string
-      valid:
-        description: Valid is true if String is not NULL
-        type: boolean
     type: object
   pdns_api.HTTPError:
     properties:
