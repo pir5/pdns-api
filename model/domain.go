@@ -1,7 +1,6 @@
 package model
 
 import (
-	"database/sql"
 	"net/http"
 
 	"github.com/jinzhu/gorm"
@@ -27,14 +26,14 @@ type DomainModel struct {
 }
 
 type Domain struct {
-	ID             int            `json:"id"`
-	Name           sql.NullString `json:"name" validate:"required,fqdn"`
-	Master         sql.NullString `json:"master"`
-	LastCheck      sql.NullInt64  `json:"last_check"`
-	Type           sql.NullString `json:"type" validate:"oneof=NATIVE MASTER SLAVE"`
-	NotifiedSerial sql.NullInt32  `json:"notified_serial"`
-	Account        sql.NullString `json:"account"`
-	Records        *Records       `json:"records"`
+	ID             int     `json:"id"`
+	Name           string  `json:"name" validate:"required,fqdn"`
+	Master         string  `json:"master"`
+	LastCheck      int     `json:"last_check"`
+	Type           string  `json:"type" validate:"oneof=NATIVE MASTER SLAVE"`
+	NotifiedSerial int32   `json:"notified_serial"`
+	Account        string  `json:"account"`
+	Records        Records `json:"records"`
 }
 
 type Domains []Domain
@@ -69,7 +68,7 @@ func (d *DomainModel) FindBy(req *http.Request, params map[string]interface{}) (
 }
 
 func (d *DomainModel) updateBy(db *gorm.DB, newDomain *Domain) (bool, error) {
-	r := db.Take(d)
+	r := db.Take(&d)
 	if r.Error != nil {
 		if r.RecordNotFound() {
 			return false, nil
@@ -78,7 +77,7 @@ func (d *DomainModel) updateBy(db *gorm.DB, newDomain *Domain) (bool, error) {
 		}
 	}
 
-	r = d.db.Model(&Domain{}).Updates(newDomain)
+	r = d.db.Model(&d).Updates(&newDomain)
 	if r.Error != nil {
 		return false, r.Error
 	}

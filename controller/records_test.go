@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"database/sql"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -23,8 +22,8 @@ func (d *recordModelStub) FindBy(params map[string]interface{}) (model.Records, 
 				ID:       1,
 				Name:     "ok.com",
 				DomainID: 1,
-				Domain: &model.Domain{
-					Name: sql.NullString{"ok.com", true},
+				Domain: model.Domain{
+					Name: "ok.com",
 				},
 			},
 		}
@@ -36,8 +35,8 @@ func (d *recordModelStub) FindBy(params map[string]interface{}) (model.Records, 
 				ID:       1,
 				Name:     "deny.com",
 				DomainID: 3,
-				Domain: &model.Domain{
-					Name: sql.NullString{"deny.com", true},
+				Domain: model.Domain{
+					Name: "deny.com",
 				},
 			},
 		}
@@ -202,7 +201,6 @@ func Test_recordHandler_createRecord(t *testing.T) {
 		fields   fields
 		wantErr  bool
 		wantCode int
-		args     model.Record
 		queryID  string
 	}{
 		{
@@ -210,14 +208,6 @@ func Test_recordHandler_createRecord(t *testing.T) {
 			fields: fields{
 				domainModel: &domainModelStub{},
 				recordModel: &recordModelStub{},
-			},
-			args: model.Record{
-				Name: "ok.com",
-				ID:   9999,
-				Domain: &model.Domain{
-					Name: sql.NullString{"ok.com", true},
-					Type: sql.NullString{"NATIVE", true},
-				},
 			},
 			wantErr:  false,
 			wantCode: http.StatusCreated,
@@ -230,7 +220,7 @@ func Test_recordHandler_createRecord(t *testing.T) {
 				recordModel: tt.fields.recordModel,
 				domainModel: tt.fields.domainModel,
 			}
-			ctx, rec := dummyContext(t, "POST", "/records", tt.args)
+			ctx, rec := dummyContext(t, "POST", "/records", nil)
 
 			if err := h.createRecord(ctx); (err != nil) != tt.wantErr {
 				t.Errorf("recordHandler.createRecord() error = %v, wantErr %v", err, tt.wantErr)
