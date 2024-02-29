@@ -76,12 +76,6 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 		},
 	}))
 
-	go func() {
-		if err := e.Start(config.Listen); err != nil {
-			e.Logger.Fatalf("shutting down the server: %s", err)
-		}
-	}()
-
 	v1 := e.Group("/v1")
 
 	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
@@ -94,6 +88,8 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 	if err != nil {
 		return err
 	}
+	db.LogMode(os.Getenv("GORM_LOG") == "true")
+	db.SetLogger(logger)
 	controller.DomainEndpoints(v1, db.Set("gorm:association_autoupdate", false).Set("gorm:association_autocreate", false))
 	controller.RecordEndpoints(v1, db.Set("gorm:association_autoupdate", false).Set("gorm:association_autocreate", false))
 	controller.VironEndpoints(v1)
@@ -109,6 +105,12 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 		docs.SwaggerInfo.Host = u.Host
 		docs.SwaggerInfo.BasePath = u.Path
 	}
+
+	go func() {
+		if err := e.Start(config.Listen); err != nil {
+			e.Logger.Fatalf("shutting down the server: %s", err)
+		}
+	}()
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
