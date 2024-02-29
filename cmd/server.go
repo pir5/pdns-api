@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	stdLog "log"
 	"net/http"
@@ -15,7 +14,6 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	echoSwagger "github.com/swaggo/echo-swagger"
 
-	"github.com/facebookgo/pidfile"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
@@ -52,32 +50,11 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 	}
 
 	logger := log.New("pdns-api")
-	pidfile.SetPidfilePath(*cmdFlags.PidPath)
-	if *cmdFlags.LogPath != "" {
-		f, err := os.OpenFile(*cmdFlags.LogPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
-		if err != nil {
-			return errors.New("error opening file :" + err.Error())
-		}
-		logger.SetOutput(f)
-	} else {
-		logger.SetLevel(log.DEBUG)
-	}
-
 	e := echo.New()
 	e.Logger = logger
 	e.StdLogger = stdLog.New(e.Logger.Output(), e.Logger.Prefix()+": ", 0)
 
 	e.GET("/status", status)
-
-	if err := pidfile.Write(); err != nil {
-		return err
-	}
-
-	defer func() {
-		if err := os.Remove(pidfile.GetPidfilePath()); err != nil {
-			e.Logger.Fatalf("Error removing %s: %s", pidfile.GetPidfilePath(), err)
-		}
-	}()
 
 	e.Use(middleware.CORS())
 	e.Use(middleware.Recover())

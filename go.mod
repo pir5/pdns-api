@@ -6,7 +6,6 @@ toolchain go1.22.0
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.3.3
-	github.com/facebookgo/pidfile v0.0.0-20150612191647-f242e2999868
 	github.com/jinzhu/gorm v1.9.16
 	github.com/k0kubun/pp v3.0.1+incompatible
 	github.com/labstack/echo/v4 v4.11.4
@@ -22,7 +21,6 @@ require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/denisenkom/go-mssqldb v0.9.0 // indirect
-	github.com/facebookgo/atomicfile v0.0.0-20151019160806-2de1f203e7d5 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-openapi/jsonpointer v0.20.2 // indirect

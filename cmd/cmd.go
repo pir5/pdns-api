@@ -9,8 +9,6 @@ import (
 
 type GlobalFlags struct {
 	ConfPath *string
-	PidPath  *string
-	LogPath  *string
 }
 
 // A Command is an implementation of a pdns-api command
