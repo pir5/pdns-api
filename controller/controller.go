@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"database/sql"
 	"database/sql/driver"
 	"math"
 	"net/http"
@@ -10,24 +9,23 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/pir5/pdns-api/model"
+	"gopkg.in/guregu/null.v3"
 )
 
 var validate *validator.Validate
 
 func init() {
 	validate = validator.New()
-	validate.RegisterCustomTypeFunc(ValidateValuer, sql.NullString{}, sql.NullInt64{}, sql.NullInt32{})
+	validate.RegisterCustomTypeFunc(ValidateValuer, null.String{}, null.Int{})
 }
 
 func ValidateValuer(field reflect.Value) interface{} {
 
 	if valuer, ok := field.Interface().(driver.Valuer); ok {
-
 		val, err := valuer.Value()
 		if err == nil {
 			return val
 		}
-		// handle the error how you want
 	}
 
 	return nil

@@ -1,13 +1,13 @@
 package model
 
 import (
-	"database/sql"
 	"net/http/httptest"
 	"reflect"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/jinzhu/gorm"
+	null "gopkg.in/guregu/null.v3"
 )
 
 func TestDomain_FindBy(t *testing.T) {
@@ -75,12 +75,12 @@ func TestDomain_FindBy(t *testing.T) {
 			want: Domains{
 				Domain{
 					ID:             1,
-					Name:           sql.NullString{"test.com", true},
-					Master:         sql.NullString{"", true},
-					Type:           sql.NullString{"", true},
-					LastCheck:      sql.NullInt64{1, true},
-					NotifiedSerial: sql.NullInt32{1, true},
-					Account:        sql.NullString{"test", true},
+					Name:           null.NewString("test.com", true),
+					Master:         null.NewString("", true),
+					Type:           null.NewString("", true),
+					LastCheck:      null.NewInt(1, true),
+					NotifiedSerial: null.NewInt(1, true),
+					Account:        null.NewString("test", true),
 					Records:        nil,
 				},
 			},
@@ -89,7 +89,7 @@ func TestDomain_FindBy(t *testing.T) {
 			name: "notfound",
 			args: args{
 				params: map[string]interface{}{
-					"id": sql.NullInt64{1, true},
+					"id": null.NewInt(1, true),
 				},
 			},
 			retErr: gorm.ErrRecordNotFound,
@@ -99,7 +99,7 @@ func TestDomain_FindBy(t *testing.T) {
 			name: "other error",
 			args: args{
 				params: map[string]interface{}{
-					"id": sql.NullInt64{1, true},
+					"id": null.NewInt(1, true),
 				},
 			},
 			retErr:  gorm.ErrInvalidSQL,
@@ -165,8 +165,8 @@ func TestDomain_UpdateByName(t *testing.T) {
 				name: "test.com",
 				newDomain: &Domain{
 					ID:      1,
-					Name:    sql.NullString{"test.com", true},
-					Account: sql.NullString{"update", true},
+					Name:    null.NewString("test.com", true),
+					Account: null.NewString("update", true),
 				},
 			},
 			domainRows: sqlmock.NewRows([]string{
@@ -203,8 +203,8 @@ func TestDomain_UpdateByName(t *testing.T) {
 				name: "test.com",
 				newDomain: &Domain{
 					ID:      1,
-					Name:    sql.NullString{"test.com", true},
-					Account: sql.NullString{"update", true},
+					Name:    null.NewString("test.com", true),
+					Account: null.NewString("update", true),
 				},
 			},
 			retErr:  gorm.ErrInvalidSQL,
@@ -377,7 +377,7 @@ func TestDomain_Create(t *testing.T) {
 			args: args{
 				newDomain: &Domain{
 					ID:   1,
-					Name: sql.NullString{"test.com", true},
+					Name: null.NewString("test.com", true),
 				},
 			},
 		},
@@ -450,8 +450,8 @@ func TestDomain_UpdateByID(t *testing.T) {
 				id: "1",
 				newDomain: &Domain{
 					ID:      1,
-					Name:    sql.NullString{"test.com", true},
-					Account: sql.NullString{"update", true},
+					Name:    null.NewString("test.com", true),
+					Account: null.NewString("update", true),
 				},
 			},
 			domainRows: sqlmock.NewRows([]string{
@@ -488,8 +488,8 @@ func TestDomain_UpdateByID(t *testing.T) {
 				id: "3",
 				newDomain: &Domain{
 					ID:      1,
-					Name:    sql.NullString{"test.com", true},
-					Account: sql.NullString{"update", true},
+					Name:    null.NewString("test.com", true),
+					Account: null.NewString("update", true),
 				},
 			},
 			retErr:  gorm.ErrInvalidSQL,

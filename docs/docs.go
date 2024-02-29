@@ -798,22 +798,22 @@ const docTemplate = `{
             ],
             "properties": {
                 "account": {
-                    "$ref": "#/definitions/sql.NullString"
+                    "$ref": "#/definitions/null.String"
                 },
                 "id": {
                     "type": "integer"
                 },
                 "last_check": {
-                    "$ref": "#/definitions/sql.NullInt64"
+                    "$ref": "#/definitions/null.Int"
                 },
                 "master": {
-                    "$ref": "#/definitions/sql.NullString"
+                    "$ref": "#/definitions/null.String"
                 },
                 "name": {
-                    "$ref": "#/definitions/sql.NullString"
+                    "$ref": "#/definitions/null.String"
                 },
                 "notified_serial": {
-                    "$ref": "#/definitions/sql.NullInt32"
+                    "$ref": "#/definitions/null.Int"
                 },
                 "records": {
                     "type": "array",
@@ -822,7 +822,7 @@ const docTemplate = `{
                     }
                 },
                 "type": {
-                    "$ref": "#/definitions/sql.NullString"
+                    "$ref": "#/definitions/null.String"
                 }
             }
         },
@@ -861,25 +861,7 @@ const docTemplate = `{
                 }
             }
         },
-        "pdns_api.HTTPError": {
-            "type": "object",
-            "properties": {
-                "message": {}
-            }
-        },
-        "sql.NullInt32": {
-            "type": "object",
-            "properties": {
-                "int32": {
-                    "type": "integer"
-                },
-                "valid": {
-                    "description": "Valid is true if Int32 is not NULL",
-                    "type": "boolean"
-                }
-            }
-        },
-        "sql.NullInt64": {
+        "null.Int": {
             "type": "object",
             "properties": {
                 "int64": {
@@ -891,7 +873,7 @@ const docTemplate = `{
                 }
             }
         },
-        "sql.NullString": {
+        "null.String": {
             "type": "object",
             "properties": {
                 "string": {
@@ -901,6 +883,12 @@ const docTemplate = `{
                     "description": "Valid is true if String is not NULL",
                     "type": "boolean"
                 }
+            }
+        },
+        "pdns_api.HTTPError": {
+            "type": "object",
+            "properties": {
+                "message": {}
             }
         }
     },

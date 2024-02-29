@@ -1,13 +1,13 @@
 package controller
 
 import (
-	"database/sql"
 	"fmt"
 	"net/http"
 	"net/url"
 	"testing"
 
 	"github.com/pir5/pdns-api/model"
+	null "gopkg.in/guregu/null.v3"
 )
 
 type recordModelStub struct {
@@ -24,7 +24,7 @@ func (d *recordModelStub) FindBy(params map[string]interface{}) (model.Records, 
 				Name:     "ok.com",
 				DomainID: 1,
 				Domain: &model.Domain{
-					Name: sql.NullString{"ok.com", true},
+					Name: null.NewString("ok.com", true),
 				},
 			},
 		}
@@ -37,7 +37,7 @@ func (d *recordModelStub) FindBy(params map[string]interface{}) (model.Records, 
 				Name:     "deny.com",
 				DomainID: 3,
 				Domain: &model.Domain{
-					Name: sql.NullString{"deny.com", true},
+					Name: null.NewString("deny.com", true),
 				},
 			},
 		}
@@ -215,8 +215,8 @@ func Test_recordHandler_createRecord(t *testing.T) {
 				Name: "ok.com",
 				ID:   9999,
 				Domain: &model.Domain{
-					Name: sql.NullString{"ok.com", true},
-					Type: sql.NullString{"NATIVE", true},
+					Name: null.NewString("ok.com", true),
+					Type: null.NewString("NATIVE", true),
 				},
 			},
 			wantErr:  false,
