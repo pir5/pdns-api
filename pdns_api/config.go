@@ -1,6 +1,7 @@
 package pdns_api
 
 import (
+	"os"
 	"reflect"
 	"strings"
 
@@ -13,15 +14,17 @@ const AuthTypeToken = "token"
 func NewConfig(confPath string) (*Config, error) {
 	var conf Config
 	defaultConfig(&conf)
-	viper.SetConfigFile(confPath)
 
 	viper.SetEnvPrefix("PIR5")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	bindEnvs(conf)
 	viper.AutomaticEnv()
 
-	if err := viper.ReadInConfig(); err != nil {
-		return nil, err
+	if _, err := os.Stat(confPath); err != nil {
+		viper.SetConfigFile(confPath)
+		if err := viper.ReadInConfig(); err != nil {
+			return nil, err
+		}
 	}
 
 	if err := viper.Unmarshal(&conf); err != nil {
@@ -104,7 +107,7 @@ type database struct {
 }
 
 func defaultConfig(c *Config) {
-	c.Listen = "0.0.0.0:8080"
+	c.Listen = "127.0.0.1:8080"
 	c.DB.Host = "localhost"
 	c.DB.Port = 3306
 	c.DB.UserName = "root"

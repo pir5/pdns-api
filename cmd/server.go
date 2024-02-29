@@ -22,10 +22,6 @@ import (
 	"github.com/pir5/pdns-api/pdns_api"
 )
 
-type HTTPError struct {
-	echo.HTTPError
-}
-
 var CmdServer = &Command{
 	Run:       runServer,
 	UsageLine: "server",

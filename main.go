@@ -6,10 +6,15 @@ import (
 	"fmt"
 	"io"
 	"log"
+<<<<<<< Updated upstream
+=======
+	"log/slog"
+>>>>>>> Stashed changes
 	"os"
 	"strings"
 	"text/template"
 
+	"github.com/joho/godotenv"
 	"github.com/pir5/pdns-api/cmd"
 )
 
@@ -41,7 +46,18 @@ func main() {
 	flag.Usage = usage
 	flag.Parse()
 
+<<<<<<< Updated upstream
 	log.SetFlags(0)
+=======
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	hostname, _ := os.Hostname()
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil)).With(slog.String("server_host", hostname))
+	slog.SetDefault(logger)
+>>>>>>> Stashed changes
 
 	args := flag.Args()
 	if len(args) < 1 {
