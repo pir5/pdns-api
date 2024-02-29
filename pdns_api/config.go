@@ -20,7 +20,7 @@ func NewConfig(confPath string) (*Config, error) {
 	bindEnvs(conf)
 	viper.AutomaticEnv()
 
-	if _, err := os.Stat(confPath); err != nil {
+	if _, err := os.Stat(confPath); err == nil {
 		viper.SetConfigFile(confPath)
 		if err := viper.ReadInConfig(); err != nil {
 			return nil, err
