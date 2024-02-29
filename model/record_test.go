@@ -1,12 +1,12 @@
 package model
 
 import (
-	"database/sql"
 	"reflect"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/jinzhu/gorm"
+	"github.com/k0kubun/pp"
 )
 
 func TestRecord_FindBy(t *testing.T) {
@@ -82,14 +82,12 @@ func TestRecord_FindBy(t *testing.T) {
 					Prio:     1,
 					Disabled: newBool(false),
 					Auth:     newBool(false),
-					Domain: &Domain{
+					Domain: Domain{
 						ID:             1,
-						Name:           sql.NullString{"test.com", true},
-						Master:         sql.NullString{"", true},
-						Type:           sql.NullString{"", true},
-						LastCheck:      sql.NullInt64{1, true},
-						NotifiedSerial: sql.NullInt32{1, true},
-						Account:        sql.NullString{"test", true},
+						Name:           "test.com",
+						LastCheck:      1,
+						NotifiedSerial: 1,
+						Account:        "test",
 					},
 				},
 			},
@@ -151,6 +149,7 @@ func TestRecord_FindBy(t *testing.T) {
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
+				pp.Println(got)
 				t.Errorf("Record.FindBy() = %v, want %v", got, tt.want)
 			}
 		})

@@ -8,17 +8,17 @@ type RecordModel struct {
 	db *gorm.DB
 }
 type Record struct {
-	ID        int     `json:"id"`
-	DomainID  int     `json:"domain_id"`
-	Name      string  `json:"name"`
-	Type      string  `json:"type"`
-	Content   string  `json:"content"`
-	TTL       int     `json:"ttl"`
-	Prio      int     `json:"prio"`
-	Disabled  *bool   `json:"disabled"`
-	OrderName string  `json:"ordername" gorm:"column:ordername"`
-	Auth      *bool   `json:"auth"`
-	Domain    *Domain `json:"-"`
+	ID        int    `json:"id"`
+	DomainID  int    `json:"domain_id"`
+	Name      string `json:"name"`
+	Type      string `json:"type"`
+	Content   string `json:"content"`
+	TTL       int    `json:"ttl"`
+	Prio      int    `json:"prio"`
+	Disabled  *bool  `json:"disabled"`
+	OrderName string `json:"ordername" gorm:"column:ordername"`
+	Auth      *bool  `json:"auth"`
+	Domain    Domain `json:"-"`
 }
 
 type Records []Record
@@ -63,7 +63,7 @@ func (d *RecordModel) FindBy(params map[string]interface{}) (Records, error) {
 	return ds, nil
 }
 func (d *RecordModel) UpdateByID(id string, newRecord *Record) (bool, error) {
-	record := Record{}
+	record := &Record{}
 	r := d.db.Where("id = ?", id).Take(&record)
 	if r.Error != nil {
 		if r.RecordNotFound() {
@@ -74,7 +74,7 @@ func (d *RecordModel) UpdateByID(id string, newRecord *Record) (bool, error) {
 	}
 
 	newRecord.DomainID = record.DomainID
-	r = d.db.Model(&record).Updates(newRecord)
+	r = d.db.Model(&record).Updates(&newRecord)
 
 	if r.Error != nil {
 		return false, r.Error
@@ -82,7 +82,7 @@ func (d *RecordModel) UpdateByID(id string, newRecord *Record) (bool, error) {
 	return true, nil
 }
 func (d *RecordModel) DeleteByID(id string) (bool, error) {
-	record := Record{}
+	record := &Record{}
 	r := d.db.Where("id = ?", id).Take(&record)
 	if r.Error != nil {
 		if r.RecordNotFound() {
@@ -92,7 +92,7 @@ func (d *RecordModel) DeleteByID(id string) (bool, error) {
 		}
 	}
 
-	r = d.db.Delete(&record)
+	r = d.db.Delete(record)
 	if r.Error != nil {
 		return false, r.Error
 	}
