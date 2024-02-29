@@ -3,23 +3,23 @@ definitions:
   model.Domain:
     properties:
       account:
-        $ref: '#/definitions/sql.NullString'
+        $ref: '#/definitions/null.String'
       id:
         type: integer
       last_check:
-        $ref: '#/definitions/sql.NullInt64'
+        $ref: '#/definitions/null.Int'
       master:
-        $ref: '#/definitions/sql.NullString'
+        $ref: '#/definitions/null.String'
       name:
-        $ref: '#/definitions/sql.NullString'
+        $ref: '#/definitions/null.String'
       notified_serial:
-        $ref: '#/definitions/sql.NullInt32'
+        $ref: '#/definitions/null.Int'
       records:
         items:
           $ref: '#/definitions/model.Record'
         type: array
       type:
-        $ref: '#/definitions/sql.NullString'
+        $ref: '#/definitions/null.String'
     required:
     - name
     type: object
@@ -46,19 +46,7 @@ definitions:
       type:
         type: string
     type: object
-  pdns_api.HTTPError:
-    properties:
-      message: {}
-    type: object
-  sql.NullInt32:
-    properties:
-      int32:
-        type: integer
-      valid:
-        description: Valid is true if Int32 is not NULL
-        type: boolean
-    type: object
-  sql.NullInt64:
+  null.Int:
     properties:
       int64:
         type: integer
@@ -66,13 +54,17 @@ definitions:
         description: Valid is true if Int64 is not NULL
         type: boolean
     type: object
-  sql.NullString:
+  null.String:
     properties:
       string:
         type: string
       valid:
         description: Valid is true if String is not NULL
         type: boolean
+    type: object
+  pdns_api.HTTPError:
+    properties:
+      message: {}
     type: object
 info:
   contact: {}
