@@ -1,10 +1,10 @@
 package model
 
 import (
+	"database/sql"
 	"net/http"
 
 	"github.com/jinzhu/gorm"
-	null "gopkg.in/guregu/null.v3"
 )
 
 type DomainModeler interface {
@@ -27,14 +27,14 @@ type DomainModel struct {
 }
 
 type Domain struct {
-	ID             int         `json:"id"`
-	Name           null.String `json:"name" validate:"required,fqdn"`
-	Master         null.String `json:"master"`
-	LastCheck      null.Int    `json:"last_check,number"`
-	Type           null.String `json:"type" validate:"oneof=NATIVE MASTER SLAVE"`
-	NotifiedSerial null.Int    `json:"notified_serial,number"`
-	Account        null.String `json:"account"`
-	Records        *Records    `json:"records"`
+	ID             int            `json:"id"`
+	Name           sql.NullString `json:"name" validate:"required,fqdn"`
+	Master         sql.NullString `json:"master"`
+	LastCheck      sql.NullInt64  `json:"last_check"`
+	Type           sql.NullString `json:"type" validate:"oneof=NATIVE MASTER SLAVE"`
+	NotifiedSerial sql.NullInt32  `json:"notified_serial"`
+	Account        sql.NullString `json:"account"`
+	Records        *Records       `json:"records"`
 }
 
 type Domains []Domain

@@ -15,7 +15,6 @@ require (
 	github.com/swaggo/echo-swagger v1.4.1
 	github.com/swaggo/swag v1.16.3
 	github.com/tj/assert v0.0.3
-	gopkg.in/guregu/null.v3 v3.5.0
 )
 
 require (

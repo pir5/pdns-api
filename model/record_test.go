@@ -1,12 +1,12 @@
 package model
 
 import (
+	"database/sql"
 	"reflect"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/jinzhu/gorm"
-	null "gopkg.in/guregu/null.v3"
 )
 
 func TestRecord_FindBy(t *testing.T) {
@@ -84,12 +84,12 @@ func TestRecord_FindBy(t *testing.T) {
 					Auth:     newBool(false),
 					Domain: &Domain{
 						ID:             1,
-						Name:           null.NewString("test.com", true),
-						Master:         null.NewString("", true),
-						Type:           null.NewString("", true),
-						LastCheck:      null.NewInt(1, true),
-						NotifiedSerial: null.NewInt(1, true),
-						Account:        null.NewString("test", true),
+						Name:           sql.NullString{"test.com", true},
+						Master:         sql.NullString{"", true},
+						Type:           sql.NullString{"", true},
+						LastCheck:      sql.NullInt64{1, true},
+						NotifiedSerial: sql.NullInt32{1, true},
+						Account:        sql.NullString{"test", true},
 					},
 				},
 			},

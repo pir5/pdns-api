@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	stdLog "log"
-	"log/slog"
 	"net/http"
 	"net/url"
 	"os"
@@ -55,32 +54,10 @@ func runServer(cmdFlags *GlobalFlags, args []string) error {
 
 	e.Use(middleware.CORS())
 	e.Use(middleware.Recover())
-	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
-		LogStatus:   true,
-		LogURI:      true,
-		LogError:    true,
-		HandleError: true, // forwards error to the global error handler, so it can decide appropriate status code
-		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
-			if v.Error == nil {
-				slog.LogAttrs(context.Background(), slog.LevelInfo, "REQUEST",
-					slog.String("uri", v.URI),
-					slog.Int("status", v.Status),
-					slog.String("remote_ip", v.RemoteIP),
-					slog.String("host", v.Host),
-					slog.String("method", v.Method),
-				)
-			} else {
-				slog.LogAttrs(context.Background(), slog.LevelError, "REQUEST_ERROR",
-					slog.String("uri", v.URI),
-					slog.Int("status", v.Status),
-					slog.String("remote_ip", v.RemoteIP),
-					slog.String("host", v.Host),
-					slog.String("method", v.Method),
-					slog.String("err", v.Error.Error()),
-				)
-			}
-			return nil
-		},
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: `{"time":"${time_rfc3339_nano}","remote_ip":"${remote_ip}","host":"${host}",` +
+			`"method":"${method}","uri":"${uri}","status":${status}}` + "\n",
+		Output: logger.Output(),
 	}))
 
 	e.Use(middleware.KeyAuthWithConfig(middleware.KeyAuthConfig{
