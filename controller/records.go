@@ -60,6 +60,10 @@ func (h *recordHandler) updateRecord(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
+	if err := validate.Struct(nd); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
 	updated, err := h.recordModel.UpdateByID(c.Param("id"), nd)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
@@ -170,6 +174,10 @@ func (h *recordHandler) deleteRecord(c echo.Context) error {
 func (h *recordHandler) createRecord(c echo.Context) error {
 	d := &model.Record{}
 	if err := c.Bind(d); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	if err := validate.Struct(d); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 

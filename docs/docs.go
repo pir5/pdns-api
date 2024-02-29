@@ -798,22 +798,22 @@ const docTemplate = `{
             ],
             "properties": {
                 "account": {
-                    "type": "string"
+                    "$ref": "#/definitions/sql.NullString"
                 },
                 "id": {
                     "type": "integer"
                 },
                 "last_check": {
-                    "type": "integer"
+                    "$ref": "#/definitions/sql.NullInt64"
                 },
                 "master": {
-                    "type": "string"
+                    "$ref": "#/definitions/sql.NullString"
                 },
                 "name": {
-                    "type": "string"
+                    "$ref": "#/definitions/sql.NullString"
                 },
                 "notified_serial": {
-                    "type": "integer"
+                    "$ref": "#/definitions/sql.NullInt32"
                 },
                 "records": {
                     "type": "array",
@@ -822,12 +822,7 @@ const docTemplate = `{
                     }
                 },
                 "type": {
-                    "type": "string",
-                    "enum": [
-                        "NATIVE",
-                        "MASTER",
-                        "SLAVE"
-                    ]
+                    "$ref": "#/definitions/sql.NullString"
                 }
             }
         },
@@ -870,6 +865,42 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "message": {}
+            }
+        },
+        "sql.NullInt32": {
+            "type": "object",
+            "properties": {
+                "int32": {
+                    "type": "integer"
+                },
+                "valid": {
+                    "description": "Valid is true if Int32 is not NULL",
+                    "type": "boolean"
+                }
+            }
+        },
+        "sql.NullInt64": {
+            "type": "object",
+            "properties": {
+                "int64": {
+                    "type": "integer"
+                },
+                "valid": {
+                    "description": "Valid is true if Int64 is not NULL",
+                    "type": "boolean"
+                }
+            }
+        },
+        "sql.NullString": {
+            "type": "object",
+            "properties": {
+                "string": {
+                    "type": "string"
+                },
+                "valid": {
+                    "description": "Valid is true if String is not NULL",
+                    "type": "boolean"
+                }
             }
         }
     },
