@@ -6,7 +6,6 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
 	"github.com/pir5/pdns-api/model"
-	"gopkg.in/go-playground/validator.v9"
 )
 
 // getDomains is getting domains.
@@ -61,7 +60,7 @@ func (h *domainHandler) updateDomainByName(c echo.Context) error {
 	if err := c.Bind(nd); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	if err := validator.New().Struct(nd); err != nil {
+	if err := validate.Struct(nd); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 	updated, err := h.domainModel.UpdateByName(c.Param("name"), nd)
@@ -95,7 +94,7 @@ func (h *domainHandler) updateDomainByID(c echo.Context) error {
 	if err := c.Bind(nd); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	if err := validator.New().Struct(nd); err != nil {
+	if err := validate.Struct(nd); err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
 	updated, err := h.domainModel.UpdateByID(c.Param("id"), nd)
@@ -183,7 +182,7 @@ func (h *domainHandler) createDomain(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	if err := validator.New().Struct(d); err != nil {
+	if err := validate.Struct(d); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -21,7 +22,7 @@ func (d *domainModelStub) FindBy(req *http.Request, params map[string]interface{
 			ds = model.Domains{
 				model.Domain{
 					ID:   1,
-					Name: "ok.com",
+					Name: sql.NullString{"ok.com", true},
 				},
 			}
 		case "error_please":
@@ -33,7 +34,7 @@ func (d *domainModelStub) FindBy(req *http.Request, params map[string]interface{
 			ds = model.Domains{
 				model.Domain{
 					ID:   1,
-					Name: "ok.com",
+					Name: sql.NullString{"ok.com", true},
 				},
 			}
 		case 2:
@@ -42,7 +43,7 @@ func (d *domainModelStub) FindBy(req *http.Request, params map[string]interface{
 			ds = model.Domains{
 				model.Domain{
 					ID:   1,
-					Name: "deny.com",
+					Name: sql.NullString{"deny.com", true},
 				},
 			}
 		}
@@ -167,9 +168,9 @@ func Test_domainHandler_updateDomainByID(t *testing.T) {
 				domainModel: &domainModelStub{},
 			},
 			args: model.Domain{
-				Name: "ok.com",
+				Name: sql.NullString{"ok.com", true},
 				ID:   9999,
-				Type: "NATIVE",
+				Type: sql.NullString{"NATIVE", true},
 			},
 			wantErr:   false,
 			wantCode:  http.StatusOK,
@@ -181,9 +182,9 @@ func Test_domainHandler_updateDomainByID(t *testing.T) {
 				domainModel: &domainModelStub{},
 			},
 			args: model.Domain{
-				Name: "ok.com",
+				Name: sql.NullString{"ok.com", true},
 				ID:   1111,
-				Type: "NATIVE",
+				Type: sql.NullString{"NATIVE", true},
 			},
 			wantErr:   false,
 			wantCode:  http.StatusNotFound,
@@ -195,9 +196,9 @@ func Test_domainHandler_updateDomainByID(t *testing.T) {
 				domainModel: &domainModelStub{},
 			},
 			args: model.Domain{
-				Name: "@.com",
+				Name: sql.NullString{"@.com", true},
 				ID:   1,
-				Type: "NATIVE",
+				Type: sql.NullString{"NATIVE", true},
 			},
 			wantErr:   false,
 			wantCode:  http.StatusBadRequest,
@@ -209,9 +210,9 @@ func Test_domainHandler_updateDomainByID(t *testing.T) {
 				domainModel: &domainModelStub{},
 			},
 			args: model.Domain{
-				Name: "ok.com",
+				Name: sql.NullString{"ok.com", true},
 				ID:   1,
-				Type: "NG",
+				Type: sql.NullString{"NG", true},
 			},
 			wantErr:   false,
 			wantCode:  http.StatusBadRequest,
@@ -258,9 +259,9 @@ func Test_domainHandler_updateDomainByName(t *testing.T) {
 				domainModel: &domainModelStub{},
 			},
 			args: model.Domain{
-				Name: "ok.com",
+				Name: sql.NullString{"ok.com", true},
 				ID:   9999,
-				Type: "NATIVE",
+				Type: sql.NullString{"NATIVE", true},
 			},
 			wantErr:   false,
 			wantCode:  http.StatusOK,
@@ -272,9 +273,9 @@ func Test_domainHandler_updateDomainByName(t *testing.T) {
 				domainModel: &domainModelStub{},
 			},
 			args: model.Domain{
-				Name: "ok.com",
+				Name: sql.NullString{"ok.com", true},
 				ID:   1111,
-				Type: "NATIVE",
+				Type: sql.NullString{"NATIVE", true},
 			},
 			wantErr:   false,
 			wantCode:  http.StatusNotFound,
@@ -286,9 +287,9 @@ func Test_domainHandler_updateDomainByName(t *testing.T) {
 				domainModel: &domainModelStub{},
 			},
 			args: model.Domain{
-				Name: "@.com",
+				Name: sql.NullString{"@.com", true},
 				ID:   1,
-				Type: "NATIVE",
+				Type: sql.NullString{"NATIVE", true},
 			},
 			wantErr:   false,
 			wantCode:  http.StatusBadRequest,
@@ -300,9 +301,9 @@ func Test_domainHandler_updateDomainByName(t *testing.T) {
 				domainModel: &domainModelStub{},
 			},
 			args: model.Domain{
-				Name: "ok.com",
+				Name: sql.NullString{"ok.com", true},
 				ID:   1,
-				Type: "NG",
+				Type: sql.NullString{"NG", true},
 			},
 			wantErr:   false,
 			wantCode:  http.StatusBadRequest,
@@ -454,9 +455,9 @@ func Test_domainHandler_createDomain(t *testing.T) {
 				domainModel: &domainModelStub{},
 			},
 			args: model.Domain{
-				Name: "ok.com",
+				Name: sql.NullString{"ok.com", true},
 				ID:   9999,
-				Type: "NATIVE",
+				Type: sql.NullString{"NATIVE", true},
 			},
 			wantErr:   false,
 			wantCode:  http.StatusCreated,
@@ -468,9 +469,9 @@ func Test_domainHandler_createDomain(t *testing.T) {
 				domainModel: &domainModelStub{},
 			},
 			args: model.Domain{
-				Name: "@.com",
+				Name: sql.NullString{"@.com", true},
 				ID:   1,
-				Type: "NATIVE",
+				Type: sql.NullString{"NATIVE", true},
 			},
 			wantErr:   false,
 			wantCode:  http.StatusBadRequest,
@@ -482,9 +483,9 @@ func Test_domainHandler_createDomain(t *testing.T) {
 				domainModel: &domainModelStub{},
 			},
 			args: model.Domain{
-				Name: "example.com",
+				Name: sql.NullString{"example.com", true},
 				ID:   1,
-				Type: "NG",
+				Type: sql.NullString{"NG", true},
 			},
 			wantErr:   false,
 			wantCode:  http.StatusBadRequest,
@@ -496,7 +497,7 @@ func Test_domainHandler_createDomain(t *testing.T) {
 				domainModel: &domainModelStub{},
 			},
 			args: model.Domain{
-				Name: "example.com",
+				Name: sql.NullString{"example.com", true},
 				ID:   1,
 			},
 			wantErr:   false,
@@ -510,7 +511,7 @@ func Test_domainHandler_createDomain(t *testing.T) {
 				domainModel: tt.fields.domainModel,
 			}
 
-			ctx, rec := dummyContext(t, "PUT", "/domains/:", tt.args)
+			ctx, rec := dummyContext(t, "POST", "/domains/:", tt.args)
 			ctx.SetParamNames("name")
 			ctx.SetParamValues(tt.queryName)
 
